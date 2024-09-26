@@ -1,5 +1,6 @@
 # Skyblock Collection Mod!
 Massive thanks to nea89 for the wiki! It taught me a lot about minecraft modding.
+https://moddev.nea.moe
 
 Run: /sct help for all commands
 ## Features: 
