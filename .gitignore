@@ -2,6 +2,5 @@
 .vscode/
 run/
 build/
-.gradle/
 .gitattributes
 .github/
