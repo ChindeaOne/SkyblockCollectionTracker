@@ -4,4 +4,4 @@ run/
 build/
 .gradle/
 .gitattributes
-.github
+.github/
