@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 @Mod(modid = HypixelConnection.MODID,
@@ -31,7 +32,11 @@ public class HypixelConnection {
 
         // Load API key from config.properties
         Properties prop = new Properties();
-        try (FileInputStream input = new FileInputStream("config.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                logger.error("config.properties not found in the classpath");
+                return;
+            }
             prop.load(input);
             apiKey = prop.getProperty("apikey");
 
