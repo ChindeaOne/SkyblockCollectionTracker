@@ -5,3 +5,4 @@ build/
 .gitattributes
 .github/
 src/main/resources/config.properties
+src/main/java/io/github/chindeaytb/collectiontracker/tracker/Collections
