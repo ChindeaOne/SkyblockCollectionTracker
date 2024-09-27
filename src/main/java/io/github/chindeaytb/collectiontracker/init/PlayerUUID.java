@@ -3,6 +3,7 @@ package io.github.chindeaytb.collectiontracker.init;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,14 +14,16 @@ public class PlayerUUID {
     private static final String MOJANG_API = "https://api.mojang.com/users/profiles/minecraft/";
     public static String UUID = "";
 
-    public static void getUUID(){
+    private static final Logger logger = HypixelConnection.logger;
+
+    public static void getUUID() {
         PlayerName.getPlayerName();
 
         if (!PlayerName.player_name.isEmpty()) {
             try {
                 UUID = fetchUUID(PlayerName.player_name, MOJANG_API);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("An error occurred while fetching the UUID for player: {}", PlayerName.player_name, e);
             }
         }
     }

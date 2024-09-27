@@ -2,8 +2,11 @@ package io.github.chindeaytb.collectiontracker.tracker;
 
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import io.github.chindeaytb.collectiontracker.init.HypixelConnection;
+import io.github.chindeaytb.collectiontracker.init.PlayerName;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
+import org.apache.logging.log4j.Logger;
 
 import java.io.StringReader;
 
@@ -13,6 +16,7 @@ import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
 public class TrackCollection {
 
     public static long previousCollection = -1;
+    private static final Logger logger = HypixelConnection.logger;
 
     public static void displayCollection(String jsonResponse, ICommandSender sender) {
         try {
@@ -20,20 +24,16 @@ public class TrackCollection {
             JsonReader reader = new JsonReader(new StringReader(jsonResponse));
             reader.beginObject(); // Start reading the JSON object
 
-            boolean success = false;
             JsonObject correctProfile = null;
 
             // Loop through the root object
             while (reader.hasNext()) {
                 String name = reader.nextName();
-                if (name.equals("success")) {
-                    success = reader.nextBoolean();
-                } else if (name.equals("profiles")) {
+                if (name.equals("profiles")) {
                     // Start reading profiles array
                     reader.beginArray();
                     while (reader.hasNext()) {
                         reader.beginObject();
-                        JsonObject profileObject = new JsonObject();
                         String profileId = null;
 
                         // Find the profile with the target profile_id
@@ -47,15 +47,15 @@ public class TrackCollection {
                                 } else {
                                     reader.skipValue();
                                 }
-                            }
-                            else {
+                            } else {
                                 reader.skipValue();
                             }
                         }
                         reader.endObject();
 
-                        if (correctProfile != null)
-                            break;
+                        if (correctProfile != null) {
+                            break; // Exit the loop once the correct profile is found
+                        }
                     }
                     reader.endArray();
                 } else {
@@ -67,9 +67,10 @@ public class TrackCollection {
             reader.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred while processing the JSON response for player: {}", PlayerName.player_name, e);
         }
     }
+
 
     // This method will check each member UUID and compare it to your UUID after removing the dashes
     private static JsonObject parseMembersObject(JsonReader reader, ICommandSender sender) throws Exception {
