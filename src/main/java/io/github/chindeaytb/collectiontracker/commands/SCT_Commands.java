@@ -50,7 +50,7 @@ public class SCT_Commands extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args){
         if (args.length == 0) {
             sender.addChatMessage(new ChatComponentText("Use /sct help."));
             return;
