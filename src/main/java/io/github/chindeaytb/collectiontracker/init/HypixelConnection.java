@@ -9,6 +9,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 @Mod(modid = HypixelConnection.MODID,
         clientSideOnly = true,
         version = "1.0.0"
@@ -16,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 public class HypixelConnection {
 
     public static final String MODID = "skyblockcollections";
-    public static final String apiKey = "4159c695-cd6a-4f0c-9baa-8535e6fcf273";
+    public static String apiKey;
 
     // Logger instance
     public static final Logger logger = LogManager.getLogger(HypixelConnection.class);
@@ -24,6 +28,21 @@ public class HypixelConnection {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+
+        // Load API key from config.properties
+        Properties prop = new Properties();
+        try (FileInputStream input = new FileInputStream("config.properties")) {
+            prop.load(input);
+            apiKey = prop.getProperty("apikey");
+
+            if (apiKey == null) {
+                logger.error("API key not found in config.properties");
+            } else {
+                logger.info("API key loaded successfully.");
+            }
+        } catch (IOException e) {
+            logger.error("Error loading config.properties", e);
+        }
 
         CommandHelper commandHelper = new CommandHelper();
         SetCollection setCollection = new SetCollection();
