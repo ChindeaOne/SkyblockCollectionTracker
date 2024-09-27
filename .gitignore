@@ -4,4 +4,4 @@ run/
 build/
 .gitattributes
 .github/
-config.properties
+src/main/resources/config.properties
