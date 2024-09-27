@@ -2,6 +2,9 @@
 Massive thanks to nea89 for the wiki! It taught me a lot about minecraft modding.
 https://moddev.nea.moe
 
+### The raw versions just send you a chat message
+- This will be changed in the future
+
 Run: /sct help for all commands
 ## Features: 
 - Tracks your skyblock collections!
