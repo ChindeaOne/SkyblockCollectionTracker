@@ -114,8 +114,10 @@ public class TrackCollection {
                             long collectedIn5Min = currentCollection - previousCollection;
                             long perHour = collectedIn5Min * 12;
 
-                            sender.addChatMessage(
-                                    new ChatComponentText("Collection/h: " + formatNumber(perHour)));
+                            sender.addChatMessage(new ChatComponentText("Coll/h: " + formatNumber(perHour)));
+                        }
+                        else{
+                            sender.addChatMessage(new ChatComponentText("Coll/h: Calculating..." ));
                         }
                         previousCollection = currentCollection;
                     }
@@ -174,11 +176,12 @@ public class TrackCollection {
         if (number < 1000) {
             return String.valueOf(number);
         } else if (number < 1_000_000) {
-            return String.format("%.1fk", number / 1000.0); // Thousands (k)
+            return String.format("%.3fk", number / 1000.0); // Thousands (k)
         } else if (number < 1_000_000_000) {
-            return String.format("%.1fM", number / 1_000_000.0); // Millions (M)
+            return String.format("%.3fM", number / 1_000_000.0); // Millions (M)
         } else {
-            return String.format("%.1fB", number / 1_000_000_000.0); // Billions (B)
+            return String.format("%.3fB", number / 1_000_000_000.0); // Billions (B)
         }
     }
+
 }

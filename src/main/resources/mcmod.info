@@ -1,16 +1,16 @@
 [
   {
-    "modid": "${modid}",
-    "name": "Xample Mod",
-    "description": "A mod that is used as an example.",
+    "modid": "skyblockcollections",
+    "name": "SkyblockCollections",
+    "description": "A Minecraft mod that tracks Hypixel Skyblock collections.",
     "version": "${version}",
-    "mcversion": "${mcversion}",
-    "url": "https://github.com/romangraef/Forge1.8.9Template/",
+    "mcversion": "1.8.9",
+    "url": "https://github.com/ChindeaYTB/SkyblockCollectionMod",
     "updateUrl": "",
     "authorList": [
-      "You"
+      "Chindea_YTB"
     ],
-    "credits": "",
+    "credits": "Thanks to nea89!",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []

@@ -1,5 +1,6 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
+import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
 import io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -8,6 +9,9 @@ import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
+import static io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher.isTracking;
 
 public class SetCollection extends CommandBase {
 
@@ -30,12 +34,33 @@ public class SetCollection extends CommandBase {
         if (args.length == 1) {
             completions.add("track");
         }
+        if (args.length == 2) {
+            completions.add("gold");
+            completions.add("iron");
+            completions.add("redstone");
+            completions.add("cobblestone");
+            completions.add("netherrack");
+            completions.add("endstone");
+            completions.add("diamond");
+            completions.add("quartz");
+            completions.add("obsidian");
+            completions.add("gemstone");
+            completions.add("umber");
+            completions.add("coal");
+            completions.add("emerald");
+            completions.add("glacite");
+            completions.add("tungsten");
+        }
         return completions;
     }
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         try {
+            if(UUID.isEmpty()){
+                PlayerUUID.getUUID();
+            }
+
             if (args[0].equalsIgnoreCase("track")) {
                 if (args.length < 2) {
                     sender.addChatMessage(new ChatComponentText("Use: /sct track <collection>"));
@@ -51,18 +76,47 @@ public class SetCollection extends CommandBase {
                 }
             }
 
-            collection = keyBuilder.toString().trim().toLowerCase();
-            sender.addChatMessage(new ChatComponentText("§aTracking " + collection + " collection"));
+            if(!isTracking) {
+                collection = keyBuilder.toString().trim().toLowerCase();
+                if (!isValidCollection(collection)) {
+                    sender.addChatMessage(new ChatComponentText("§4Invalid collection!"));
+                } else {
+                        sender.addChatMessage(new ChatComponentText("§aTracking " + collection + " collection"));
+                        HypixelApiFetcher.startTracking(sender);
 
-            if (SetHypixelApiKey.apiKey.isEmpty()) {
-                sender.addChatMessage(new ChatComponentText("Set api key first!"));
-            } else {
-                HypixelApiFetcher.startTracking(sender);
+                }
             }
 
+            else {
+                sender.addChatMessage(new ChatComponentText("§cAlready tracking a collection."));
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private boolean isValidCollection(String collectionName) {
+        // Check if the collectionName matches any of the valid collections
+        switch (collectionName) {
+            case "gold":
+            case "iron":
+            case "redstone":
+            case "cobblestone":
+            case "netherrack":
+            case "endstone":
+            case "diamond":
+            case "quartz":
+            case "obsidian":
+            case "gemstone":
+            case "umber":
+            case "coal":
+            case "emerald":
+            case "glacite":
+            case "tungsten":
+                return true;
+            default:
+                return false;
         }
     }
 

@@ -12,13 +12,11 @@ import java.util.List;
 public class SCT_Commands extends CommandBase {
 
     private final CommandHelper commandHelper;
-    private final SetHypixelApiKey setHypixelApiKey;
     private final SetCollection setCollection;
     private final StopTracker stopTracker;
 
-    public SCT_Commands(CommandHelper commandHelper, SetHypixelApiKey setHypixelApiKey, SetCollection setCollection, StopTracker stopTracker) {
+    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker) {
         this.commandHelper = commandHelper;
-        this.setHypixelApiKey = setHypixelApiKey;
         this.setCollection = setCollection;
         this.stopTracker = stopTracker;
     }
@@ -36,9 +34,18 @@ public class SCT_Commands extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            // Provide completions based on what has been typed so far
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "setkey", "track", "stop");
+            // Provide completions for the first argument (commands)
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop");
         }
+
+        if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
+            // Provide completions for the second argument (collection names) when the first argument is 'track'
+            return CommandBase.getListOfStringsMatchingLastWord(args,
+                    "gold", "iron", "redstone", "cobblestone", "netherrack", "endstone",
+                    "diamond", "quartz", "obsidian", "gemstone", "umber", "coal",
+                    "emerald", "glacite", "tungsten");
+        }
+
         return Collections.emptyList();
     }
 
@@ -53,9 +60,6 @@ public class SCT_Commands extends CommandBase {
         switch (args[0].toLowerCase()) {
             case "help":
                 commandHelper.processCommand(sender, args);
-                break;
-            case "setkey":
-                setHypixelApiKey.processCommand(sender, args);
                 break;
             case "track":
                 setCollection.processCommand(sender, args);
