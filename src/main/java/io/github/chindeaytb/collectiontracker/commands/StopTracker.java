@@ -4,7 +4,6 @@ import io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,6 @@ public class StopTracker extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length > 0 && args[0].equalsIgnoreCase("stop")) {
             HypixelApiFetcher.stopTracking(sender);
-        } else {
-            sender.addChatMessage(new ChatComponentText("Use: /sct stop to stop tracking."));
         }
     }
 

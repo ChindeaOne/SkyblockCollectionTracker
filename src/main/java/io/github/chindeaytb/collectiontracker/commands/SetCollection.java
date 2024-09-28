@@ -57,38 +57,36 @@ public class SetCollection extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         try {
-            if(UUID.isEmpty()){
+            if(UUID.isEmpty()) {
                 PlayerUUID.getUUID();
             }
 
+            // Check if the command is for tracking
             if (args[0].equalsIgnoreCase("track")) {
                 if (args.length < 2) {
                     sender.addChatMessage(new ChatComponentText("Use: /sct track <collection>"));
                     return;
                 }
-            }
-            // Join the args to allow spaces in the API key
-            StringBuilder keyBuilder = new StringBuilder();
-            for (int i = 1; i < args.length; i++) {
-                keyBuilder.append(args[i]);
-                if (i < args.length - 1) {
-                    keyBuilder.append(" ");
-                }
-            }
 
-            if(!isTracking) {
-                collection = keyBuilder.toString().trim().toLowerCase();
-                if (!isValidCollection(collection)) {
-                    sender.addChatMessage(new ChatComponentText("§4Invalid collection!"));
-                } else {
-                        sender.addChatMessage(new ChatComponentText("§aTracking " + collection + " collection"));
+                // Join the args to allow spaces in the collection name
+                StringBuilder keyBuilder = new StringBuilder();
+                for (int i = 1; i < args.length; i++) {
+                    keyBuilder.append(args[i]);
+                    if (i < args.length - 1) {
+                        keyBuilder.append(" ");
+                    }
+                }
+
+                if (!isTracking) {
+                    collection = keyBuilder.toString().trim().toLowerCase();
+                    if (!isValidCollection(collection)) {
+                        sender.addChatMessage(new ChatComponentText("§4Invalid collection!"));
+                    } else{
                         HypixelApiFetcher.startTracking(sender);
-
+                    }
+                } else {
+                    sender.addChatMessage(new ChatComponentText("§cAlready tracking a collection."));
                 }
-            }
-
-            else {
-                sender.addChatMessage(new ChatComponentText("§cAlready tracking a collection."));
             }
 
         } catch (Exception e) {
