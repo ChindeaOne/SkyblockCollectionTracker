@@ -112,8 +112,8 @@ public class TrackCollection {
                                 new ChatComponentText(formattedCollection + " collection: " + formatNumber(currentCollection)));
 
                         if (previousCollection > 0) {
-                            long collectedIn5Min = currentCollection - previousCollection;
-                            long perHour = collectedIn5Min * 12;
+                            long collectedIn3Min = currentCollection - previousCollection;
+                            long perHour = collectedIn3Min * 20;
 
                             sender.addChatMessage(new ChatComponentText("Coll/h: " + formatNumber(perHour)));
                         }
