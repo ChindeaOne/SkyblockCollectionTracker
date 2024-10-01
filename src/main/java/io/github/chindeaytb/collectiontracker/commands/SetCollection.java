@@ -50,6 +50,7 @@ public class SetCollection extends CommandBase {
             completions.add("emerald");
             completions.add("glacite");
             completions.add("tungsten");
+            completions.add("mithril");
         }
         return completions;
     }
@@ -112,6 +113,7 @@ public class SetCollection extends CommandBase {
             case "emerald":
             case "glacite":
             case "tungsten":
+            case "mithril":
                 return true;
             default:
                 return false;

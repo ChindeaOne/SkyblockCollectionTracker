@@ -13,13 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-@Mod(modid = HypixelConnection.MODID,
-        clientSideOnly = true,
-        version = "1.0.0"
-)
+@Mod(modid = HypixelConnection.MODID, clientSideOnly = true, version = "1.0.0")
 public class HypixelConnection {
 
-    public static final String MODID = "skyblockcollections";
+    public static final String MODID = "skyblockcollectiontracker";
     public static String apiKey;
 
     // Logger instance
@@ -27,6 +24,7 @@ public class HypixelConnection {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        // Register the event bus
         MinecraftForge.EVENT_BUS.register(this);
 
         // Load API key from config.properties
@@ -48,6 +46,7 @@ public class HypixelConnection {
             logger.error("Error loading config.properties", e);
         }
 
+        // Register commands
         CommandHelper commandHelper = new CommandHelper();
         SetCollection setCollection = new SetCollection();
         StopTracker stopTracker = new StopTracker();
