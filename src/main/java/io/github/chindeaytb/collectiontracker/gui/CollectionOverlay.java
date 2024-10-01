@@ -19,7 +19,6 @@ public class CollectionOverlay {
     private static String collectionPerHour = "";
     private static long startTime = 0;
 
-    private static long lastUpdateTime = 0; // Store the last update time
 
     public CollectionOverlay() {
         // Register this class to the event bus
@@ -32,7 +31,6 @@ public class CollectionOverlay {
         collectionAmount = amount != null ? amount : "";
         collectionPerHour = perHour != null ? perHour : "";
 
-        lastUpdateTime = System.currentTimeMillis();
 
         // Reset start time to the current time when tracking starts
         if (isTracking && startTime == 0) { // Only reset when starting a new tracking session
