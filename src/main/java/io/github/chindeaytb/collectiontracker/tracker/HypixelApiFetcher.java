@@ -84,7 +84,7 @@ public class HypixelApiFetcher {
     }
 
     public static void scheduleDataFetch(ICommandSender sender) {
-        scheduler.scheduleAtFixedRate(() -> fetchData(sender), 0, 20, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(() -> fetchData(sender), 15, 180, TimeUnit.SECONDS);
         logger.info("Data fetching scheduled to run every 300 seconds");
     }
 
