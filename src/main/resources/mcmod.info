@@ -1,11 +1,11 @@
 [
   {
-    "modid": "skyblockcollections",
-    "name": "SkyblockCollections",
+    "modid": "skyblockcollectiontracker",
+    "name": "SkyblockCollectionTracker",
     "description": "A Minecraft mod that tracks Hypixel Skyblock collections.",
     "version": "${version}",
     "mcversion": "1.8.9",
-    "url": "https://github.com/ChindeaYTB/SkyblockCollectionMod",
+    "url": "https://github.com/ChindeaYTB/SkyblockCollectionTracker",
     "updateUrl": "",
     "authorList": [
       "Chindea_YTB"
