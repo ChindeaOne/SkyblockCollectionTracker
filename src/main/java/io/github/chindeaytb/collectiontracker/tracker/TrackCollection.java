@@ -47,7 +47,7 @@ public class TrackCollection {
                                     profileId = reader.nextString();
                                 } else if (key.equals("members")) {
                                     if (profileId != null && profileId.replace("-", "").equals(UUID)) {
-                                        correctProfile = parseMembersObject(reader, sender);
+                                        correctProfile = parseMembersObject(reader);
                                     } else {
                                         reader.skipValue();
                                     }
@@ -78,14 +78,14 @@ public class TrackCollection {
     }
 
     // This method will check each member UUID and compare it to your UUID after removing the dashes
-    private static JsonObject parseMembersObject(JsonReader reader, ICommandSender sender) throws Exception {
+    private static JsonObject parseMembersObject(JsonReader reader) throws Exception {
         reader.beginObject();
         JsonObject memberData = null;
 
         while (reader.hasNext()) {
             String name = reader.nextName();
             if (name.equals(UUID)) {
-                memberData = parseCollectionObject(reader, sender);
+                memberData = parseCollectionObject(reader);
             } else {
                 reader.skipValue();
             }
@@ -95,7 +95,7 @@ public class TrackCollection {
         return memberData;
     }
 
-    private static JsonObject parseCollectionObject(JsonReader reader, ICommandSender sender) throws Exception {
+    private static JsonObject parseCollectionObject(JsonReader reader) throws Exception {
         JsonObject collectionsObject = null;
 
         reader.beginObject();
