@@ -42,7 +42,7 @@ public class SCT_Commands extends CommandBase {
             return CommandBase.getListOfStringsMatchingLastWord(args,
                     "gold", "iron", "redstone", "cobblestone", "netherrack", "endstone",
                     "diamond", "quartz", "obsidian", "gemstone", "umber", "coal",
-                    "emerald", "glacite", "tungsten");
+                    "emerald", "glacite", "tungsten", "mycelium", "red sand", "hard stone", "sulphur");
         }
 
         return Collections.emptyList();

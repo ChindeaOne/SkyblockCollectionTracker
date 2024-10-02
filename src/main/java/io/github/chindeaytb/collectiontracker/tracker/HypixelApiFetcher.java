@@ -32,9 +32,11 @@ public class HypixelApiFetcher {
     private static final int COOLDOWN_PERIOD = 30;
 
     private static final HashMap<String, CachedData> collectionCache = new HashMap<>();
-    private static final int CACHE_EXPIRATION = 180;
+    private static final int CACHE_EXPIRATION = 150;
 
     private static CollectionOverlay collectionOverlay = null;
+
+    private static final int PAUSE_PERIOD = 600; // Retry period when paused (in seconds)
 
     public static void startTracking(ICommandSender sender) {
         long currentTime = System.currentTimeMillis();
@@ -58,8 +60,9 @@ public class HypixelApiFetcher {
 
         logger.info("Tracking started for player with UUID: {}", UUID);
 
-        scheduleDataFetch(sender);
+        scheduleDataFetch();
     }
+
 
     public static void stopTracking(ICommandSender sender) {
         if (scheduler != null && !scheduler.isShutdown()) {
@@ -83,35 +86,35 @@ public class HypixelApiFetcher {
         }
     }
 
-    public static void scheduleDataFetch(ICommandSender sender) {
-        scheduler.scheduleAtFixedRate(() -> fetchData(sender), 15, 180, TimeUnit.SECONDS);
+    public static void scheduleDataFetch() {
+        scheduler.scheduleAtFixedRate(HypixelApiFetcher::fetchData, 15, 180, TimeUnit.SECONDS);
         logger.info("Data fetching scheduled to run every 300 seconds");
     }
 
-    public static void fetchData(ICommandSender sender) {
-            try {
-                if (collectionCache.containsKey(UUID)) {
-                    CachedData cachedData = collectionCache.get(UUID);
-                    if (cachedData.isValid()) {
-                        logger.info("Using cached data for player with UUID: {}", UUID);
-                        TrackCollection.displayCollection(cachedData.getJsonData(), sender);
-                        return;
-                    } else {
-                        collectionCache.remove(UUID);
-                    }
+    public static void fetchData() {
+        try {
+            if (collectionCache.containsKey(UUID)) {
+                CachedData cachedData = collectionCache.get(UUID);
+                if (cachedData.isValid()) {
+                    logger.info("Using cached data for player with UUID: {}", UUID);
+                    TrackCollection.displayCollection(cachedData.getJsonData());
+                    return;
+                } else {
+                    collectionCache.remove(UUID);
                 }
-
-                HypixelApiURL = getSkyBlockProfileURL(UUID, apiKey);
-                logger.debug("Fetching data from URL: {}", HypixelApiURL);
-                String jsonData = fetchJsonData(HypixelApiURL);
-
-                collectionCache.put(UUID, new CachedData(jsonData, System.currentTimeMillis()));
-
-                TrackCollection.displayCollection(jsonData, sender);
-                logger.info("Data successfully fetched and displayed for player with UUID: {}", UUID);
-            } catch (Exception e) {
-                logger.error("Error fetching data from the Hypixel API: {}", e.getMessage(), e);
             }
+
+            HypixelApiURL = getSkyBlockProfileURL(UUID, apiKey);
+            logger.debug("Fetching data from URL: {}", HypixelApiURL);
+            String jsonData = fetchJsonData(HypixelApiURL);
+
+            collectionCache.put(UUID, new CachedData(jsonData, System.currentTimeMillis()));
+            TrackCollection.displayCollection(jsonData);
+            logger.info("Data successfully fetched and displayed for player with UUID: {}", UUID);
+
+        } catch (Exception e) {
+            logger.error("Error fetching data from the Hypixel API: {}", e.getMessage(), e);
+        }
     }
 
     private static class CachedData {
@@ -152,5 +155,29 @@ public class HypixelApiFetcher {
         conn.disconnect();
 
         return content.toString();
+    }
+
+    public static void pauseTracking() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdownNow();  // Stop current tracking
+            logger.info("Tracking paused. Will check again in {} seconds.", PAUSE_PERIOD);
+
+            // Schedule a one-time check after the pause period
+            scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.schedule(HypixelApiFetcher::resumeTracking, PAUSE_PERIOD, TimeUnit.SECONDS);
+        }
+    }
+
+    public static void resumeTracking() {
+        logger.info("Resuming tracking to check for updates.");
+
+        // Stop the current scheduler if still running
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdownNow();
+        }
+
+        // Schedule data fetch at the original 3-minute interval
+        scheduler = Executors.newScheduledThreadPool(1);
+        scheduleDataFetch();
     }
 }

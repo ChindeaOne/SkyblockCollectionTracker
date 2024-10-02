@@ -34,24 +34,7 @@ public class SetCollection extends CommandBase {
         if (args.length == 1) {
             completions.add("track");
         }
-        if (args.length == 2) {
-            completions.add("gold");
-            completions.add("iron");
-            completions.add("redstone");
-            completions.add("cobblestone");
-            completions.add("netherrack");
-            completions.add("endstone");
-            completions.add("diamond");
-            completions.add("quartz");
-            completions.add("obsidian");
-            completions.add("gemstone");
-            completions.add("umber");
-            completions.add("coal");
-            completions.add("emerald");
-            completions.add("glacite");
-            completions.add("tungsten");
-            completions.add("mithril");
-        }
+
         return completions;
     }
 
@@ -114,6 +97,10 @@ public class SetCollection extends CommandBase {
             case "glacite":
             case "tungsten":
             case "mithril":
+            case "mycelium":
+            case "red sand":
+            case "hard stone":
+            case "sulphur":
                 return true;
             default:
                 return false;

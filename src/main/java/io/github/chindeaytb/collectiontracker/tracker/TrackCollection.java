@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
 import io.github.chindeaytb.collectiontracker.init.HypixelConnection;
 import io.github.chindeaytb.collectiontracker.init.PlayerName;
-import net.minecraft.command.ICommandSender;
 import org.apache.logging.log4j.Logger;
 
 import java.io.StringReader;
@@ -14,6 +13,7 @@ import java.util.concurrent.Executors;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
 import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
+import static io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher.*;
 
 public class TrackCollection {
 
@@ -21,7 +21,7 @@ public class TrackCollection {
     private static final Logger logger = HypixelConnection.logger;
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
-    public static void displayCollection(String jsonResponse, ICommandSender sender) {
+    public static void displayCollection(String jsonResponse) {
         executor.submit(() -> {
             try {
                 // Initialize JsonReader to process JSON incrementally
@@ -117,15 +117,25 @@ public class TrackCollection {
                         if (previousCollection > 0) {
                             long collectedIn3Min = currentCollection - previousCollection;
                             long perHour = collectedIn3Min * 20;
-                            collectionPerHour = formatNumber(perHour);
-                        } else {
-                            collectionPerHour = "Calculating...";
+
+                            // If there's no change, show "Paused"
+                            if (collectedIn3Min == 0) {
+                                collectionPerHour = "Paused"; // Display "Paused" in the GUI
+                                pauseTracking();
+                            } else {
+                                collectionPerHour = formatNumber(perHour);
+                            }
+                        } else  {
+                                collectionPerHour = "Calculating..."; // For first-time calculations
                         }
 
+                        logger.info("New collection is " + currentCollection);
+                        logger.info("Old collection is " + previousCollection);
+
+                        previousCollection = currentCollection;
                         // Update the GUI instead of sending chat messages
                         CollectionOverlay.updateCollectionData(formattedCollection, formatNumber(currentCollection), collectionPerHour);
 
-                        previousCollection = currentCollection;
                     } else {
                         reader.skipValue();
                     }
@@ -174,6 +184,14 @@ public class TrackCollection {
                 return collectionName.equals("TUNGSTEN");
             case "mithril":
                 return collectionName.equals("MITHRIL_ORE");
+            case "mycelium":
+                return collectionName.equals("MYCEL");
+            case "red sand":
+                return collectionName.equals("SAND:1");
+            case "hard stone":
+                return collectionName.equals("HARD_STONE");
+            case "sulphur":
+                return collectionName.equals("SULPHUR");
             default:
                 return false;
         }
