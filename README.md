@@ -7,5 +7,5 @@ https://moddev.nea.moe
   - for now it only tracks mining collections like gold or gemstones
 - Run: /sct help for all commands
 - Shows the collection, as well as how much you gain/h
-  - The gui is inspired by [Ninjune's coleweight mod](https://github.com/Ninjune/coleweight?tab=readme-ov-file) (since his collection tracker is 'broken')
+  - The gui is inspired by [Ninjune's coleweight mod](https://www.chattriggers.com/modules/v/Coleweight) (since his collection tracker is 'broken')
   
