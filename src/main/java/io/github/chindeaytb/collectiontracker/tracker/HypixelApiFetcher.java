@@ -21,7 +21,7 @@ import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.pre
 
 public class HypixelApiFetcher {
 
-    public static final String BASE_URL = "https://hypixelapikey-d40a5ed42094.herokuapp.com/hypixelapi?sessionId=";
+    public static final String BASE_URL = "https://hypixelapikey-d40a5ed42094.herokuapp.com/hypixelapi?token=";
     private static final Logger logger = HypixelConnection.logger;
 
     private static ScheduledExecutorService scheduler;
@@ -102,7 +102,7 @@ public class HypixelApiFetcher {
             }
 
             logger.info("Fetching data from URL: {}", BASE_URL);
-            String jsonData = fetchJsonData(HypixelConnection.sessionId);
+            String jsonData = fetchJsonData(HypixelConnection.token);
 
             collectionCache.put(PlayerUUID.UUID, new CachedData(jsonData, System.currentTimeMillis()));
             TrackCollection.displayCollection(jsonData);
@@ -131,9 +131,9 @@ public class HypixelApiFetcher {
         }
     }
 
-    public static String fetchJsonData(String sessionId){
+    public static String fetchJsonData(String token){
         try{
-            String urlString = BASE_URL + sessionId;
+            String urlString = BASE_URL + token;
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");

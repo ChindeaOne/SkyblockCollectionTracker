@@ -31,11 +31,11 @@ import java.util.UUID;
 public class HypixelConnection {
 
     public static final String MODID = "skyblockcollectiontracker";
-    // Logger instance
     public static final Logger logger = LogManager.getLogger(HypixelConnection.class);
 
-    // Static variable to hold the session ID
+    // Static variables to hold the session ID and token
     public static String sessionId;
+    public static String token;
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
@@ -53,6 +53,12 @@ public class HypixelConnection {
         logger.info("Skyblock Collections Tracker mod initialized.");
     }
 
+    /**
+     * Sends the player's UUID and sessionId to the server.
+     *
+     * @param uuid The player's UUID.
+     * @param sessionId The session ID.
+     */
     private void sendUUIDToServer(String uuid, String sessionId) {
         try {
             String urlString = "https://hypixelapikey-d40a5ed42094.herokuapp.com/uuid";
@@ -83,30 +89,64 @@ public class HypixelConnection {
         }
     }
 
+    /**
+     * Calls the /herokutoken endpoint and retrieves the token.
+     */
+    private void fetchHerokuToken() {
+        try {
+            String urlString = "https://hypixelapikey-d40a5ed42094.herokuapp.com/herokutoken";
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            // Check the response code
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Read the token from the custom header
+                token = connection.getHeaderField("X-Heroku-Token");
+                logger.info("Heroku token fetched successfully: {}", token);
+            } else {
+                logger.error("Failed to fetch Heroku token: HTTP response code {}", responseCode);
+            }
+
+            connection.disconnect();
+        } catch (Exception e) {
+            logger.error("An error occurred while fetching the Heroku token: {}", e.getMessage());
+        }
+    }
+
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        // Generate the sessionId along with fetching the token
+        if (sessionId == null) {
+            sessionId = UUID.randomUUID().toString();
+            logger.info("Session ID generated: {}", sessionId);
+        }
+
+        // Fetch Heroku token during post-initialization
+        fetchHerokuToken();
+
         // Log post-initialization
         logger.info("Skyblock Collections Tracker post-initialization complete.");
     }
 
     @SubscribeEvent
     public void onServerJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        if(sessionId == null) {
+        // Ensure sessionId exists before proceeding
+        if (sessionId == null) {
             sessionId = UUID.randomUUID().toString();
         }
     }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        // Check if both player and world are loaded
         if (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().theWorld != null) {
             logger.info("Player and world fully loaded on tick.");
             if (PlayerUUID.UUID.isEmpty()) {
                 PlayerUUID.getUUID();
                 sendUUIDToServer(PlayerUUID.UUID, sessionId);
             }
-            // Unsubscribe from the tick event once loaded to avoid repeated checks
-            MinecraftForge.EVENT_BUS.unregister(this);
+            MinecraftForge.EVENT_BUS.unregister(this); // Unsubscribe once loaded
         }
     }
 
