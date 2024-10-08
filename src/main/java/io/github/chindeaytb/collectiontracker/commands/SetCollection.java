@@ -4,11 +4,8 @@ import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
 import io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
 import static io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher.isTracking;
@@ -25,17 +22,6 @@ public class SetCollection extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return "/sct <command> [arguments]";
-    }
-
-    @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        List<String> completions = new ArrayList<>();
-
-        if (args.length == 1) {
-            completions.add("track");
-        }
-
-        return completions;
     }
 
     @Override

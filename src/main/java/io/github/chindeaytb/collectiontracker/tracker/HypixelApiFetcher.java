@@ -2,6 +2,7 @@ package io.github.chindeaytb.collectiontracker.tracker;
 
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
 import io.github.chindeaytb.collectiontracker.init.HypixelConnection;
+import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import org.apache.logging.log4j.Logger;
@@ -15,14 +16,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
-import static io.github.chindeaytb.collectiontracker.init.HypixelConnection.apiKey;
+import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.previousCollection;
 
 public class HypixelApiFetcher {
 
-    public static String HypixelApiURL = "";
-    public static final String BASE_URL = "https://api.hypixel.net/v2/skyblock/profiles";
+    public static final String BASE_URL = "https://hypixelapikey-d40a5ed42094.herokuapp.com/hypixelapi?sessionId=";
     private static final Logger logger = HypixelConnection.logger;
 
     private static ScheduledExecutorService scheduler;
@@ -46,11 +45,12 @@ public class HypixelApiFetcher {
             return;
         }
 
+        sender.addChatMessage(new ChatComponentText("§aTracking " + collection + " collection"));
+
         if (scheduler == null || scheduler.isShutdown()) {
             scheduler = Executors.newScheduledThreadPool(1);
         }
 
-        // Ensure only one instance of CollectionOverlay exists
         if (collectionOverlay == null) {
             collectionOverlay = new CollectionOverlay();
         }
@@ -58,11 +58,10 @@ public class HypixelApiFetcher {
         lastTrackTime = currentTime;
         isTracking = true;
 
-        logger.info("Tracking started for player with UUID: {}", UUID);
+        logger.info("Tracking started for player with UUID: {}", PlayerUUID.UUID);
 
         scheduleDataFetch();
     }
-
 
     public static void stopTracking(ICommandSender sender) {
         if (scheduler != null && !scheduler.isShutdown()) {
@@ -70,15 +69,13 @@ public class HypixelApiFetcher {
             sender.addChatMessage(new ChatComponentText("§cStopped tracking!"));
             logger.info("Tracking stopped.");
 
-            // Reset tracking variables
             isTracking = false;
             lastTrackTime = System.currentTimeMillis();
             previousCollection = -1;
 
-            // Unregister and reset the overlay
             if (collectionOverlay != null) {
                 CollectionOverlay.stopTracking();
-                collectionOverlay = null; // Clear the reference to allow garbage collection
+                collectionOverlay = null;
             }
         } else {
             sender.addChatMessage(new ChatComponentText("§cNo tracking active!"));
@@ -93,24 +90,23 @@ public class HypixelApiFetcher {
 
     public static void fetchData() {
         try {
-            if (collectionCache.containsKey(UUID)) {
-                CachedData cachedData = collectionCache.get(UUID);
+            if (collectionCache.containsKey(PlayerUUID.UUID)) {
+                CachedData cachedData = collectionCache.get(PlayerUUID.UUID);
                 if (cachedData.isValid()) {
-                    logger.info("Using cached data for player with UUID: {}", UUID);
+                    logger.info("Using cached data for player with UUID: {}", PlayerUUID.UUID);
                     TrackCollection.displayCollection(cachedData.getJsonData());
                     return;
                 } else {
-                    collectionCache.remove(UUID);
+                    collectionCache.remove(PlayerUUID.UUID);
                 }
             }
 
-            HypixelApiURL = getSkyBlockProfileURL(UUID, apiKey);
-            logger.debug("Fetching data from URL: {}", HypixelApiURL);
-            String jsonData = fetchJsonData(HypixelApiURL);
+            logger.info("Fetching data from URL: {}", BASE_URL);
+            String jsonData = fetchJsonData(HypixelConnection.sessionId);
 
-            collectionCache.put(UUID, new CachedData(jsonData, System.currentTimeMillis()));
+            collectionCache.put(PlayerUUID.UUID, new CachedData(jsonData, System.currentTimeMillis()));
             TrackCollection.displayCollection(jsonData);
-            logger.info("Data successfully fetched and displayed for player with UUID: {}", UUID);
+            logger.info("Data successfully fetched and displayed for player with UUID: {}", PlayerUUID.UUID);
 
         } catch (Exception e) {
             logger.error("Error fetching data from the Hypixel API: {}", e.getMessage(), e);
@@ -135,34 +131,36 @@ public class HypixelApiFetcher {
         }
     }
 
-    public static String getSkyBlockProfileURL(String uuid, String apiKey) {
-        return BASE_URL + "?uuid=" + uuid + "&key=" + apiKey;
-    }
+    public static String fetchJsonData(String sessionId){
+        try{
+            String urlString = BASE_URL + sessionId;
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json");
 
-    public static String fetchJsonData(String urlString) throws Exception {
-        URL url = new URL(urlString);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-Type", "application/json");
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            conn.disconnect();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String inputLine;
-        StringBuilder content = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
-            content.append(inputLine);
+            return content.toString();
+
+        }catch (Exception e) {
+            logger.error("An error occurred while fetching data from Hypixel API: {}", e.getMessage());
         }
-        in.close();
-        conn.disconnect();
-
-        return content.toString();
+        return null;
     }
 
     public static void pauseTracking() {
         if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdownNow();  // Stop current tracking
+            scheduler.shutdownNow();
             logger.info("Tracking paused. Will check again in {} seconds.", PAUSE_PERIOD);
 
-            // Schedule a one-time check after the pause period
             scheduler = Executors.newScheduledThreadPool(1);
             scheduler.schedule(HypixelApiFetcher::resumeTracking, PAUSE_PERIOD, TimeUnit.SECONDS);
         }
@@ -171,12 +169,10 @@ public class HypixelApiFetcher {
     public static void resumeTracking() {
         logger.info("Resuming tracking to check for updates.");
 
-        // Stop the current scheduler if still running
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdownNow();
         }
 
-        // Schedule data fetch at the original 3-minute interval
         scheduler = Executors.newScheduledThreadPool(1);
         scheduleDataFetch();
     }

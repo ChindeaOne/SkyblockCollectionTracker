@@ -67,14 +67,13 @@ public class CollectionOverlay {
                     Math.max(fontRenderer.getStringWidth(perHourText), fontRenderer.getStringWidth(uptimeText)));
 
             // Set box dimensions (adjusted for the new full size)
-            int boxWidth = maxWidth + 2; // Adding a bit of padding
-            int boxHeight = 35; // Box height remains the same
+            int boxHeight = 28; // Box height remains the same
 
             // Calculate the box's position above the chat
-            int boxY = chatY - boxHeight - 10; // Position it just above the chat
+            int boxY = chatY - boxHeight - 8; // Position it just above the chat
 
             // Draw a semi-transparent background for the box
-            Gui.drawRect(chatX, boxY, chatX + boxWidth, boxY + boxHeight, 0x10000000); // Semi-transparent background
+            Gui.drawRect(chatX, boxY, chatX + maxWidth, boxY + boxHeight, 0x10000000); // Semi-transparent background
 
             // Scaling text to 85%
             float scale = 0.85f;
@@ -90,7 +89,7 @@ public class CollectionOverlay {
 
             // Adjust textX and textY for the scaling factor
             int textX = (int) ((chatX + 1) / scale); // Scale position for 85%
-            int textY = (int) (startY / scale);     // Scale position for 85%
+            int textY = (int) ((startY + 2) / scale);     // Scale position for 85%
 
             // Render each full string with its embedded color codes
             fontRenderer.drawString(collectionText, textX, textY, 0xFFFFFF); // Draw the full collectionText
@@ -122,5 +121,6 @@ public class CollectionOverlay {
     // Method to reset tracking data when stopping tracking
     public static void stopTracking() {
         startTime = 0; // Reset the start time to 0 when tracking stops
+        updateCollectionData(null, null, null);
     }
 }

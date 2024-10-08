@@ -1,64 +1,166 @@
 package io.github.chindeaytb.collectiontracker.init;
 
 import io.github.chindeaytb.collectiontracker.commands.*;
+import io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher;
+import net.minecraft.client.Minecraft;
+import net.minecraft.command.CommandResultStats;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Mod(modid = HypixelConnection.MODID, clientSideOnly = true, version = "1.0.0")
 public class HypixelConnection {
 
     public static final String MODID = "skyblockcollectiontracker";
-    public static String apiKey;
-
     // Logger instance
     public static final Logger logger = LogManager.getLogger(HypixelConnection.class);
+
+    // Static variable to hold the session ID
+    public static String sessionId;
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         // Register the event bus
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Load API key from config.properties
-        Properties prop = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
-            if (input == null) {
-                logger.error("config.properties not found in the classpath");
-                return;
-            }
-            prop.load(input);
-            apiKey = prop.getProperty("apikey");
-
-            if (apiKey == null) {
-                logger.error("API key not found in config.properties");
-            } else {
-                logger.info("API key loaded successfully.");
-            }
-        } catch (IOException e) {
-            logger.error("Error loading config.properties", e);
-        }
-
         // Register commands
         CommandHelper commandHelper = new CommandHelper();
         SetCollection setCollection = new SetCollection();
         StopTracker stopTracker = new StopTracker();
-        ClientCommandHandler.instance.registerCommand(new SCT_Commands(commandHelper, setCollection, stopTracker));
+        MoveGui moveGui = new MoveGui();
+        ClientCommandHandler.instance.registerCommand(new SCT_Commands(commandHelper, setCollection, stopTracker, moveGui));
 
         // Log initialization
         logger.info("Skyblock Collections Tracker mod initialized.");
+    }
+
+    private void sendUUIDToServer(String uuid, String sessionId) {
+        try {
+            String urlString = "https://hypixelapikey-d40a5ed42094.herokuapp.com/uuid";
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Create JSON payload
+            String postData = "{\"uuid\":\"" + uuid + "\", \"sessionId\":\"" + sessionId + "\"}";
+
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(postData.getBytes(StandardCharsets.UTF_8));
+            }
+
+            // Check response code
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                logger.info("UUID sent successfully to server.");
+            } else {
+                logger.error("Failed to send UUID to server: HTTP response code {}", responseCode);
+            }
+
+            connection.disconnect();
+        } catch (Exception e) {
+            logger.error("An error occurred while sending UUID to server: {}", e.getMessage());
+        }
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         // Log post-initialization
         logger.info("Skyblock Collections Tracker post-initialization complete.");
+    }
+
+    @SubscribeEvent
+    public void onServerJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        if(sessionId == null) {
+            sessionId = UUID.randomUUID().toString();
+        }
+    }
+
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        // Check if both player and world are loaded
+        if (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().theWorld != null) {
+            logger.info("Player and world fully loaded on tick.");
+            if (PlayerUUID.UUID.isEmpty()) {
+                PlayerUUID.getUUID();
+                sendUUIDToServer(PlayerUUID.UUID, sessionId);
+            }
+            // Unsubscribe from the tick event once loaded to avoid repeated checks
+            MinecraftForge.EVENT_BUS.unregister(this);
+        }
+    }
+
+    @SubscribeEvent
+    public void onServerDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        ICommandSender sender = new ICommandSender() {
+            @Override
+            public String getName() {
+                return "";
+            }
+
+            @Override
+            public IChatComponent getDisplayName() {
+                return null;
+            }
+
+            @Override
+            public void addChatMessage(IChatComponent component) {
+            }
+
+            @Override
+            public boolean canCommandSenderUseCommand(int permLevel, String commandName) {
+                return false;
+            }
+
+            @Override
+            public BlockPos getPosition() {
+                return null;
+            }
+
+            @Override
+            public Vec3 getPositionVector() {
+                return null;
+            }
+
+            @Override
+            public World getEntityWorld() {
+                return null;
+            }
+
+            @Override
+            public Entity getCommandSenderEntity() {
+                return null;
+            }
+
+            @Override
+            public boolean sendCommandFeedback() {
+                return false;
+            }
+
+            @Override
+            public void setCommandStat(CommandResultStats.Type type, int amount) {
+            }
+        };
+        HypixelApiFetcher.stopTracking(sender);
     }
 }
