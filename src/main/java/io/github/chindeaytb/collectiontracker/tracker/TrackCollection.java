@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
 import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
-import static io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher.*;
+import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.*;
 
 public class TrackCollection {
 
@@ -129,8 +129,8 @@ public class TrackCollection {
                                 collectionPerHour = "Calculating..."; // For first-time calculations
                         }
 
-                        logger.info("New collection is " + currentCollection);
-                        logger.info("Old collection is " + previousCollection);
+                        logger.info("New collection is {}", currentCollection);
+                        logger.info("Old collection is {}", previousCollection);
 
                         previousCollection = currentCollection;
                         // Update the GUI instead of sending chat messages

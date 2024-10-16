@@ -1,6 +1,6 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
-import io.github.chindeaytb.collectiontracker.tracker.HypixelApiFetcher;
+import io.github.chindeaytb.collectiontracker.tracker.DataFetcher;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
@@ -19,7 +19,7 @@ public class StopTracker extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length > 0 && args[0].equalsIgnoreCase("stop")) {
-            HypixelApiFetcher.stopTracking(sender);
+            DataFetcher.stopTracking(sender);
         }
     }
 

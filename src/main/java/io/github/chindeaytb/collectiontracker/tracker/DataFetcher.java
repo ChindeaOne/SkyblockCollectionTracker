@@ -3,7 +3,7 @@ package io.github.chindeaytb.collectiontracker.tracker;
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
 import io.github.chindeaytb.collectiontracker.init.HypixelConnection;
 import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
-import io.github.chindeaytb.collectiontracker.tokenapi.DataFetcher;
+import io.github.chindeaytb.collectiontracker.tokenapi.HypixelApiFetcher;
 import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -17,10 +17,8 @@ import java.util.concurrent.TimeUnit;
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.previousCollection;
 
-public class HypixelApiFetcher {
+public class DataFetcher {
 
-//    public static final String BASE_URL = "https://skyblockcollections.com/
-    public static final String BASE_URL = "http://localhost:8080/hypixelapi";
     private static final Logger logger = HypixelConnection.logger;
 
     private static ScheduledExecutorService scheduler;
@@ -83,7 +81,7 @@ public class HypixelApiFetcher {
     }
 
     public static void scheduleDataFetch() {
-        scheduler.scheduleAtFixedRate(HypixelApiFetcher::fetchData, 15, 180, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 15, 180, TimeUnit.SECONDS);
         logger.info("Data fetching scheduled to run every 300 seconds");
     }
 
@@ -100,8 +98,7 @@ public class HypixelApiFetcher {
                 }
             }
 
-            logger.info("Fetching data from URL: {}", BASE_URL);
-            String jsonData = DataFetcher.fetchJsonData(PlayerUUID.UUID, TokenManager.getToken());
+            String jsonData = HypixelApiFetcher.fetchJsonData(PlayerUUID.UUID, TokenManager.getToken());
 
             collectionCache.put(PlayerUUID.UUID, new CachedData(jsonData, System.currentTimeMillis()));
             TrackCollection.displayCollection(jsonData);
@@ -136,7 +133,7 @@ public class HypixelApiFetcher {
             logger.info("Tracking paused. Will check again in {} seconds.", PAUSE_PERIOD);
 
             scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.schedule(HypixelApiFetcher::resumeTracking, PAUSE_PERIOD, TimeUnit.SECONDS);
+            scheduler.schedule(DataFetcher::resumeTracking, PAUSE_PERIOD, TimeUnit.SECONDS);
         }
     }
 
