@@ -14,7 +14,7 @@ public class PlayerUUID {
     private static final String MOJANG_API = "https://api.mojang.com/users/profiles/minecraft/";
     public static String UUID = "";
 
-    private static final Logger logger = HypixelConnection.logger;
+    private static final Logger logger = ModInitialization.logger;
 
     public static void getUUID() {
         PlayerName.getPlayerName();

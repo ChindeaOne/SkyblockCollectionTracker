@@ -3,7 +3,7 @@ package io.github.chindeaytb.collectiontracker.tracker;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
-import io.github.chindeaytb.collectiontracker.init.HypixelConnection;
+import io.github.chindeaytb.collectiontracker.init.ModInitialization;
 import io.github.chindeaytb.collectiontracker.init.PlayerName;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,7 @@ import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.*;
 public class TrackCollection {
 
     public static long previousCollection = -1;
-    private static final Logger logger = HypixelConnection.logger;
+    private static final Logger logger = ModInitialization.logger;
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
     public static void displayCollection(String jsonResponse) {

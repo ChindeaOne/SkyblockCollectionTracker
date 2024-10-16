@@ -1,7 +1,7 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
-import io.github.chindeaytb.collectiontracker.init.HypixelConnection;
+import io.github.chindeaytb.collectiontracker.init.ModInitialization;
 import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
 import io.github.chindeaytb.collectiontracker.tokenapi.HypixelApiFetcher;
 import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager;
@@ -19,7 +19,7 @@ import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.pre
 
 public class DataFetcher {
 
-    private static final Logger logger = HypixelConnection.logger;
+    private static final Logger logger = ModInitialization.logger;
 
     private static ScheduledExecutorService scheduler;
     public static boolean isTracking = false;
