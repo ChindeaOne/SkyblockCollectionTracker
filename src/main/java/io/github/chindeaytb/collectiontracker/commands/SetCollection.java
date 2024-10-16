@@ -1,14 +1,14 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
 import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
-import io.github.chindeaytb.collectiontracker.tracker.DataFetcher;
+import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
 
 import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
-import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.isTracking;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
 
 public class SetCollection extends CommandBase {
 
@@ -52,7 +52,7 @@ public class SetCollection extends CommandBase {
                     if (!isValidCollection(collection)) {
                         sender.addChatMessage(new ChatComponentText("§4Invalid collection!"));
                     } else{
-                        DataFetcher.startTracking(sender);
+                        TrackingHandlerClass.startTracking(sender);
                     }
                 } else {
                     sender.addChatMessage(new ChatComponentText("§cAlready tracking a collection."));

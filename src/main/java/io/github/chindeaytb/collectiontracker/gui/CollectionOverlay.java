@@ -9,7 +9,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.isTracking;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
 
 public class CollectionOverlay {
 

@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
 import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
-import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.*;
 
 public class TrackCollection {
 
@@ -121,7 +120,7 @@ public class TrackCollection {
                             // If there's no change, show "Paused"
                             if (collectedIn3Min == 0) {
                                 collectionPerHour = "Paused"; // Display "Paused" in the GUI
-                                pauseTracking();
+                                TrackingHandlerClass.pauseTracking();
                             } else {
                                 collectionPerHour = formatNumber(perHour);
                             }
