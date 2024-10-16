@@ -3,15 +3,12 @@ package io.github.chindeaytb.collectiontracker.tracker;
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
 import io.github.chindeaytb.collectiontracker.init.HypixelConnection;
 import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
-import io.github.chindeaytb.collectiontracker.token.TokenManager;
+import io.github.chindeaytb.collectiontracker.tokenapi.DataFetcher;
+import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,7 +19,8 @@ import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.pre
 
 public class HypixelApiFetcher {
 
-    public static final String BASE_URL = "https://skyblockcollections.com/hypixelapi";
+//    public static final String BASE_URL = "https://skyblockcollections.com/
+    public static final String BASE_URL = "http://localhost:8080/hypixelapi";
     private static final Logger logger = HypixelConnection.logger;
 
     private static ScheduledExecutorService scheduler;
@@ -103,7 +101,7 @@ public class HypixelApiFetcher {
             }
 
             logger.info("Fetching data from URL: {}", BASE_URL);
-            String jsonData = fetchJsonData(PlayerUUID.UUID, TokenManager.getToken());
+            String jsonData = DataFetcher.fetchJsonData(PlayerUUID.UUID, TokenManager.getToken());
 
             collectionCache.put(PlayerUUID.UUID, new CachedData(jsonData, System.currentTimeMillis()));
             TrackCollection.displayCollection(jsonData);
@@ -129,48 +127,6 @@ public class HypixelApiFetcher {
 
         public boolean isValid() {
             return (System.currentTimeMillis() - timestamp) < CACHE_EXPIRATION * 1000;
-        }
-    }
-
-    public static String fetchJsonData(String uuid, String token) {
-        try {
-            URL url = new URL(BASE_URL);
-
-            // Open a connection
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-
-            // Set the headers (X-UUID and Authorization)
-            conn.setRequestProperty("X-UUID", uuid);
-            conn.setRequestProperty("Authorization", token);
-            conn.setRequestProperty("Content-Type", "application/json");
-
-            // Get the response code
-            int responseCode = conn.getResponseCode();
-            if (responseCode == 200) {  // If response is OK
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-                StringBuilder content = new StringBuilder();
-
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                }
-
-                // Close connections
-                in.close();
-                conn.disconnect();
-
-                // Return the fetched data
-                return content.toString();
-            } else {
-                logger.error("Failed to fetch data, server responded with code: " + responseCode);
-                return null;
-            }
-
-        } catch (Exception e) {
-            // Handle and log the error
-            logger.error("An error occurred while fetching data from the server: {}", e.getMessage());
-            return null;
         }
     }
 
