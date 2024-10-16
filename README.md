@@ -1,4 +1,5 @@
 # Skyblock Collection Tracker Mod!
+# The server is down for now so no one can actually use the mod! I'm sorry for the inconveniences!
 Massive thanks to nea89 for the wiki! It taught me a lot about minecraft modding.
 https://moddev.nea.moe
 
