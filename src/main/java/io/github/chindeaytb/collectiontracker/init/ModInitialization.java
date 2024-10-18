@@ -29,8 +29,8 @@ public class ModInitialization {
         CommandHelper commandHelper = new CommandHelper();
         SetCollection setCollection = new SetCollection();
         StopTracker stopTracker = new StopTracker();
-        MoveGui moveGui = new MoveGui();
-        ClientCommandHandler.instance.registerCommand(new SCT_Commands(commandHelper, setCollection, stopTracker, moveGui));
+
+        ClientCommandHandler.instance.registerCommand(new SCT_Commands(commandHelper, setCollection, stopTracker));
 
         // Log initialization
         logger.info("Skyblock Collections Tracker mod initialized.");
