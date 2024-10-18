@@ -27,6 +27,7 @@ public class CommandHelper extends CommandBase {
 
     private void sendHelpMessage(ICommandSender sender) {
         sender.addChatMessage(new ChatComponentText("                        §f<§eInfo§f>"));
+        sender.addChatMessage(new ChatComponentText("§a◆/sct config => Opens the gui."));
         sender.addChatMessage(new ChatComponentText("§a◆/sct track => Tracks your Skyblock collection."));
         sender.addChatMessage(new ChatComponentText("§a◆/sct stop => Stops tracking."));
     }

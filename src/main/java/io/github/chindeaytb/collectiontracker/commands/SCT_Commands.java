@@ -13,13 +13,13 @@ public class SCT_Commands extends CommandBase {
     private final CommandHelper commandHelper;
     private final SetCollection setCollection;
     private final StopTracker stopTracker;
-    private final MoveGui moveGui;
+    private final GuiHandler guiHandler;
 
-    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, MoveGui moveGui) {
+    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, GuiHandler guiHandler) {
         this.commandHelper = commandHelper;
         this.setCollection = setCollection;
         this.stopTracker = stopTracker;
-        this.moveGui = moveGui;
+        this.guiHandler = guiHandler;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SCT_Commands extends CommandBase {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             // Provide completions for the first argument (commands)
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop", "move");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
@@ -53,7 +53,7 @@ public class SCT_Commands extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args){
         if (args.length == 0) {
-            sender.addChatMessage(new ChatComponentText("Use /sct help."));
+            guiHandler.processCommand(sender, args);
             return;
         }
 
@@ -67,9 +67,6 @@ public class SCT_Commands extends CommandBase {
                 break;
             case "stop":
                 stopTracker.processCommand(sender, args);
-                break;
-            case "move":
-                moveGui.processCommand(sender, args);
                 break;
             default:
                 sender.addChatMessage(new ChatComponentText("Unknown command. Use /sct help."));
