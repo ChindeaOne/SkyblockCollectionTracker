@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting.GREEN
 
-@SuppressWarnings("shadowed")
 class VersionCheck(option: ProcessedOption) : GuiOptionEditor(option) {
 
     override fun render(x: Int, y: Int, width: Int) {
