@@ -13,13 +13,15 @@ public class SCT_Commands extends CommandBase {
     private final CommandHelper commandHelper;
     private final SetCollection setCollection;
     private final StopTracker stopTracker;
-    private final GuiHandler guiHandler;
+    private final GuiMenu guiMenu;
+    private final MoveGui moveGui;
 
-    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, GuiHandler guiHandler) {
+    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, GuiMenu guiMenu, MoveGui moveGui) {
         this.commandHelper = commandHelper;
         this.setCollection = setCollection;
         this.stopTracker = stopTracker;
-        this.guiHandler = guiHandler;
+        this.guiMenu = guiMenu;
+        this.moveGui = moveGui;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class SCT_Commands extends CommandBase {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             // Provide completions for the first argument (commands)
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop", "move");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
@@ -53,7 +55,7 @@ public class SCT_Commands extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args){
         if (args.length == 0) {
-            guiHandler.processCommand(sender, args);
+            guiMenu.processCommand(sender, args);
             return;
         }
 
@@ -67,6 +69,9 @@ public class SCT_Commands extends CommandBase {
                 break;
             case "stop":
                 stopTracker.processCommand(sender, args);
+                break;
+            case "move":
+                moveGui.processCommand(sender, args);
                 break;
             default:
                 sender.addChatMessage(new ChatComponentText("Unknown command. Use /sct help."));

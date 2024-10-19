@@ -3,7 +3,6 @@ package io.github.chindeaytb.collectiontracker.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,22 +42,15 @@ public class CollectionOverlay {
     public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
         if (isTracking) {
 
+            int x = MoveableOverlay.getX();  // Get the updated X position
+            int y = MoveableOverlay.getY();  // Get the updated Y position
+
             Minecraft mc = Minecraft.getMinecraft();
+
             FontRenderer fontRenderer = mc.fontRendererObj; // Default Minecraft font renderer
 
-            // Get screen dimensions
-            ScaledResolution scaledRes = new ScaledResolution(mc);
-            int screenHeight = scaledRes.getScaledHeight();
-
-            // Set chat dimensions
-            int chatHeight = (int) (130 * 0.7); // Focused height scaled to 70%
-
-            // Calculate chat position (bottom-left corner of the screen)
-            int chatX = 4; // X-coordinate for the chat (left-aligned)
-            int chatY = screenHeight - chatHeight - 10; // Y-coordinate for the chat, offset above the bottom
-
             // Prepare the texts with color codes embedded directly in the string
-            String collectionText =  (collectionName.isEmpty() ? "" : "§a" + collectionName + " collection ") +  (collectionAmount.isEmpty() ? "" : "§f> " + collectionAmount);
+            String collectionText = (collectionName.isEmpty() ? "" : "§a" + collectionName + " collection ") + (collectionAmount.isEmpty() ? "" : "§f> " + collectionAmount);
             String perHourText = (collectionPerHour.isEmpty() ? "" : "§aColl/h " + "§f> " + collectionPerHour);
             String uptimeText = (collectionName.isEmpty() ? "" : "§aUptime " + "§f> " + getUptime());
 
@@ -66,14 +58,12 @@ public class CollectionOverlay {
             int maxWidth = Math.max(fontRenderer.getStringWidth(collectionText),
                     Math.max(fontRenderer.getStringWidth(perHourText), fontRenderer.getStringWidth(uptimeText)));
 
-            // Set box dimensions (adjusted for the new full size)
-            int boxHeight = 28; // Box height remains the same
+            // Set box dimensions based on text content
+            int boxHeight = 28;  // Height of the box remains fixed
+            int boxWidth = maxWidth + 10;  // Width depends on the longest string with some padding
 
-            // Calculate the box's position above the chat
-            int boxY = chatY - boxHeight - 8; // Position it just above the chat
-
-            // Draw a semi-transparent background for the box
-            Gui.drawRect(chatX, boxY, chatX + maxWidth, boxY + boxHeight, 0x10000000); // Semi-transparent background
+            // Draw a semi-transparent background for the box at the new position
+            Gui.drawRect(x, y, x + boxWidth, y + boxHeight, 0x10000000); // Semi-transparent background
 
             // Scaling text to 85%
             float scale = 0.85f;
@@ -81,14 +71,14 @@ public class CollectionOverlay {
             // Vertical text centering calculations
             int lineHeight = (int) (12 * scale);  // Approximate height of each line of text scaled to 85%
             int totalTextHeight = 3 * lineHeight; // 3 lines of text
-            int startY = boxY + (boxHeight - totalTextHeight) / 2; // Center the text vertically in the box
+            int startY = y + (boxHeight - totalTextHeight) / 2; // Center the text vertically in the box
 
             // Render the text with scaling
             GlStateManager.pushMatrix();
             GlStateManager.scale(scale, scale, scale); // Apply 85% scaling
 
             // Adjust textX and textY for the scaling factor
-            int textX = (int) ((chatX + 1) / scale); // Scale position for 85%
+            int textX = (int) ((x + 1) / scale); // Scale position for 85%
             int textY = (int) ((startY + 2) / scale);     // Scale position for 85%
 
             // Render each full string with its embedded color codes
@@ -103,6 +93,7 @@ public class CollectionOverlay {
             GlStateManager.popMatrix(); // Restore previous OpenGL state
         }
     }
+
 
     // Method to calculate and return the uptime as a formatted string
     private static String getUptime() {

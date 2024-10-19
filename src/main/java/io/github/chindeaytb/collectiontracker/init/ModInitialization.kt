@@ -4,6 +4,8 @@ import io.github.chindeaytb.collectiontracker.commands.*
 import io.github.chindeaytb.collectiontracker.config.ConfigManager
 import io.github.chindeaytb.collectiontracker.connection.DisconnectHandlerClass
 import io.github.chindeaytb.collectiontracker.connection.ServerConnectHandlerClass
+import io.github.chindeaytb.collectiontracker.commands.GuiMenu
+import io.github.chindeaytb.collectiontracker.gui.MoveableOverlay
 import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
@@ -42,14 +44,18 @@ class ModInitialization {
         MinecraftForge.EVENT_BUS.register(configManager)
         logger.info("ConfigManager initialized.")
 
+        MinecraftForge.EVENT_BUS.register(MoveableOverlay())
+        logger.info("Moveable overlay initialized.")
+
         MinecraftForge.EVENT_BUS.register(this)
 
         // Register commands
         val commandHelper = CommandHelper()
         val setCollection = SetCollection()
         val stopTracker = StopTracker()
-        val guiHandler = GuiHandler()
-        ClientCommandHandler.instance.registerCommand(SCT_Commands(commandHelper, setCollection, stopTracker, guiHandler))
+        val guiMenu = GuiMenu()
+        val moveGui = MoveGui()
+        ClientCommandHandler.instance.registerCommand(SCT_Commands(commandHelper, setCollection, stopTracker, guiMenu, moveGui))
 
         // Log initialization
         logger.info("Skyblock Collections Tracker mod initialized.")

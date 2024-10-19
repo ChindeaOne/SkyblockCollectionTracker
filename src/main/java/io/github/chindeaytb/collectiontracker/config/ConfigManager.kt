@@ -2,9 +2,15 @@ package io.github.chindeaytb.collectiontracker.config
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
+import io.github.chindeaytb.collectiontracker.init.ModInitialization.Companion.logger
 import io.github.chindeaytb.collectiontracker.config.error.ConfigError
+import io.github.chindeaytb.collectiontracker.config.misc.VersionManager
 import io.github.moulberry.moulconfig.gui.MoulConfigEditor
 import io.github.moulberry.moulconfig.gui.GuiScreenElementWrapper
+import io.github.moulberry.moulconfig.observer.PropertyTypeAdapterFactory
 import io.github.moulberry.moulconfig.processor.BuiltinMoulConfigGuis
 import io.github.moulberry.moulconfig.processor.ConfigProcessorDriver
 import io.github.moulberry.moulconfig.processor.MoulConfigProcessor
@@ -12,35 +18,48 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import java.io.BufferedReader
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.io.*
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import java.util.*
 
 class ConfigManager {
+
     companion object {
-        val gson: Gson = GsonBuilder()
+
+        val gson: Gson = GsonBuilder().setPrettyPrinting()
+            .excludeFieldsWithoutExposeAnnotation()
+            .serializeSpecialFloatingPointValues()
+            .registerTypeAdapterFactory(PropertyTypeAdapterFactory())
+            .registerTypeAdapter(UUID::class.java, object : TypeAdapter<UUID>() {
+                override fun write(out: JsonWriter, value: UUID) {
+                    out.value(value.toString())
+                }
+
+                override fun read(reader: JsonReader): UUID {
+                    return UUID.fromString(reader.nextString())
+                }
+            }.nullSafe())
+            .enableComplexMapKeySerialization()
             .create()
     }
 
+    private var config: ModConfig? = null
+
     private var configDirectory = File("config/sct")
     private var configFile: File
-    private var config: ModConfig? = null
     private var lastSaveTime = 0L
-
 
     private lateinit var processor: MoulConfigProcessor<ModConfig>
     private val editor by lazy { MoulConfigEditor(processor) }
 
     init {
+
+        logger.info("Loading config...")
+
         configDirectory.mkdirs()
+
         configFile = File(configDirectory, "config.json")
 
         if (configFile.isFile) {
@@ -56,7 +75,7 @@ class ConfigManager {
         val config = config!!
         processor = MoulConfigProcessor(config)
         BuiltinMoulConfigGuis.addProcessors(processor)
-//        UpdateManager.injectConfigProcessor(processor)
+        VersionManager.injectConfigProcessor(processor)
         ConfigProcessorDriver.processConfig(
             config.javaClass,
             config,
@@ -66,10 +85,6 @@ class ConfigManager {
         Runtime.getRuntime().addShutdownHook(Thread {
             save()
         })
-    }
-
-    fun openConfigGui() {
-        screenToOpen = GuiScreenElementWrapper(editor)
     }
 
     private fun tryReadConfig() {
@@ -109,6 +124,11 @@ class ConfigManager {
         } catch (e: IOException) {
             throw ConfigError("Could not save config", e)
         }
+    }
+
+
+    fun openConfigGui() {
+        screenToOpen = GuiScreenElementWrapper(editor)
     }
 
     private var screenToOpen: GuiScreen? = null

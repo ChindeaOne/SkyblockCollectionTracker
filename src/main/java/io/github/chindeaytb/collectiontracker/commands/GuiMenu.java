@@ -5,7 +5,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
 
-public class GuiHandler extends CommandBase {
+public class GuiMenu extends CommandBase {
     @Override
     public String getCommandName() {
         return "sct";
