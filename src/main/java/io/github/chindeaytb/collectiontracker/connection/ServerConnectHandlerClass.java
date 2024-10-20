@@ -1,6 +1,6 @@
 package io.github.chindeaytb.collectiontracker.connection;
 
-import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
+import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

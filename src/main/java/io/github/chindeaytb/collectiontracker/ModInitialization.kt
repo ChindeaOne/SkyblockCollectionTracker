@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.init
+package io.github.chindeaytb.collectiontracker
 
 import io.github.chindeaytb.collectiontracker.commands.*
 import io.github.chindeaytb.collectiontracker.config.ConfigManager

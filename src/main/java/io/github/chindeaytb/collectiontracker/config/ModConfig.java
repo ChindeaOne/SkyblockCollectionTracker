@@ -3,7 +3,7 @@ package io.github.chindeaytb.collectiontracker.config;
 import com.google.gson.annotations.Expose;
 import io.github.chindeaytb.collectiontracker.config.categories.About;
 import io.github.chindeaytb.collectiontracker.config.categories.GUIConfig;
-import io.github.chindeaytb.collectiontracker.init.ModInitialization;
+import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.moulberry.moulconfig.Config;
 import io.github.moulberry.moulconfig.annotations.Category;
 

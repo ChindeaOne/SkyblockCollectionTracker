@@ -3,7 +3,7 @@ package io.github.chindeaytb.collectiontracker.tracker;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
-import io.github.chindeaytb.collectiontracker.init.PlayerName;
+import io.github.chindeaytb.collectiontracker.player.PlayerName;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
-import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
+import static io.github.chindeaytb.collectiontracker.player.PlayerUUID.UUID;
 
 public class TrackCollection {
 

@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.init;
+package io.github.chindeaytb.collectiontracker.player;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

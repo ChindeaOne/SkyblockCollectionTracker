@@ -1,6 +1,6 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
-import io.github.chindeaytb.collectiontracker.init.ModInitialization;
+import io.github.chindeaytb.collectiontracker.ModInitialization;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 

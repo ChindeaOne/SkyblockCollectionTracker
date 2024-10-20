@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.init;
+package io.github.chindeaytb.collectiontracker.player;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

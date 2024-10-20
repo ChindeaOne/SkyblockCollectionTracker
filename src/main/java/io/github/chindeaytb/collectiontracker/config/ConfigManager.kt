@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import io.github.chindeaytb.collectiontracker.init.ModInitialization.Companion.logger
+import io.github.chindeaytb.collectiontracker.ModInitialization.Companion.logger
 import io.github.chindeaytb.collectiontracker.config.error.ConfigError
 import io.github.chindeaytb.collectiontracker.config.misc.version.VersionManager
 import io.github.moulberry.moulconfig.gui.MoulConfigEditor
