@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = ModInitialization.MODID, clientSideOnly = true,useMetadata = true, version = "1.0.2")
+@Mod(modid = ModInitialization.MODID, clientSideOnly = true,useMetadata = true, version = "@MOD_VERSION@")
 class ModInitialization {
 
     companion object {
