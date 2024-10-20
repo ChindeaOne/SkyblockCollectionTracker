@@ -1,6 +1,5 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
-import io.github.chindeaytb.collectiontracker.gui.MoveableOverlay;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -23,7 +22,8 @@ public class MoveGui extends CommandBase {
         if(!isTracking){
             sender.addChatMessage(new ChatComponentText("§cNo tracking active!"));
         }else if (args.length > 0 && args[0].equalsIgnoreCase("move")) {
-            MoveableOverlay.activateDragging();
+            // Activate dragging mode
+            return;
         }
     }
 
@@ -31,4 +31,5 @@ public class MoveGui extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
         return true;
     }
+    
 }

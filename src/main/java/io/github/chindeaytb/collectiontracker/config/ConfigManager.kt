@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import io.github.chindeaytb.collectiontracker.init.ModInitialization.Companion.logger
 import io.github.chindeaytb.collectiontracker.config.error.ConfigError
-import io.github.chindeaytb.collectiontracker.config.misc.VersionManager
+import io.github.chindeaytb.collectiontracker.config.misc.version.VersionManager
 import io.github.moulberry.moulconfig.gui.MoulConfigEditor
 import io.github.moulberry.moulconfig.gui.GuiScreenElementWrapper
 import io.github.moulberry.moulconfig.observer.PropertyTypeAdapterFactory

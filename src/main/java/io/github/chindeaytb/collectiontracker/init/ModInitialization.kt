@@ -5,7 +5,6 @@ import io.github.chindeaytb.collectiontracker.config.ConfigManager
 import io.github.chindeaytb.collectiontracker.connection.DisconnectHandlerClass
 import io.github.chindeaytb.collectiontracker.connection.ServerConnectHandlerClass
 import io.github.chindeaytb.collectiontracker.commands.GuiMenu
-import io.github.chindeaytb.collectiontracker.gui.MoveableOverlay
 import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
@@ -43,9 +42,6 @@ class ModInitialization {
         configManager = ConfigManager()
         MinecraftForge.EVENT_BUS.register(configManager)
         logger.info("ConfigManager initialized.")
-
-        MinecraftForge.EVENT_BUS.register(MoveableOverlay())
-        logger.info("Moveable overlay initialized.")
 
         MinecraftForge.EVENT_BUS.register(this)
 

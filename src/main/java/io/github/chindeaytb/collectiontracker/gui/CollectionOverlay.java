@@ -42,9 +42,6 @@ public class CollectionOverlay {
     public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
         if (isTracking) {
 
-            int x = MoveableOverlay.getX();  // Get the updated X position
-            int y = MoveableOverlay.getY();  // Get the updated Y position
-
             Minecraft mc = Minecraft.getMinecraft();
 
             FontRenderer fontRenderer = mc.fontRendererObj; // Default Minecraft font renderer
@@ -63,6 +60,10 @@ public class CollectionOverlay {
             int boxWidth = maxWidth + 10;  // Width depends on the longest string with some padding
 
             // Draw a semi-transparent background for the box at the new position
+            // Default X position
+            int x = 4;
+            // Default Y position
+            int y = 150;
             Gui.drawRect(x, y, x + boxWidth, y + boxHeight, 0x10000000); // Semi-transparent background
 
             // Scaling text to 85%
