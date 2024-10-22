@@ -5,3 +5,5 @@ build/
 .gitattributes
 .github/
 src/main/java/io/github/chindeaytb/collectiontracker/tokenapi/
+
+private-key.asc
