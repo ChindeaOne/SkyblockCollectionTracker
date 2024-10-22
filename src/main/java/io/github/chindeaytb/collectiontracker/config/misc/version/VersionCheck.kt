@@ -16,7 +16,7 @@ class VersionCheck(option: ProcessedOption) : GuiOptionEditor(option) {
         val width = width - 20
 
         val widthRemaining = width - 10
-        val currentVersion = "Version: " + ModInitialization.version
+        val currentVersion = "Version " + ModInitialization.version
 
         // Render the current version in green
         GlStateManager.pushMatrix()
