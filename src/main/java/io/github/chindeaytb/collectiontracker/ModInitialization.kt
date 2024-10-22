@@ -30,7 +30,6 @@ class ModInitialization {
         configManager = ConfigManager()
         MinecraftForge.EVENT_BUS.register(configManager)
         logger.info("ConfigManager initialized.")
-
         MinecraftForge.EVENT_BUS.register(this)
 
         // Register commands
