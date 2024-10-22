@@ -47,7 +47,6 @@ class ModInitialization {
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {
         try {
-            // Fetch and store the token
             TokenManager.fetchAndStoreToken()
             logger.info("Token successfully fetched and stored.")
         } catch (e: Exception) {
