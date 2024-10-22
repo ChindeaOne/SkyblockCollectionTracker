@@ -1,7 +1,7 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
-import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
+import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import org.apache.logging.log4j.LogManager;

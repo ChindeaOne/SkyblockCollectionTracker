@@ -13,11 +13,15 @@ public class SCT_Commands extends CommandBase {
     private final CommandHelper commandHelper;
     private final SetCollection setCollection;
     private final StopTracker stopTracker;
+    private final GuiMenu guiMenu;
+    private final MoveGui moveGui;
 
-    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker) {
+    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, GuiMenu guiMenu, MoveGui moveGui) {
         this.commandHelper = commandHelper;
         this.setCollection = setCollection;
         this.stopTracker = stopTracker;
+        this.guiMenu = guiMenu;
+        this.moveGui = moveGui;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class SCT_Commands extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args){
         if (args.length == 0) {
-            sender.addChatMessage(new ChatComponentText("Use /sct help."));
+            guiMenu.processCommand(sender, args);
             return;
         }
 
@@ -65,6 +69,9 @@ public class SCT_Commands extends CommandBase {
                 break;
             case "stop":
                 stopTracker.processCommand(sender, args);
+                break;
+            case "move":
+                moveGui.processCommand(sender, args);
                 break;
             default:
                 sender.addChatMessage(new ChatComponentText("Unknown command. Use /sct help."));

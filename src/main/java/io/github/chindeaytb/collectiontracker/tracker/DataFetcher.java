@@ -1,9 +1,9 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
-import io.github.chindeaytb.collectiontracker.init.ModInitialization;
-import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
+import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
 import io.github.chindeaytb.collectiontracker.tokenapi.HypixelApiFetcher;
 import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DataFetcher {
 
-    private static final Logger logger = ModInitialization.logger;
+    private static final Logger logger = LogManager.getLogger(DataFetcher.class);
 
     public static ScheduledExecutorService scheduler;
 

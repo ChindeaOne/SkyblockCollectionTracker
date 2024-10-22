@@ -1,8 +1,9 @@
-package io.github.chindeaytb.collectiontracker.init;
+package io.github.chindeaytb.collectiontracker.player;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -14,7 +15,7 @@ public class PlayerUUID {
     private static final String MOJANG_API = "https://api.mojang.com/users/profiles/minecraft/";
     public static String UUID = "";
 
-    private static final Logger logger = ModInitialization.logger;
+    private static final Logger logger = LogManager.getLogger(PlayerName.class);
 
     public static void getUUID() {
         PlayerName.getPlayerName();

@@ -1,13 +1,13 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
-import io.github.chindeaytb.collectiontracker.init.PlayerUUID;
+import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
 
-import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
+import static io.github.chindeaytb.collectiontracker.player.PlayerUUID.UUID;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
 
 public class SetCollection extends CommandBase {

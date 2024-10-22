@@ -3,8 +3,8 @@ package io.github.chindeaytb.collectiontracker.tracker;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
-import io.github.chindeaytb.collectiontracker.init.ModInitialization;
-import io.github.chindeaytb.collectiontracker.init.PlayerName;
+import io.github.chindeaytb.collectiontracker.player.PlayerName;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.StringReader;
@@ -12,12 +12,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
-import static io.github.chindeaytb.collectiontracker.init.PlayerUUID.UUID;
+import static io.github.chindeaytb.collectiontracker.player.PlayerUUID.UUID;
 
 public class TrackCollection {
 
     public static long previousCollection = -1;
-    private static final Logger logger = ModInitialization.logger;
+    private static final Logger logger = LogManager.getLogger(TrackCollection.class);
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
     public static void displayCollection(String jsonResponse) {
