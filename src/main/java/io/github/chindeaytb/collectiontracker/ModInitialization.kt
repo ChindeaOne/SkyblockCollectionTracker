@@ -15,20 +15,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = ModInitialization.MODID, clientSideOnly = true,useMetadata = true, version = "@MOD_VERSION@")
+@Mod(modid = ModInitialization.MODID, clientSideOnly = true,useMetadata = true, version = "@SCT_VERSION@",)
 class ModInitialization {
-
-    companion object {
-        lateinit var configManager: ConfigManager
-        const val MODID = "skyblockcollectiontracker"
-
-        val logger: Logger = LogManager.getLogger(ModInitialization::class.java)
-
-        @JvmStatic
-        val version: String
-            get() = Loader.instance().indexedModList[MODID]!!.version
-
-    }
 
     @Mod.EventHandler
     @Suppress("UNUSED_PARAMETER")
@@ -69,5 +57,16 @@ class ModInitialization {
 
         // Log post-initialization
         logger.info("Skyblock Collections Tracker post-initialization complete.")
+    }
+
+    companion object {
+        lateinit var configManager: ConfigManager
+        const val MODID = "skyblockcollectiontracker"
+
+        val logger: Logger = LogManager.getLogger(ModInitialization::class.java)
+
+        @JvmStatic
+        val version: String
+            get() = Loader.instance().indexedModList[MODID]!!.version
     }
 }
