@@ -4,6 +4,10 @@ run/
 build/
 .gitattributes
 .github/
-src/main/java/io/github/chindeaytb/collectiontracker/tokenapi/
 
-private-key.asc
+build
+gradle.properties
+.gradle
+
+src/main/resources/secret.properties
+*.asc

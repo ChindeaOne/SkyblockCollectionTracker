@@ -12,7 +12,6 @@ plugins {
     id("net.kyori.blossom")
 }
 
-
 version = setVersionFromGit()
 
 // Toolchains
@@ -89,7 +88,6 @@ dependencies {
 
     kotlinDependencies(kotlin("stdlib"))
     kotlinDependencies(kotlin("reflect"))
-
 }
 
 kotlin {
@@ -102,6 +100,7 @@ kotlin {
 }
 
 // Tasks
+
 tasks.compileJava {
     dependsOn(tasks.processResources)
 }
@@ -169,7 +168,5 @@ tasks.shadowJar {
 }
 
 blossom {
-    replaceToken("@SCT_VERSION@", project.version)
+    replaceToken("sctVersion", project.version)
 }
-
-tasks.assemble.get().dependsOn(tasks.remapJar)
