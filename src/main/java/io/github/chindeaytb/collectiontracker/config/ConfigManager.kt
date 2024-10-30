@@ -47,7 +47,7 @@ class ConfigManager {
 
     private var config: ModConfig? = null
 
-    private var configDirectory = File("config/sct")
+    private var configDirectory = File("config.properties/sct")
     private var configFile: File
     private var lastSaveTime = 0L
 
@@ -56,19 +56,19 @@ class ConfigManager {
 
     init {
 
-        logger.info("Loading config...")
+        logger.info("Loading config.properties...")
 
         configDirectory.mkdirs()
 
-        configFile = File(configDirectory, "config.json")
+        configFile = File(configDirectory, "config.properties.json")
 
         if (configFile.isFile) {
-            println("Trying to load the config")
+            println("Trying to load the config.properties")
             tryReadConfig()
         }
 
         if (config == null) {
-            println("Creating a clean config.")
+            println("Creating a clean config.properties.")
             config = ModConfig()
         }
 
@@ -99,17 +99,17 @@ class ConfigManager {
             }
             config = gson.fromJson(builder.toString(), ModConfig::class.java)
         } catch (e: Exception) {
-            throw ConfigError("Could not load config", e)
+            throw ConfigError("Could not load config.properties", e)
         }
     }
 
     fun save() {
         lastSaveTime = System.currentTimeMillis()
-        val config = config ?: error("Can not save null config.")
+        val config = config ?: error("Can not save null config.properties.")
 
         try {
             configDirectory.mkdirs()
-            val unit = configDirectory.resolve("config.json.write")
+            val unit = configDirectory.resolve("config.properties.json.write")
             unit.createNewFile()
             BufferedWriter(OutputStreamWriter(FileOutputStream(unit), StandardCharsets.UTF_8)).use { writer ->
                 writer.write(gson.toJson(config))
@@ -122,7 +122,7 @@ class ConfigManager {
                 StandardCopyOption.ATOMIC_MOVE
             )
         } catch (e: IOException) {
-            throw ConfigError("Could not save config", e)
+            throw ConfigError("Could not save config.properties", e)
         }
     }
 

@@ -1,8 +1,8 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
 import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
-import io.github.chindeaytb.collectiontracker.tokenapi.HypixelApiFetcher;
-import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager;
+import io.github.chindeaytb.collectiontracker.api.HypixelApiFetcher;
+import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +30,9 @@ public class DataFetcher {
                 CachedData cachedData = collectionCache.get(PlayerUUID.UUID);
                 if (cachedData.isValid()) {
                     logger.info("Using cached data for player with UUID: {}", PlayerUUID.UUID);
-                    TrackCollection.displayCollection(cachedData.getJsonData());
+                    String targetProfileId = TrackCollection.findSelectedProfileId(cachedData.getJsonData());
+                    logger.info("Selected profile ID: {}", targetProfileId);
+                    TrackCollection.displayCollection(cachedData.getJsonData(),targetProfileId);
                     return;
                 } else {
                     collectionCache.remove(PlayerUUID.UUID);
@@ -40,7 +42,10 @@ public class DataFetcher {
             String jsonData = HypixelApiFetcher.fetchJsonData(PlayerUUID.UUID, TokenManager.getToken());
 
             collectionCache.put(PlayerUUID.UUID, new CachedData(jsonData, System.currentTimeMillis()));
-            TrackCollection.displayCollection(jsonData);
+
+            String targetProfileId = TrackCollection.findSelectedProfileId(jsonData);
+            logger.info("Selected profile ID: {}", targetProfileId);
+            TrackCollection.displayCollection(jsonData, targetProfileId);
             logger.info("Data successfully fetched and displayed for player with UUID: {}", PlayerUUID.UUID);
 
         } catch (Exception e) {

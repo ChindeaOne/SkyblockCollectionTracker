@@ -5,7 +5,7 @@ import io.github.chindeaytb.collectiontracker.config.ConfigManager
 import io.github.chindeaytb.collectiontracker.connection.DisconnectHandlerClass
 import io.github.chindeaytb.collectiontracker.connection.ServerConnectHandlerClass
 import io.github.chindeaytb.collectiontracker.commands.GuiMenu
-import io.github.chindeaytb.collectiontracker.tokenapi.TokenManager
+import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Loader
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = ModInitialization.MODID, clientSideOnly = true,useMetadata = true, version = "@SCT_VERSION@",)
+@Mod(modid = ModInitialization.MODID, clientSideOnly = true,useMetadata = true, version = "sctVersion",)
 class ModInitialization {
 
     @Mod.EventHandler
@@ -40,7 +40,6 @@ class ModInitialization {
         val moveGui = MoveGui()
         ClientCommandHandler.instance.registerCommand(SCT_Commands(commandHelper, setCollection, stopTracker, guiMenu, moveGui))
 
-        // Log initialization
         logger.info("Skyblock Collections Tracker mod initialized.")
     }
 
@@ -48,12 +47,10 @@ class ModInitialization {
     fun postInit(event: FMLPostInitializationEvent) {
         try {
             TokenManager.fetchAndStoreToken()
-            logger.info("Token successfully fetched and stored.")
         } catch (e: Exception) {
             logger.error("Failed to fetch token: {}", e.message)
         }
 
-        // Log post-initialization
         logger.info("Skyblock Collections Tracker post-initialization complete.")
     }
 

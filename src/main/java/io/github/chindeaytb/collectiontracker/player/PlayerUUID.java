@@ -41,7 +41,6 @@ public class PlayerUUID {
             throw new Exception("Failed to fetch UUID: HTTP response code " + responseCode);
         }
 
-        // Read the response
         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String inputLine;
         StringBuilder content = new StringBuilder();

@@ -19,7 +19,7 @@ public class ServerConnectHandlerClass {
             if (PlayerUUID.UUID.isEmpty()) {
                 PlayerUUID.getUUID();
             }
-            MinecraftForge.EVENT_BUS.unregister(this); // Unsubscribe once loaded
+            MinecraftForge.EVENT_BUS.unregister(this);
         }
     }
 }

@@ -30,15 +30,12 @@ public class SetCollection extends CommandBase {
             if(UUID.isEmpty()) {
                 PlayerUUID.getUUID();
             }
-
-            // Check if the command is for tracking
             if (args[0].equalsIgnoreCase("track")) {
                 if (args.length < 2) {
                     sender.addChatMessage(new ChatComponentText("Use: /sct track <collection>"));
                     return;
                 }
 
-                // Join the args to allow spaces in the collection name
                 StringBuilder keyBuilder = new StringBuilder();
                 for (int i = 1; i < args.length; i++) {
                     keyBuilder.append(args[i]);
@@ -65,7 +62,6 @@ public class SetCollection extends CommandBase {
     }
 
     private boolean isValidCollection(String collectionName) {
-        // Check if the collectionName matches any of the valid collections
         switch (collectionName) {
             case "gold":
             case "iron":
