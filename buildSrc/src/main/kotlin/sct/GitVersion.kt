@@ -1,3 +1,7 @@
+/*
+ * This kotlin object is derived from the Skyhanni mod.
+ */
+
 package sct
 
 import org.gradle.api.Project
