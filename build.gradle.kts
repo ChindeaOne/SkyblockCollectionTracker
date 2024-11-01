@@ -47,11 +47,11 @@ repositories {
         }
     }
 }
-
 sourceSets.main {
-    resources.destinationDirectory.set(kotlin.destinationDirectory)
-    output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
+        resources.destinationDirectory.set(kotlin.destinationDirectory)
+        output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
 }
+
 
 val kotlinDependencies: Configuration by configurations.creating {
     configurations.implementation.get().extendsFrom(this)
@@ -109,6 +109,7 @@ tasks.compileJava {
 tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
 }
+
 
 tasks.withType(org.gradle.jvm.tasks.Jar::class) {
     archiveBaseName.set("SkyblockCollectionTracker")
@@ -171,3 +172,5 @@ tasks.shadowJar {
 blossom {
     replaceToken("sctVersion", project.version)
 }
+
+
