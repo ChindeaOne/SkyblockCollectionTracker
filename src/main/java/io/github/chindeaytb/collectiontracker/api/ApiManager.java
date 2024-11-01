@@ -1,38 +1,60 @@
 package io.github.chindeaytb.collectiontracker.api;
 
-import io.github.chindeaytb.collectiontracker.ModInitialization;
+import io.github.chindeaytb.collectiontracker.api.decryptor.Decryptor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class ApiManager {
 
+    private static String KEY = null;
     private static String TOKEN_URL = null;
     private static String BASE_URL = null;
-    private static String User_Agent = null;
-    private static String Token_Validation = null;
+    private static String USER_AGENT = null;
+    private static String TOKEN_VALIDATION = null;
 
     private static final Logger logger = LogManager.getLogger(ApiManager.class);
 
     static {
-        try (InputStream input = ApiManager.class.getClassLoader().getResourceAsStream("secret.properties")) {
-            if (input == null) {
-                logger.error("Unable to find secret.properties");
-            } else {
-                Properties prop = new Properties();
-                prop.load(input);
+        File decryptedFile = null;
+        try {
+            decryptedFile = File.createTempFile("secret", ".properties");
+            decryptedFile.deleteOnExit();
 
-                TOKEN_URL = prop.getProperty("TOKEN_URL");
-                BASE_URL = prop.getProperty("BASE_URL");
-                User_Agent = prop.getProperty("User-Agent") + "/" + ModInitialization.getVersion();
-                Token_Validation = prop.getProperty("Token-Validation");
+            try (InputStream encryptedInputStream = ApiManager.class.getClassLoader().getResourceAsStream("secret.properties.enc")) {
+
+                assert encryptedInputStream != null;
+                Decryptor.decryptFile(encryptedInputStream, decryptedFile.getAbsolutePath());
+
+                try (InputStream input = Files.newInputStream(decryptedFile.toPath())) {
+                    Properties properties = new Properties();
+                    properties.load(input);
+
+                    KEY = properties.getProperty("KEY");
+                    TOKEN_URL = properties.getProperty("TOKEN_URL");
+                    BASE_URL = properties.getProperty("BASE_URL");
+                    USER_AGENT = properties.getProperty("User-Agent");
+                    TOKEN_VALIDATION = properties.getProperty("Token-Validation");
+                }
             }
         } catch (IOException e) {
             logger.error("Error loading properties file", e);
+        } finally {
+            if (decryptedFile != null && decryptedFile.exists()) {
+                decryptedFile.delete();
+            }
         }
+    }
+
+    @SuppressWarnings("unused")
+    public static String getKey() {
+        return KEY;
     }
 
     public static String getTokenUrl() {
@@ -43,11 +65,11 @@ public class ApiManager {
         return BASE_URL;
     }
 
-    public static String getAgent() {
-        return User_Agent;
+    public static String getUserAgent() {
+        return USER_AGENT;
     }
 
     public static String getTokenValidation() {
-        return Token_Validation;
+        return TOKEN_VALIDATION;
     }
 }
