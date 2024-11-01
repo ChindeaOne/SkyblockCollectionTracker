@@ -46,7 +46,18 @@ public class SCT_Commands extends CommandBase {
             return CommandBase.getListOfStringsMatchingLastWord(args,
                     "gold", "iron", "redstone", "cobblestone", "netherrack", "endstone",
                     "diamond", "quartz", "obsidian", "gemstone", "umber", "coal",
-                    "emerald", "glacite", "tungsten", "mycelium", "red sand", "hard stone", "sulphur");
+                    "emerald", "glacite", "tungsten", "mycelium", "red sand", "hard stone",
+                    "cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane",
+                    "pumpkin", "wheat", "seeds", "mushroom", "raw rabbit", "nether wart",
+                    "mutton", "melon", "potato", "leather", "porkchop", "feather",
+                    "lapis lazuli", "glowstone", "gravel", "slimeball", "magma cream",
+                    "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone",
+                    "blaze rod", "string", "acacia wood", "spruce wood", "jungle wood",
+                    "birch wood", "oak wood", "dark oak wood", "lily pad", "prismarine shard",
+                    "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon",
+                    "magmafish", "prismarine crystal", "clay", "sponge", "wilted berberis",
+                    "living metal heart", "caducous stem", "agaricus cap", "hemovibe",
+                    "half-eaten carrot");
         }
 
         return Collections.emptyList();

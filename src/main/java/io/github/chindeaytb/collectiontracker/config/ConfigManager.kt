@@ -63,7 +63,7 @@ class ConfigManager {
         configFile = File(configDirectory, "config.properties.json")
 
         if (configFile.isFile) {
-            println("Trying to load the config.properties")
+            println("Trying to load the config.properties.")
             tryReadConfig()
         }
 

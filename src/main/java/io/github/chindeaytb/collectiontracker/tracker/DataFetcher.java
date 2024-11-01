@@ -1,7 +1,7 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
 import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
-import io.github.chindeaytb.collectiontracker.api.HypixelApiFetcher;
+import io.github.chindeaytb.collectiontracker.api.hypixelapi.HypixelApiFetcher;
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

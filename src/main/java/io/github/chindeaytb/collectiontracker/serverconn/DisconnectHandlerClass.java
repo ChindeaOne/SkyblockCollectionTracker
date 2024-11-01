@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.connection;
+package io.github.chindeaytb.collectiontracker.serverconn;
 
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import net.minecraft.command.CommandResultStats;

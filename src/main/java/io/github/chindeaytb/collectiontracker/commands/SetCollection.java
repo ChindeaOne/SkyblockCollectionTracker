@@ -5,6 +5,7 @@ import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
+import io.github.chindeaytb.collectiontracker.util.Utils;
 
 
 import static io.github.chindeaytb.collectiontracker.player.PlayerUUID.UUID;
@@ -31,6 +32,10 @@ public class SetCollection extends CommandBase {
                 PlayerUUID.getUUID();
             }
             if (args[0].equalsIgnoreCase("track")) {
+                if(!Utils.isOnSkyblock()){
+                    sender.addChatMessage(new ChatComponentText("§cYou must be on Skyblock to use this command!"));
+                    return;
+                }
                 if (args.length < 2) {
                     sender.addChatMessage(new ChatComponentText("Use: /sct track <collection>"));
                     return;
@@ -82,7 +87,58 @@ public class SetCollection extends CommandBase {
             case "mycelium":
             case "red sand":
             case "hard stone":
-            case "sulphur":
+            case "cocoa beans":
+            case "carrot":
+            case "cactus":
+            case "raw chicken":
+            case "sugar cane":
+            case "pumpkin":
+            case "wheat":
+            case "seeds":
+            case "mushroom":
+            case "raw rabbit":
+            case "nether wart":
+            case "mutton":
+            case "melon":
+            case "potato":
+            case "leather":
+            case "porkchop":
+            case "feather":
+            case "lapis lazuli":
+            case "glowstone":
+            case "gravel":
+            case "slimeball":
+            case "magma cream":
+            case "ghast tear":
+            case "gunpowder":
+            case "rotten flesh":
+            case "spider eye":
+            case "bone":
+            case "blaze rod":
+            case "string":
+            case "acacia wood":
+            case "spruce wood":
+            case "jungle wood":
+            case "birch wood":
+            case "oak wood":
+            case "dark oak wood":
+            case "lily pad":
+            case "prismarine shard":
+            case "ink sac":
+            case "raw fish":
+            case "pufferfish":
+            case "clownfish":
+            case "raw salmon":
+            case "magmafish":
+            case "prismarine crystal":
+            case "clay":
+            case "sponge":
+            case "wilted berberis":
+            case "living metal heart":
+            case "caducous stem":
+            case "agaricus cap":
+            case "hemovibe":
+            case "half-eaten carrot":
                 return true;
             default:
                 return false;

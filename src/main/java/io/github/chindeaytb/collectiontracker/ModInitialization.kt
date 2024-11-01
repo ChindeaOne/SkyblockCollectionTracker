@@ -2,10 +2,11 @@ package io.github.chindeaytb.collectiontracker
 
 import io.github.chindeaytb.collectiontracker.commands.*
 import io.github.chindeaytb.collectiontracker.config.ConfigManager
-import io.github.chindeaytb.collectiontracker.connection.DisconnectHandlerClass
-import io.github.chindeaytb.collectiontracker.connection.ServerConnectHandlerClass
+import io.github.chindeaytb.collectiontracker.serverconn.DisconnectHandlerClass
+import io.github.chindeaytb.collectiontracker.serverconn.ServerConnectHandlerClass
 import io.github.chindeaytb.collectiontracker.commands.GuiMenu
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
+import io.github.chindeaytb.collectiontracker.util.Hypixel
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Loader
@@ -31,6 +32,9 @@ class ModInitialization {
         MinecraftForge.EVENT_BUS.register(configManager)
         logger.info("ConfigManager initialized.")
         MinecraftForge.EVENT_BUS.register(this)
+
+        MinecraftForge.EVENT_BUS.register(Hypixel)
+        logger.info("Hypixel event handlers registered.")
 
         // Register commands
         val commandHelper = CommandHelper()

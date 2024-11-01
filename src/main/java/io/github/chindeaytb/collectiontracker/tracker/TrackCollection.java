@@ -2,6 +2,7 @@ package io.github.chindeaytb.collectiontracker.tracker;
 
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
 import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
 import io.github.chindeaytb.collectiontracker.player.PlayerName;
 import org.apache.logging.log4j.LogManager;
@@ -103,11 +104,14 @@ public class TrackCollection {
 
                 reader.endObject();
 
+            } catch (IllegalStateException e) {
+                logger.error("An error occurred while processing the JSON response for player: {}. Exception: {}", PlayerName.player_name, e);
             } catch (Exception e) {
-                logger.error("An error occurred while processing the JSON response for player: {}", PlayerName.player_name, e);
+                logger.error("An unexpected error occurred while processing the JSON response for player: {}", PlayerName.player_name, e);
             }
         });
     }
+
 
     private static JsonObject parseMembersObject(JsonReader reader) throws Exception {
         reader.beginObject();
@@ -122,7 +126,6 @@ public class TrackCollection {
             }
         }
         reader.endObject();
-
         return memberData;
     }
 
@@ -137,7 +140,7 @@ public class TrackCollection {
                 reader.beginObject();
                 while (reader.hasNext()) {
                     String collectionName = reader.nextName();
-                    if (collectionMatches(collectionName)) {
+                    if (CollectionsManager.collectionMatches(collectionName)) {
                         long currentCollection = reader.nextLong();
                         String formattedCollection = collection.substring(0, 1).toUpperCase() + collection.substring(1);
 
@@ -174,32 +177,6 @@ public class TrackCollection {
         reader.endObject();
 
         return collectionsObject;
-    }
-
-    private static boolean collectionMatches(String collectionName) {
-        switch (collection) {
-            case "gold": return collectionName.equals("GOLD_INGOT");
-            case "iron": return collectionName.equals("IRON_INGOT");
-            case "redstone": return collectionName.equals("REDSTONE");
-            case "cobblestone": return collectionName.equals("COBBLESTONE");
-            case "netherrack": return collectionName.equals("NETHERRACK");
-            case "endstone": return collectionName.equals("ENDER_STONE");
-            case "diamond": return collectionName.equals("DIAMOND");
-            case "quartz": return collectionName.equals("QUARTZ");
-            case "obsidian": return collectionName.equals("OBSIDIAN");
-            case "gemstone": return collectionName.equals("GEMSTONE_COLLECTION");
-            case "umber": return collectionName.equals("UMBER");
-            case "coal": return collectionName.equals("COAL");
-            case "emerald": return collectionName.equals("EMERALD");
-            case "glacite": return collectionName.equals("GLACITE");
-            case "tungsten": return collectionName.equals("TUNGSTEN");
-            case "mithril": return collectionName.equals("MITHRIL_ORE");
-            case "mycelium": return collectionName.equals("MYCEL");
-            case "red sand": return collectionName.equals("SAND:1");
-            case "hard stone": return collectionName.equals("HARD_STONE");
-            case "sulphur": return collectionName.equals("SULPHUR");
-            default: return false;
-        }
     }
 
     private static String formatNumber(long number) {

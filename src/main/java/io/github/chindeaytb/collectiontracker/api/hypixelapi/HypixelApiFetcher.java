@@ -1,5 +1,6 @@
-package io.github.chindeaytb.collectiontracker.api;
+package io.github.chindeaytb.collectiontracker.api.hypixelapi;
 
+import io.github.chindeaytb.collectiontracker.api.ApiManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +52,7 @@ public class HypixelApiFetcher {
 
         conn.setRequestProperty("X-UUID", uuid);
         conn.setRequestProperty("Authorization", token);
-        conn.setRequestProperty("User-Agent", ApiManager.getAgent());
+        conn.setRequestProperty("User-Agent", ApiManager.getUserAgent());
 
         conn.setConnectTimeout(15000); // 15 seconds
         conn.setReadTimeout(15000); // 15 seconds

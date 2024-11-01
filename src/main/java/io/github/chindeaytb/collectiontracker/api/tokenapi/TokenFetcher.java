@@ -24,7 +24,7 @@ public class TokenFetcher {
         connection.setReadTimeout(15000); // 15 seconds
 
         connection.setRequestProperty("Token-Validation", ApiManager.getTokenValidation());
-        connection.setRequestProperty("User-Agent", ApiManager.getAgent());
+        connection.setRequestProperty("User-Agent", ApiManager.getUserAgent());
 
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -34,7 +34,7 @@ public class TokenFetcher {
                 while ((inputLine = in.readLine()) != null) {
                     content.append(inputLine);
                 }
-                logger.info("Token fetched successfully. Token: {}", content.toString());
+                logger.info("Token fetched successfully.");
                 return content.toString();
             }
         } else {
