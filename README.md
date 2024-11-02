@@ -34,7 +34,7 @@ A huge thanks to:
   - Use `/sct track <collection>` to start tracking a collection.
 - **Statistics Overview**
   - Displays collection details, such as *collection/h*, *total amount of collection*, *uptime*.
-  - **GUI Design**: Inspired by [Ninjune’s Coleweight mod](https://www.chattriggers.com/modules/v/Coleweight) (since his collection tracker is "broken")
+  - **GUI Design**: Inspired by [Ninjune’s Coleweight mod](https://www.chattriggers.com/modules/v/Coleweight)
 
 ---
 
