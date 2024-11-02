@@ -14,14 +14,12 @@ public class SCT_Commands extends CommandBase {
     private final SetCollection setCollection;
     private final StopTracker stopTracker;
     private final GuiMenu guiMenu;
-    private final MoveGui moveGui;
 
-    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, GuiMenu guiMenu, MoveGui moveGui) {
+    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, GuiMenu guiMenu) {
         this.commandHelper = commandHelper;
         this.setCollection = setCollection;
         this.stopTracker = stopTracker;
         this.guiMenu = guiMenu;
-        this.moveGui = moveGui;
     }
 
     @Override
@@ -38,7 +36,7 @@ public class SCT_Commands extends CommandBase {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             // Provide completions for the first argument (commands)
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop", "move");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
@@ -80,9 +78,6 @@ public class SCT_Commands extends CommandBase {
                 break;
             case "stop":
                 stopTracker.processCommand(sender, args);
-                break;
-            case "move":
-                moveGui.processCommand(sender, args);
                 break;
             default:
                 sender.addChatMessage(new ChatComponentText("Unknown command. Use /sct help."));
