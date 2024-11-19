@@ -5,6 +5,7 @@
   <img src="src/main/resources/assets/logo.jpg" alt="Collection Tracker GUI" width="80">
 </div>
 
+# **The server is down in preparation for the final version of the mod**
 ---
 
 ## Acknowledgments
