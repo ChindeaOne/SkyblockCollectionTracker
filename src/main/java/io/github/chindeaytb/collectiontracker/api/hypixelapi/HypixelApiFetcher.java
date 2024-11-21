@@ -1,6 +1,6 @@
 package io.github.chindeaytb.collectiontracker.api.hypixelapi;
 
-import io.github.chindeaytb.collectiontracker.api.ApiManager;
+import io.github.chindeaytb.collectiontracker.api.URLManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +15,11 @@ public class HypixelApiFetcher {
 
     private static final Logger logger = LogManager.getLogger(HypixelApiFetcher.class);
 
-    public static String fetchJsonData(String uuid, String token) {
+    public static String fetchJsonData(String uuid, String token, String collection) {
         try {
-            URL url = new URL(ApiManager.getBaseUrl());
+            URL url = new URL(URLManager.COLLECTION_URL);
 
-            HttpURLConnection conn = getHttpURLConnection(uuid, token, url);
+            HttpURLConnection conn = getHttpURLConnection(uuid, token, url, collection);
 
             int responseCode = conn.getResponseCode();
             if (responseCode == 200) {
@@ -46,13 +46,14 @@ public class HypixelApiFetcher {
         }
     }
 
-    private static @NotNull HttpURLConnection getHttpURLConnection(String uuid, String token, URL url) throws IOException {
+    private static @NotNull HttpURLConnection getHttpURLConnection(String uuid, String token, URL url, String collection) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
         conn.setRequestProperty("X-UUID", uuid);
-        conn.setRequestProperty("Authorization", token);
-        conn.setRequestProperty("User-Agent", ApiManager.getUserAgent());
+        conn.setRequestProperty("Authorization", "Bearer " + token);
+        conn.setRequestProperty("X-COLLECTION", collection);
+        conn.setRequestProperty("User-Agent", URLManager.AGENT);
 
         conn.setConnectTimeout(15000); // 15 seconds
         conn.setReadTimeout(15000); // 15 seconds
