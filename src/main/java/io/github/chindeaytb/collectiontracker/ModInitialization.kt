@@ -3,8 +3,6 @@ package io.github.chindeaytb.collectiontracker
 import io.github.chindeaytb.collectiontracker.commands.*
 import io.github.chindeaytb.collectiontracker.config.ConfigManager
 import io.github.chindeaytb.collectiontracker.commands.GuiMenu
-import io.github.chindeaytb.collectiontracker.config.ModConfig
-import io.github.chindeaytb.collectiontracker.util.Hypixel
 import io.github.chindeaytb.collectiontracker.util.ModulesLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
