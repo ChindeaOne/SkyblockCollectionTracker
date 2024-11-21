@@ -5,17 +5,16 @@
   <img src="src/main/resources/assets/logo.jpg" alt="Collection Tracker GUI" width="80">
 </div>
 
-# **The server is down in preparation for the final version of the mod**
 ---
 
 ## Acknowledgments
 
 A huge thanks to:
 
-- **nea89** for the [wiki](https://moddev.nea.moe)
+- **nea89** for the [mod guide](https://moddev.nea.moe)
 - **Ninjune** for inspiration
 - **Moulberry and nea89** for the [MoulConfig](https://notenoughupdates.org/MoulConfig/) library
-- **hannibal2 and everyone else** working at the [Skyhanni](https://github.com/hannibal002/SkyHanni) mod, which provided many ideas
+- **hannibal2 and everyone else** working at the [Skyhanni](https://github.com/hannibal002/SkyHanni) mod, which provided many ideas and the [Example Mod](https://github.com/hannibal002/Example-1.8.9-Mod)
 
 ---
 
@@ -31,11 +30,11 @@ A huge thanks to:
 
 ## Features
 
-- **Track your skyblock collections!**
+- **Track your skyblock collections**
   - Use `/sct track <collection>` to start tracking a collection.
-- **Statistics Overview**
-  - Displays collection details, such as *collection/h*, *total amount of collection*, *uptime*.
-  - **GUI Design**: Inspired by [Ninjune’s Coleweight mod](https://www.chattriggers.com/modules/v/Coleweight)
-
+- **Overlay Overview**
+  - **Overlay Design**: Inspired by Ninjune’s [Coleweight mod](https://www.chattriggers.com/modules/v/Coleweight)
+  - You can change what stats you can see in the Overlay Configuration
+  - You can move or size the overlay in the GUI Configuration
 ---
 
