@@ -43,7 +43,7 @@ public class SCT_Commands extends CommandBase {
             // Provide completions for the second argument (collection names) when the first argument is 'track'
             return CommandBase.getListOfStringsMatchingLastWord(args,
                     "gold", "iron", "redstone", "cobblestone", "netherrack", "endstone",
-                    "diamond", "quartz", "obsidian", "gemstone", "umber", "coal",
+                    "diamond", "quartz", "obsidian", "gemstone", "umber", "coal", "mithril",
                     "emerald", "glacite", "tungsten", "mycelium", "red sand", "hard stone",
                     "cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane",
                     "pumpkin", "wheat", "seeds", "mushroom", "raw rabbit", "nether wart",
