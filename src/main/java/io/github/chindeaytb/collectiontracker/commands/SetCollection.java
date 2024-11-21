@@ -1,15 +1,13 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
-import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
-import io.github.chindeaytb.collectiontracker.util.Utils;
+import io.github.chindeaytb.collectiontracker.util.HypixelUtils;
 
-
-import static io.github.chindeaytb.collectiontracker.player.PlayerUUID.UUID;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
+import io.github.chindeaytb.collectiontracker.collections.ValidCollectionsManager;
 
 public class SetCollection extends CommandBase {
 
@@ -28,14 +26,12 @@ public class SetCollection extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         try {
-            if(UUID.isEmpty()) {
-                PlayerUUID.getUUID();
+            if(!HypixelUtils.isOnSkyblock()){
+                sender.addChatMessage(new ChatComponentText("§cYou must be on Hypixel Skyblock to use this command!"));
+                return;
             }
+
             if (args[0].equalsIgnoreCase("track")) {
-                if(!Utils.isOnSkyblock()){
-                    sender.addChatMessage(new ChatComponentText("§cYou must be on Skyblock to use this command!"));
-                    return;
-                }
                 if (args.length < 2) {
                     sender.addChatMessage(new ChatComponentText("Use: /sct track <collection>"));
                     return;
@@ -51,7 +47,7 @@ public class SetCollection extends CommandBase {
 
                 if (!isTracking) {
                     collection = keyBuilder.toString().trim().toLowerCase();
-                    if (!isValidCollection(collection)) {
+                    if (!ValidCollectionsManager.isValidCollection(collection)) {
                         sender.addChatMessage(new ChatComponentText("§4Invalid collection!"));
                     } else{
                         TrackingHandlerClass.startTracking(sender);
@@ -63,85 +59,6 @@ public class SetCollection extends CommandBase {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private boolean isValidCollection(String collectionName) {
-        switch (collectionName) {
-            case "gold":
-            case "iron":
-            case "redstone":
-            case "cobblestone":
-            case "netherrack":
-            case "endstone":
-            case "diamond":
-            case "quartz":
-            case "obsidian":
-            case "gemstone":
-            case "umber":
-            case "coal":
-            case "emerald":
-            case "glacite":
-            case "tungsten":
-            case "mithril":
-            case "mycelium":
-            case "red sand":
-            case "hard stone":
-            case "cocoa beans":
-            case "carrot":
-            case "cactus":
-            case "raw chicken":
-            case "sugar cane":
-            case "pumpkin":
-            case "wheat":
-            case "seeds":
-            case "mushroom":
-            case "raw rabbit":
-            case "nether wart":
-            case "mutton":
-            case "melon":
-            case "potato":
-            case "leather":
-            case "porkchop":
-            case "feather":
-            case "lapis lazuli":
-            case "glowstone":
-            case "gravel":
-            case "slimeball":
-            case "magma cream":
-            case "ghast tear":
-            case "gunpowder":
-            case "rotten flesh":
-            case "spider eye":
-            case "bone":
-            case "blaze rod":
-            case "string":
-            case "acacia wood":
-            case "spruce wood":
-            case "jungle wood":
-            case "birch wood":
-            case "oak wood":
-            case "dark oak wood":
-            case "lily pad":
-            case "prismarine shard":
-            case "ink sac":
-            case "raw fish":
-            case "pufferfish":
-            case "clownfish":
-            case "raw salmon":
-            case "magmafish":
-            case "prismarine crystal":
-            case "clay":
-            case "sponge":
-            case "wilted berberis":
-            case "living metal heart":
-            case "caducous stem":
-            case "agaricus cap":
-            case "hemovibe":
-            case "half-eaten carrot":
-                return true;
-            default:
-                return false;
         }
     }
 

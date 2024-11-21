@@ -1,7 +1,7 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
-import io.github.chindeaytb.collectiontracker.gui.CollectionOverlay;
-import io.github.chindeaytb.collectiontracker.player.PlayerUUID;
+import io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay;
+import io.github.chindeaytb.collectiontracker.util.PlayerData;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.previousCollection;
 import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.scheduler;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.sessionStartCollection;
 
 public class TrackingHandlerClass {
 
@@ -25,8 +26,7 @@ public class TrackingHandlerClass {
 
     private static CollectionOverlay collectionOverlay = null;
 
-    private static final int PAUSE_PERIOD = 600; // Retry period when paused (in seconds)
-
+    private static final int PAUSE_PERIOD = 600;
 
     public static void startTracking(ICommandSender sender) {
         long currentTime = System.currentTimeMillis();
@@ -49,7 +49,8 @@ public class TrackingHandlerClass {
         lastTrackTime = currentTime;
         isTracking = true;
 
-        logger.info("Tracking started for player with UUID: {}", PlayerUUID.UUID);
+        CollectionOverlay.setVisible(true);
+        logger.info("Tracking started for player: {}", PlayerData.INSTANCE.getPlayerName());
 
         DataFetcher.scheduleDataFetch();
     }
@@ -63,6 +64,7 @@ public class TrackingHandlerClass {
             isTracking = false;
             lastTrackTime = System.currentTimeMillis();
             previousCollection = -1;
+            sessionStartCollection = 0;
 
             if (collectionOverlay != null) {
                 CollectionOverlay.stopTracking();

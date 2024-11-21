@@ -1,178 +1,175 @@
 package io.github.chindeaytb.collectiontracker.collections;
 
-import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
-
 public class CollectionsManager {
 
-    public static boolean collectionMatches(String collectionName) {
-        switch (collection) {
-
+    public static String toHypixelCollection(String collectionName) {
+        switch (collectionName) {
             // Farming
             case "cocoa beans":
-                return collectionName.equals("INK_SACK:3");
+                return "INK_SACK:3";
             case "carrot":
-                return collectionName.equals("CARROT_ITEM");
+                return "CARROT_ITEM";
             case "cactus":
-                return collectionName.equals("CACTUS");
+                return "CACTUS";
             case "raw chicken":
-                return collectionName.equals("RAW_CHICKEN");
+                return "RAW_CHICKEN";
             case "sugar cane":
-                return collectionName.equals("SUGAR_CANE");
+                return "SUGAR_CANE";
             case "pumpkin":
-                return collectionName.equals("PUMPKIN");
+                return "PUMPKIN";
             case "wheat":
-                return collectionName.equals("WHEAT");
+                return "WHEAT";
             case "seeds":
-                return collectionName.equals("SEEDS");
+                return "SEEDS";
             case "mushroom":
-                return collectionName.equals("MUSHROOM_COLLECTION");
+                return "MUSHROOM_COLLECTION";
             case "raw rabbit":
-                return collectionName.equals("RABBIT");
+                return "RABBIT";
             case "nether wart":
-                return collectionName.equals("NETHER_STALK");
+                return "NETHER_STALK";
             case "mutton":
-                return collectionName.equals("MUTTON");
+                return "MUTTON";
             case "melon":
-                return collectionName.equals("MELON");
+                return "MELON";
             case "potato":
-                return collectionName.equals("POTATO_ITEM");
+                return "POTATO_ITEM";
             case "leather":
-                return collectionName.equals("LEATHER");
+                return "LEATHER";
             case "porkchop":
-                return collectionName.equals("PORK");
+                return "PORK";
             case "feather":
-                return collectionName.equals("FEATHER");
+                return "FEATHER";
 
             // Mining
             case "lapis lazuli":
-                return collectionName.equals("INK_SACK:4");
+                return "INK_SACK:4";
             case "redstone":
-                return collectionName.equals("REDSTONE");
+                return "REDSTONE";
             case "umber":
-                return collectionName.equals("UMBER");
+                return "UMBER";
             case "coal":
-                return collectionName.equals("COAL");
+                return "COAL";
             case "mycelium":
-                return collectionName.equals("MYCEL");
+                return "MYCEL";
             case "endstone":
-                return collectionName.equals("ENDER_STONE");
+                return "ENDER_STONE";
             case "quartz":
-                return collectionName.equals("QUARTZ");
+                return "QUARTZ";
             case "sand":
-                return collectionName.equals("SAND");
+                return "SAND";
             case "iron":
-                return collectionName.equals("IRON_INGOT");
+                return "IRON_INGOT";
             case "gemstone":
-                return collectionName.equals("GEMSTONE_COLLECTION");
+                return "GEMSTONE_COLLECTION";
             case "tungsten":
-                return collectionName.equals("TUNGSTEN");
+                return "TUNGSTEN";
             case "obsidian":
-                return collectionName.equals("OBSIDIAN");
+                return "OBSIDIAN";
             case "diamond":
-                return collectionName.equals("DIAMOND");
+                return "DIAMOND";
             case "cobblestone":
-                return collectionName.equals("COBBLESTONE");
+                return "COBBLESTONE";
             case "glowstone":
-                return collectionName.equals("GLOWSTONE_DUST");
+                return "GLOWSTONE_DUST";
             case "gold":
-                return collectionName.equals("GOLD_INGOT");
+                return "GOLD_INGOT";
             case "gravel":
-                return collectionName.equals("GRAVEL");
+                return "GRAVEL";
             case "hard stone":
-                return collectionName.equals("HARD_STONE");
+                return "HARD_STONE";
             case "mithril":
-                return collectionName.equals("MITHRIL_ORE");
+                return "MITHRIL_ORE";
             case "emerald":
-                return collectionName.equals("EMERALD");
+                return "EMERALD";
             case "red sand":
-                return collectionName.equals("SAND:1");
+                return "SAND:1";
             case "ice":
-                return collectionName.equals("ICE");
+                return "ICE";
             case "glacite":
-                return collectionName.equals("GLACITE");
+                return "GLACITE";
             case "sulphur":
-                return collectionName.equals("SULPHUR_ORE");
+                return "SULPHUR_ORE";
             case "netherrack":
-                return collectionName.equals("NETHERRACK");
+                return "NETHERRACK";
 
             // Combat
             case "ender pearl":
-                return collectionName.equals("ENDER_PEARL");
+                return "ENDER_PEARL";
             case "chili pepper":
-                return collectionName.equals("HOT_PEPPER");
+                return "HOT_PEPPER";
             case "slimeball":
-                return collectionName.equals("SLIMEBALL");
+                return "SLIMEBALL";
             case "magma cream":
-                return collectionName.equals("MAGMA_CREAM");
+                return "MAGMA_CREAM";
             case "ghast tear":
-                return collectionName.equals("GHAST_TEAR");
+                return "GHAST_TEAR";
             case "gunpowder":
-                return collectionName.equals("SULPHUR");
+                return "SULPHUR";
             case "rotten flesh":
-                return collectionName.equals("ROTTEN_FLESH");
+                return "ROTTEN_FLESH";
             case "spider eye":
-                return collectionName.equals("SPIDER_EYE");
+                return "SPIDER_EYE";
             case "bone":
-                return collectionName.equals("BONE");
+                return "BONE";
             case "blaze rod":
-                return collectionName.equals("BLAZE_ROD");
+                return "BLAZE_ROD";
             case "string":
-                return collectionName.equals("STRING");
+                return "STRING";
 
             // Foraging
             case "acacia wood":
-                return collectionName.equals("LOG_2");
+                return "LOG_2";
             case "spruce wood":
-                return collectionName.equals("LOG:1");
+                return "LOG:1";
             case "jungle wood":
-                return collectionName.equals("LOG:3");
+                return "LOG:3";
             case "birch wood":
-                return collectionName.equals("LOG:2");
+                return "LOG:2";
             case "oak wood":
-                return collectionName.equals("LOG");
+                return "LOG";
             case "dark oak wood":
-                return collectionName.equals("LOG_2:1");
+                return "LOG_2:1";
 
             // Fishing
             case "lily pad":
-                return collectionName.equals("WATER_LILY");
+                return "WATER_LILY";
             case "prismarine shard":
-                return collectionName.equals("PRISMARINE_SHARD");
+                return "PRISMARINE_SHARD";
             case "ink sac":
-                return collectionName.equals("INK_SACK");
+                return "INK_SACK";
             case "raw fish":
-                return collectionName.equals("RAW_FISH");
+                return "RAW_FISH";
             case "pufferfish":
-                return collectionName.equals("RAW_FISH:3");
+                return "RAW_FISH:3";
             case "clownfish":
-                return collectionName.equals("RAW_FISH:2");
+                return "RAW_FISH:2";
             case "raw salmon":
-                return collectionName.equals("RAW_FISH:1");
+                return "RAW_FISH:1";
             case "magmafish":
-                return collectionName.equals("MAGMA_FISH");
+                return "MAGMA_FISH";
             case "prismarine crystal":
-                return collectionName.equals("PRISMARINE_CRYSTALS");
+                return "PRISMARINE_CRYSTALS";
             case "clay":
-                return collectionName.equals("CLAY_BALL");
+                return "CLAY_BALL";
             case "sponge":
-                return collectionName.equals("SPONGE");
+                return "SPONGE";
 
             // Rift
             case "wilted berberis":
-                return collectionName.equals("WILTED_BERBERIS");
+                return "WILTED_BERBERIS";
             case "living metal heart":
-                return collectionName.equals("METAL_HEART");
+                return "METAL_HEART";
             case "caducous stem":
-                return collectionName.equals("CADUCOUS_STEM");
+                return "CADUCOUS_STEM";
             case "agaricus cap":
-                return collectionName.equals("AGARICUS_CAP");
+                return "AGARICUS_CAP";
             case "hemovibe":
-                return collectionName.equals("HEMOVIBE");
+                return "HEMOVIBE";
             case "half-eaten carrot":
-                return collectionName.equals("HALF_EATEN_CARROT");
+                return "HALF_EATEN_CARROT";
 
             default:
-                return false;
+                return null;
         }
     }
 }
