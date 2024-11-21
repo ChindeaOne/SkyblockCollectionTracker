@@ -9,9 +9,3 @@ build
 gradle.properties
 .gradle
 
-src/main/resources/secret.properties
-src/main/resources/secret.properties.enc
-src/main/java/io/github/chindeaytb/collectiontracker/api/decryptor/Decryptor.kt
-src/main/java/io/github/chindeaytb/collectiontracker/collections/coll
-*.asc
-TODO
