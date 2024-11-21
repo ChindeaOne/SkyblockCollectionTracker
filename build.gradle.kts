@@ -20,6 +20,13 @@ java {
 }
 
 loom {
+    runs {
+        named("client") {
+            property("mixin.debug", "true")
+            property("asmhelper.verbose", "true")
+            programArgs("--tweakClass", "org.spongepowered.asm.launch.MixinTweaker")
+        }
+    }
     log4jConfigs.from(file("log4j2.xml"))
     runConfigs {
         "client" {
@@ -31,6 +38,11 @@ loom {
     }
     forge {
         pack200Provider.set(dev.architectury.pack200.java.Pack200Adapter())
+        mixinConfig("mixins.sct.json")
+    }
+    @Suppress("UnstableApiUsage")
+    mixin {
+        defaultRefmapName.set("mixins.sct.refmap.json")
     }
 }
 
@@ -48,10 +60,9 @@ repositories {
     }
 }
 sourceSets.main {
-        resources.destinationDirectory.set(kotlin.destinationDirectory)
-        output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
+    resources.destinationDirectory.set(kotlin.destinationDirectory)
+    output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
 }
-
 
 val kotlinDependencies: Configuration by configurations.creating {
     configurations.implementation.get().extendsFrom(this)
@@ -67,7 +78,6 @@ val shadowModImpl: Configuration by configurations.creating {
 }
 
 // Dependencies
-@Suppress("UnstableApiUsage")
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
@@ -89,6 +99,16 @@ dependencies {
 
     kotlinDependencies(kotlin("stdlib"))
     kotlinDependencies(kotlin("reflect"))
+
+    shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+        isTransitive = false
+    }
+
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
+
+    annotationProcessor("net.fabricmc:sponge-mixin:0.11.4+mixin.0.8.5")
+    testAnnotationProcessor("net.fabricmc:sponge-mixin:0.11.4+mixin.0.8.5")
+
 }
 
 kotlin {
@@ -110,18 +130,19 @@ tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
 }
 
-
 tasks.withType(org.gradle.jvm.tasks.Jar::class) {
     archiveBaseName.set("SkyblockCollectionTracker")
     manifest.attributes.run {
         this["FMLCorePluginContainsFMLMod"] = "true"
         this["ForceLoadAsMod"] = "true"
+        this["TweakClass"] = "org.spongepowered.asm.launch.MixinTweaker"
+        this["MixinConfigs"] = "mixins.sct.json"
     }
 }
 
 tasks.processResources {
     inputs.property("version", version)
-    filesMatching(listOf("mcmod.info")) {
+    filesMatching(listOf("mcmod.info","mixins.sct.json")) {
         expand("version" to version)
     }
 }
@@ -147,7 +168,6 @@ val kotlinDependencyCollectionJar by tasks.creating(Zip::class) {
     from(kotlinDependencies)
     into("sct-kotlin-libraries-wrapped")
 }
-
 tasks.jar {
     archiveClassifier.set("without-deps")
     destinationDirectory.set(layout.buildDirectory.dir("intermediates"))
@@ -164,7 +184,6 @@ tasks.shadowJar {
         }
     }
     exclude("META-INF/versions/**")
-
     relocate("io.github.notenoughupdates.moulconfig","io.github.chindeaytb.collectiontracker.deps.moulconfig")
     relocate("moe.nea.libautoupdate", "io.github.chindeaytb.collectiontracker.deps.libautoupdate")
 }
@@ -172,5 +191,4 @@ tasks.shadowJar {
 blossom {
     replaceToken("sctVersion", project.version)
 }
-
 
