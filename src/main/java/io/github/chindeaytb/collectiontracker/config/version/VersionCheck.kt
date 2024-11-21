@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.config.misc.version
+package io.github.chindeaytb.collectiontracker.config.version
 
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.moulberry.moulconfig.gui.GuiOptionEditor
