@@ -11,6 +11,7 @@ import io.github.moulberry.moulconfig.observer.PropertyTypeAdapterFactory
 import io.github.moulberry.moulconfig.processor.BuiltinMoulConfigGuis
 import io.github.moulberry.moulconfig.processor.ConfigProcessorDriver
 import io.github.moulberry.moulconfig.processor.MoulConfigProcessor
+import io.github.chindeaytb.collectiontracker.config.version.VersionManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -65,6 +66,7 @@ class ConfigManager {
         val config = config!!
         processor = MoulConfigProcessor(config)
         BuiltinMoulConfigGuis.addProcessors(processor)
+        VersionManager.injectConfigProcessor(processor)
         ConfigProcessorDriver.processConfig(
             config.javaClass,
             config,
