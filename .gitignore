@@ -4,9 +4,13 @@ run/
 build/
 .gitattributes
 .github/
-bin/
+bin
+
 
 build
 gradle.properties
 .gradle
+
+.DS_STORE
+
 
