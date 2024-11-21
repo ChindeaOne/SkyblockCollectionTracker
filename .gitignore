@@ -4,12 +4,10 @@ run/
 build/
 .gitattributes
 .github/
-bin
 
 build
 gradle.properties
 .gradle
 
-.DS_STORE
 
 
