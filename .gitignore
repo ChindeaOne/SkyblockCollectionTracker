@@ -6,7 +6,8 @@ build/
 .github/
 bin
 
-
+*.lock
+*.bin
 build
 gradle.properties
 .gradle
