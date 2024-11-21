@@ -4,6 +4,7 @@
 
 package io.github.chindeaytb.collectiontracker.util
 
+import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
@@ -18,11 +19,15 @@ object Hypixel {
 
     var server = false
     var skyblock = false
+    var playerLoaded = false
+
 
     @SubscribeEvent
     fun onDisconnect(event: ClientDisconnectionFromServerEvent) {
+        DisconnectHandlerClass.onServerDisconnect()
         server = false
         skyblock = false
+        playerLoaded = false
     }
 
     // Method taken from Skyhanni mod
@@ -37,20 +42,37 @@ object Hypixel {
                 hypixel = true
             }
         }
+
         server = hypixel
     }
 
     // Method taken from Skyhanni mod
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
-        if(!Utils.isInHypixel){
+        if(!HypixelUtils.isInHypixel){
             checkServer()
+            if(HypixelUtils.isInHypixel&& !playerLoaded){
+                loadPlayerData()
+                if(playerLoaded)
+                    TokenManager.fetchAndStoreToken()
+            }
         }
 
-        val inSkyBlock = checkScoreboard()
+        val inSkyblock = checkScoreboard()
 
-        if (inSkyBlock == skyblock) return
-        skyblock = inSkyBlock
+        if(inSkyblock == skyblock) return
+
+        skyblock = inSkyblock
+    }
+
+    fun loadPlayerData(){
+        val mc = Minecraft.getMinecraft()
+        val player = mc.thePlayer
+        if (player != null){
+            playerLoaded = true
+            PlayerData.playerUUID
+            PlayerData.playerName
+        }
     }
 
     // Method taken from Skyhanni mod
