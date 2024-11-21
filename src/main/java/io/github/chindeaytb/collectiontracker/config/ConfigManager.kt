@@ -1,13 +1,10 @@
 package io.github.chindeaytb.collectiontracker.config
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import io.github.chindeaytb.collectiontracker.ModInitialization.Companion.logger
 import io.github.chindeaytb.collectiontracker.config.error.ConfigError
-import io.github.chindeaytb.collectiontracker.config.misc.version.VersionManager
 import io.github.moulberry.moulconfig.gui.MoulConfigEditor
 import io.github.moulberry.moulconfig.gui.GuiScreenElementWrapper
 import io.github.moulberry.moulconfig.observer.PropertyTypeAdapterFactory
@@ -25,10 +22,8 @@ import java.nio.file.StandardCopyOption
 import java.util.*
 
 class ConfigManager {
-
     companion object {
-
-        val gson: Gson = GsonBuilder().setPrettyPrinting()
+        val gson = GsonBuilder().setPrettyPrinting()
             .excludeFieldsWithoutExposeAnnotation()
             .serializeSpecialFloatingPointValues()
             .registerTypeAdapterFactory(PropertyTypeAdapterFactory())
@@ -45,37 +40,31 @@ class ConfigManager {
             .create()
     }
 
-    private var config: ModConfig? = null
-
-    private var configDirectory = File("config.properties/sct")
+    private var configDirectory = File("config/sct")
     private var configFile: File
+    var config: ModConfig? = null
     private var lastSaveTime = 0L
 
     private lateinit var processor: MoulConfigProcessor<ModConfig>
     private val editor by lazy { MoulConfigEditor(processor) }
 
     init {
-
-        logger.info("Loading config.properties...")
-
         configDirectory.mkdirs()
-
-        configFile = File(configDirectory, "config.properties.json")
+        configFile = File(configDirectory, "config.json")
 
         if (configFile.isFile) {
-            println("Trying to load the config.properties.")
+            println("Trying to load the config")
             tryReadConfig()
         }
 
         if (config == null) {
-            println("Creating a clean config.properties.")
+            println("Creating a clean config.")
             config = ModConfig()
         }
 
         val config = config!!
         processor = MoulConfigProcessor(config)
         BuiltinMoulConfigGuis.addProcessors(processor)
-        VersionManager.injectConfigProcessor(processor)
         ConfigProcessorDriver.processConfig(
             config.javaClass,
             config,
@@ -85,6 +74,10 @@ class ConfigManager {
         Runtime.getRuntime().addShutdownHook(Thread {
             save()
         })
+    }
+
+    fun openConfigGui() {
+        screenToOpen = GuiScreenElementWrapper(editor)
     }
 
     private fun tryReadConfig() {
@@ -99,22 +92,21 @@ class ConfigManager {
             }
             config = gson.fromJson(builder.toString(), ModConfig::class.java)
         } catch (e: Exception) {
-            throw ConfigError("Could not load config.properties", e)
+            throw ConfigError("Could not load config", e)
         }
     }
 
     fun save() {
         lastSaveTime = System.currentTimeMillis()
-        val config = config ?: error("Can not save null config.properties.")
+        val config = config ?: error("Can not save null config.")
 
         try {
             configDirectory.mkdirs()
-            val unit = configDirectory.resolve("config.properties.json.write")
+            val unit = configDirectory.resolve("config.json.write")
             unit.createNewFile()
             BufferedWriter(OutputStreamWriter(FileOutputStream(unit), StandardCharsets.UTF_8)).use { writer ->
                 writer.write(gson.toJson(config))
             }
-            // Perform move — which is atomic, unlike writing — after writing is done.
             Files.move(
                 unit.toPath(),
                 configFile.toPath(),
@@ -122,13 +114,8 @@ class ConfigManager {
                 StandardCopyOption.ATOMIC_MOVE
             )
         } catch (e: IOException) {
-            throw ConfigError("Could not save config.properties", e)
+            throw ConfigError("Could not save config", e)
         }
-    }
-
-
-    fun openConfigGui() {
-        screenToOpen = GuiScreenElementWrapper(editor)
     }
 
     private var screenToOpen: GuiScreen? = null
