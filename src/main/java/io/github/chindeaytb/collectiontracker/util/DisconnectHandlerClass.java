@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.serverconn;
+package io.github.chindeaytb.collectiontracker.util;
 
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import net.minecraft.command.CommandResultStats;
@@ -8,8 +8,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,8 +15,7 @@ public class DisconnectHandlerClass {
 
     private static final Logger logger = LogManager.getLogger(DisconnectHandlerClass.class);
 
-    @SubscribeEvent
-    public void onServerDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+    public static void onServerDisconnect() {
         logger.info("Player has disconnected.");
         ICommandSender sender = new ICommandSender() {
             @Override
