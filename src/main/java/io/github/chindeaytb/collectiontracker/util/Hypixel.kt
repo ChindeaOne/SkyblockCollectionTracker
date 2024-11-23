@@ -66,8 +66,8 @@ object Hypixel {
                         if (RepoUtils.downloadUrl != null) {
                             Minecraft.getMinecraft().thePlayer.addChatMessage(
                                 ChatComponentText(
-                                    "New mod version available: " + RepoUtils.latestVersion +
-                                            " | Download: " + RepoUtils.downloadUrl
+                                    "§a New mod version available: " + RepoUtils.latestVersion +
+                                            "\n§a Download: " + RepoUtils.downloadUrl
                                 )
                             )
                         }
