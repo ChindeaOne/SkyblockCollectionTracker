@@ -4,14 +4,18 @@
 
 package io.github.chindeaytb.collectiontracker.util
 
+import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
 import net.minecraft.client.Minecraft
+import net.minecraft.util.ChatComponentText
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
-
+import org.apache.logging.log4j.Logger
+import org.apache.logging.log4j.LogManager
 object Hypixel {
 
+    val logger: Logger = LogManager.getLogger(Hypixel::class.java)
     private val scoreboardTitlePattern = Regex("SK[YI]BLOCK(?: CO-OP| GUEST)?")
 
     private val formattingChars = "kmolnrKMOLNR".toSet()
@@ -53,8 +57,22 @@ object Hypixel {
             checkServer()
             if(HypixelUtils.isInHypixel&& !playerLoaded){
                 loadPlayerData()
-                if(playerLoaded)
+                if(playerLoaded) {
                     TokenManager.fetchAndStoreToken()
+
+                    RepoUtils.checkForUpdates()
+                    logger.info("Checking for updates")
+                    if (ModInitialization.version != RepoUtils.latestVersion) {
+                        if (RepoUtils.downloadUrl != null) {
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(
+                                ChatComponentText(
+                                    "New mod version available: " + RepoUtils.latestVersion +
+                                            " | Download: " + RepoUtils.downloadUrl
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
 
