@@ -26,8 +26,6 @@ public class RepoUtils {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
-
-            logger.info("Verificam conexiuea la server...");
             if (connection.getResponseCode() == 200) {
                 JsonObject jsonResponse = getJsonObject(connection);
 
@@ -35,12 +33,9 @@ public class RepoUtils {
                 JsonArray assets = jsonResponse.getAsJsonArray("assets");
 
                 downloadUrl = null;
-                logger.info("Vedem daca avem Url de download...");
                 if (assets.size() > 0) {
                     JsonObject asset = assets.get(0).getAsJsonObject();
                     downloadUrl = asset.get("browser_download_url").getAsString();
-
-                    logger.info("Download URL: {}", downloadUrl);
                 }
 
             } else {
