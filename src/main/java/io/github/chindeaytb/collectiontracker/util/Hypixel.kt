@@ -18,7 +18,6 @@ import org.apache.logging.log4j.LogManager
 
 object Hypixel {
 
-    val logger: Logger = LogManager.getLogger(Hypixel::class.java)
     private val scoreboardTitlePattern = Regex("SK[YI]BLOCK(?: CO-OP| GUEST)?")
 
     private val formattingChars = "kmolnrKMOLNR".toSet()
