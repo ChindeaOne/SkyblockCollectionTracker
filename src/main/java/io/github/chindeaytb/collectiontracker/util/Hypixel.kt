@@ -13,8 +13,6 @@ import net.minecraft.util.ChatStyle
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
-import org.apache.logging.log4j.Logger
-import org.apache.logging.log4j.LogManager
 
 object Hypixel {
 
