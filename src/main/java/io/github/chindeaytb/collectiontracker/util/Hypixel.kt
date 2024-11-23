@@ -7,12 +7,15 @@ package io.github.chindeaytb.collectiontracker.util
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
 import net.minecraft.client.Minecraft
+import net.minecraft.event.ClickEvent
 import net.minecraft.util.ChatComponentText
+import net.minecraft.util.ChatStyle
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
 import org.apache.logging.log4j.Logger
 import org.apache.logging.log4j.LogManager
+
 object Hypixel {
 
     val logger: Logger = LogManager.getLogger(Hypixel::class.java)
@@ -53,22 +56,29 @@ object Hypixel {
     // Method taken from Skyhanni mod
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
-        if(!HypixelUtils.isInHypixel){
+        if (!HypixelUtils.isInHypixel) {
             checkServer()
-            if(HypixelUtils.isInHypixel&& !playerLoaded){
+            if (HypixelUtils.isInHypixel && !playerLoaded) {
                 loadPlayerData()
-                if(playerLoaded) {
+                if (playerLoaded) {
                     TokenManager.fetchAndStoreToken()
 
                     RepoUtils.checkForUpdates()
-                    logger.info("Checking for updates")
                     if (ModInitialization.version != RepoUtils.latestVersion) {
                         if (RepoUtils.downloadUrl != null) {
                             Minecraft.getMinecraft().thePlayer.addChatMessage(
-                                ChatComponentText(
-                                    "§a New mod version available: " + RepoUtils.latestVersion +
-                                            "\n§a Download: " + RepoUtils.downloadUrl
-                                )
+                                ChatComponentText("§a New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
+                                    .appendSibling(
+                                        ChatComponentText("§9${RepoUtils.downloadUrl}")
+                                            .apply {
+                                                chatStyle = ChatStyle().apply {
+                                                    chatClickEvent = ClickEvent(
+                                                        ClickEvent.Action.OPEN_URL,
+                                                        RepoUtils.downloadUrl
+                                                    )
+                                                }
+                                            }
+                                    )
                             )
                         }
                     }
@@ -78,15 +88,15 @@ object Hypixel {
 
         val inSkyblock = checkScoreboard()
 
-        if(inSkyblock == skyblock) return
+        if (inSkyblock == skyblock) return
 
         skyblock = inSkyblock
     }
 
-    fun loadPlayerData(){
+    fun loadPlayerData() {
         val mc = Minecraft.getMinecraft()
         val player = mc.thePlayer
-        if (player != null){
+        if (player != null) {
             playerLoaded = true
             PlayerData.playerUUID
             PlayerData.playerName
