@@ -35,6 +35,6 @@ A huge thanks to:
 - **Overlay Overview**
   - **Overlay Design**: Inspired by Ninjune’s [Coleweight mod](https://www.chattriggers.com/modules/v/Coleweight)
   - You can change what stats you can see in the Overlay Configuration
-  - You can move or size the overlay in the GUI Configuration
+  - You can move the overlay in the GUI Configuration
 ---
 
