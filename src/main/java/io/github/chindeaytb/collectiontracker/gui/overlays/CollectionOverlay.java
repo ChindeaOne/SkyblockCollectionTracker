@@ -3,6 +3,7 @@ package io.github.chindeaytb.collectiontracker.gui.overlays;
 import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.config.ModConfig;
 import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
+import io.github.chindeaytb.collectiontracker.config.core.Position;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -27,8 +28,10 @@ public class CollectionOverlay {
 
     private static int overlayX;
     private static int overlayY;
-    private static int boxWidth = 100;
-    private static int boxHeight = 28;
+    private static int boxWidth;
+    private static int boxHeight;
+    private static float scaleX;
+    private static float scaleY;
 
     private static boolean visible = true;
     private static ModConfig config ;
@@ -47,14 +50,18 @@ public class CollectionOverlay {
         return visible;
     }
 
-    public static void updateOverlayPositionAndSize(int newX, int newY, int newWidth, int newHeight) {
+    public static void updateOverlayPositionAndSize(int newX, int newY, int newWidth, int newHeight, float newScaleX, float newScaleY) {
         overlayX = newX;
         overlayY = newY;
         boxWidth = newWidth;
         boxHeight = newHeight;
+        scaleX = newScaleX;
+        scaleY = newScaleY;
 
         if (config != null) {
-            config.overlay.overlayPosition.set(newX, newY);
+            config.overlay.overlayPosition.setPosition(newX, newY);
+            config.overlay.overlayPosition.setDimensions(newWidth, newHeight);
+            config.overlay.overlayPosition.setScaling(newScaleX, newScaleY);
         }
     }
 
@@ -77,40 +84,33 @@ public class CollectionOverlay {
         FontRenderer fontRenderer = mc.fontRendererObj;
 
         List<String> overlayLines = getStrings();
-
-        overlayX = config.overlay.overlayPosition.getX();
-        overlayY = config.overlay.overlayPosition.getY();
-
         if (overlayLines.isEmpty()) return;
 
-        int maxWidth = overlayLines.stream()
-                .mapToInt(fontRenderer::getStringWidth)
-                .max()
-                .orElse(0);
-
-        boxWidth = maxWidth + 10;
-        boxHeight = overlayLines.size() * 12 + 6;
+        Position position = config.overlay.overlayPosition;
+        overlayX = position.getX();
+        overlayY = position.getY();
+        boxWidth = position.getWidth();
+        boxHeight = position.getHeight();
+        scaleX = position.getScaleX();
+        scaleY = position.getScaleY();
 
         Gui.drawRect(overlayX, overlayY, overlayX + boxWidth, overlayY + boxHeight, 0x10000000);
 
-        float scale = 0.85f;
-        int lineHeight = (int) (12 * scale);
-
         GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, scale);
+        GlStateManager.scale(scaleX, scaleY, 1.0f);
 
-        int textX = (int) ((overlayX + 1) / scale);
-        int textY = (int) ((overlayY + 2) / scale);
+        int scaledOverlayX = (int) (overlayX / scaleX);
+        int scaledOverlayY = (int) (overlayY / scaleY);
+        int textY = scaledOverlayY + 2;
 
         for (String line : overlayLines) {
-            fontRenderer.drawString(line, textX, textY, 0xFFFFFF);
-            textY += lineHeight;
+            fontRenderer.drawString(line, scaledOverlayX + 1, textY, 0xFFFFFF);
+            textY += fontRenderer.FONT_HEIGHT;
         }
-
         GlStateManager.popMatrix();
     }
 
-    private static @NotNull List<String> getStrings() {
+    public static @NotNull List<String> getStrings() {
         List<String> overlayLines = new ArrayList<>();
         Overlay overlay = config.overlay;
 
@@ -156,13 +156,5 @@ public class CollectionOverlay {
         startTime = 0;
         updateCollectionData(null, null, null, null);
         setVisible(false);
-    }
-
-    public static int getOverlayWidth() {
-        return boxWidth;
-    }
-
-    public static int getOverlayHeight() {
-        return boxHeight;
     }
 }
