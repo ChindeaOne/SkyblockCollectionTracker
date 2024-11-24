@@ -62,16 +62,16 @@ object Hypixel {
 
                     RepoUtils.checkForUpdates()
                     if (ModInitialization.version != RepoUtils.latestVersion) {
-                        if (RepoUtils.downloadUrl != null) {
+                        if (RepoUtils.releasePageUrl != null) {
                             Minecraft.getMinecraft().thePlayer.addChatMessage(
-                                ChatComponentText("§a New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
+                                ChatComponentText("§aNew SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
                                     .appendSibling(
-                                        ChatComponentText("§9${RepoUtils.downloadUrl}")
+                                        ChatComponentText("§9${RepoUtils.releasePageUrl}")
                                             .apply {
                                                 chatStyle = ChatStyle().apply {
                                                     chatClickEvent = ClickEvent(
                                                         ClickEvent.Action.OPEN_URL,
-                                                        RepoUtils.downloadUrl
+                                                        RepoUtils.releasePageUrl
                                                     )
                                                 }
                                             }

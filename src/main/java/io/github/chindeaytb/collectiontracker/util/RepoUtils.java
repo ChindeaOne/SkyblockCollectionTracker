@@ -17,7 +17,7 @@ public class RepoUtils {
 
     private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases/latest";
     public static String latestVersion;
-    public static String downloadUrl;
+    public static String releasePageUrl;
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
 
     public static void checkForUpdates() {
@@ -30,13 +30,8 @@ public class RepoUtils {
                 JsonObject jsonResponse = getJsonObject(connection);
 
                 latestVersion = jsonResponse.get("tag_name").getAsString();
-                JsonArray assets = jsonResponse.getAsJsonArray("assets");
 
-                downloadUrl = null;
-                if (assets.size() > 0) {
-                    JsonObject asset = assets.get(0).getAsJsonObject();
-                    downloadUrl = asset.get("browser_download_url").getAsString();
-                }
+                releasePageUrl = jsonResponse.get("html_url").getAsString();
 
             } else {
                 logger.error("Failed to check for updates. HTTP Response Code: {}", connection.getResponseCode());
