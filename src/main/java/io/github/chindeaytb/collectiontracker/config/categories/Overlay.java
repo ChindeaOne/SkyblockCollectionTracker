@@ -36,5 +36,5 @@ public class Overlay {
 
     @Expose
     @ConfigLink(owner = Overlay.class, field = "statsOverlay")
-    public Position overlayPosition = new Position(4, 150);
+    public Position overlayPosition = new Position(4, 150, 100, 28);
 }
