@@ -15,7 +15,7 @@ import java.net.URL;
 
 public class RepoUtils {
 
-    private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases/latest";
+    private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
     public static String latestVersion;
     public static String releasePageUrl;
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
@@ -26,13 +26,24 @@ public class RepoUtils {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
+
             if (connection.getResponseCode() == 200) {
-                JsonObject jsonResponse = getJsonObject(connection);
+                JsonArray releases = getJsonArray(connection);
 
-                latestVersion = jsonResponse.get("tag_name").getAsString();
+                JsonObject latestRelease = null;
+                for (JsonElement element : releases) {
+                    JsonObject release = element.getAsJsonObject();
+                    if (latestRelease == null || isNewerVersion(release, latestRelease)) {
+                        latestRelease = release;
+                    }
+                }
 
-                releasePageUrl = jsonResponse.get("html_url").getAsString();
-
+                if (latestRelease != null) {
+                    latestVersion = latestRelease.get("tag_name").getAsString().replaceFirst("^v", "");
+                    releasePageUrl = latestRelease.get("html_url").getAsString();
+                } else {
+                    logger.warn("No releases found.");
+                }
             } else {
                 logger.error("Failed to check for updates. HTTP Response Code: {}", connection.getResponseCode());
             }
@@ -41,7 +52,7 @@ public class RepoUtils {
         }
     }
 
-    private static JsonObject getJsonObject(HttpURLConnection connection) throws IOException {
+    private static JsonArray getJsonArray(HttpURLConnection connection) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder response = new StringBuilder();
         String line;
@@ -53,6 +64,12 @@ public class RepoUtils {
 
         JsonParser parser = new JsonParser();
         JsonElement jsonElement = parser.parse(response.toString());
-        return jsonElement.getAsJsonObject();
+        return jsonElement.getAsJsonArray();
+    }
+
+    private static boolean isNewerVersion(JsonObject candidate, JsonObject current) {
+        String candidateDate = candidate.get("created_at").getAsString();
+        String currentDate = current.get("created_at").getAsString();
+        return candidateDate.compareTo(currentDate) > 0;
     }
 }
