@@ -5,6 +5,7 @@
 package io.github.chindeaytb.collectiontracker.util
 
 import io.github.chindeaytb.collectiontracker.ModInitialization
+import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
 import net.minecraft.client.Minecraft
 import net.minecraft.event.ClickEvent
@@ -25,6 +26,7 @@ object Hypixel {
     var skyblock = false
     var playerLoaded = false
 
+    private val serverStatus = ServerStatus.checkServer()
 
     @SubscribeEvent
     fun onDisconnect(event: ClientDisconnectionFromServerEvent) {
@@ -58,7 +60,15 @@ object Hypixel {
             if (HypixelUtils.isInHypixel && !playerLoaded) {
                 loadPlayerData()
                 if (playerLoaded) {
-                    TokenManager.fetchAndStoreToken()
+
+                    if(!serverStatus){
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(
+                            ChatComponentText("§cSkyblockCollectionTracker's server is down at the moment. Sorry for the inconvenience.")
+                        )
+                    }
+                    else{
+                        TokenManager.fetchAndStoreToken()
+                    }
 
                     RepoUtils.checkForUpdates()
                     if (ModInitialization.version != RepoUtils.latestVersion) {

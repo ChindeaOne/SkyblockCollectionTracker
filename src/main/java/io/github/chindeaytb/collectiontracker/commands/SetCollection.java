@@ -8,6 +8,7 @@ import io.github.chindeaytb.collectiontracker.util.HypixelUtils;
 
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
 import io.github.chindeaytb.collectiontracker.collections.ValidCollectionsManager;
+import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus;
 
 public class SetCollection extends CommandBase {
 
@@ -28,6 +29,11 @@ public class SetCollection extends CommandBase {
         try {
             if(!HypixelUtils.isOnSkyblock()){
                 sender.addChatMessage(new ChatComponentText("§cYou must be on Hypixel Skyblock to use this command!"));
+                return;
+            }
+
+            if(!ServerStatus.checkServer()){
+                sender.addChatMessage(new ChatComponentText("§cThe Mod's server is currently down."));
                 return;
             }
 
