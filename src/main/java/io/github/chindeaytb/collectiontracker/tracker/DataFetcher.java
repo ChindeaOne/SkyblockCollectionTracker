@@ -12,6 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
+import io.github.chindeaytb.collectiontracker.util.ServerUtils;
 
 public class DataFetcher {
 
@@ -23,12 +24,18 @@ public class DataFetcher {
     private static final int CACHE_EXPIRATION = 150;
 
     public static void scheduleDataFetch() {
-        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 15, 180, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 0, 30, TimeUnit.SECONDS);
         logger.info("Data fetching scheduled to run every 180 seconds");
     }
 
     public static void fetchData() {
         try {
+            if (!ServerUtils.INSTANCE.getServerStatus()) {
+                logger.warn("Server is not alive. Stopping the tracker.");
+                TrackingHandlerClass.stopTracking();
+                return;
+            }
+
             String playerUUID = PlayerData.INSTANCE.getPlayerUUID();
             CacheKey cacheKey = new CacheKey(playerUUID, collection);
 
