@@ -24,7 +24,7 @@ public class DataFetcher {
     private static final int CACHE_EXPIRATION = 150;
 
     public static void scheduleDataFetch() {
-        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 0, 30, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 10, 180, TimeUnit.SECONDS);
         logger.info("Data fetching scheduled to run every 180 seconds");
     }
 
