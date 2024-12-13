@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager;
+
 public class HypixelApiFetcher {
 
     private static final Logger logger = LogManager.getLogger(HypixelApiFetcher.class);
@@ -18,10 +20,10 @@ public class HypixelApiFetcher {
     public static String fetchJsonData(String uuid, String token, String collection) {
         try {
             URL url = new URL(URLManager.COLLECTION_URL);
-
             HttpURLConnection conn = getHttpURLConnection(uuid, token, url, collection);
 
             int responseCode = conn.getResponseCode();
+
             if (responseCode == 200) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String inputLine;
@@ -35,15 +37,38 @@ public class HypixelApiFetcher {
                 conn.disconnect();
 
                 return content.toString();
+            } else if (responseCode == 401) {
+                logger.warn("Invalid or expired token. Fetching a new one and retrying...");
+                TokenManager.fetchAndStoreToken();
+
+                conn = getHttpURLConnection(uuid, token, url, collection);
+                responseCode = conn.getResponseCode();
+
+                if (responseCode == 200) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String inputLine;
+                    StringBuilder content = new StringBuilder();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        content.append(inputLine);
+                    }
+
+                    in.close();
+                    conn.disconnect();
+
+                    return content.toString();
+                } else {
+                    logger.error("Retry failed. Server responded with code: {}", responseCode);
+                }
             } else {
-                logger.error("Failed to fetch data, server responded with code: {}", responseCode);
-                return null;
+                logger.error("Failed to fetch data. Server responded with code: {}", responseCode);
             }
 
         } catch (Exception e) {
             logger.error("An error occurred while fetching data from the server: {}", e.getMessage());
-            return null;
         }
+
+        return null;
     }
 
     private static @NotNull HttpURLConnection getHttpURLConnection(String uuid, String token, URL url, String collection) throws IOException {

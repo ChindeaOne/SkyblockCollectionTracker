@@ -36,7 +36,6 @@ public class TokenFetcher {
                     content.append(inputLine);
                 }
 
-                // Parse JSON string to JsonObject using Gson
                 JsonObject jsonResponse = new JsonParser().parse(content.toString()).getAsJsonObject();
                 String token = jsonResponse.has("token") ? jsonResponse.get("token").getAsString() : null;
 
