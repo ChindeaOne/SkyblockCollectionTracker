@@ -167,6 +167,8 @@ public class CollectionsManager {
                 return "HEMOVIBE";
             case "half-eaten carrot":
                 return "HALF_EATEN_CARROT";
+            case "timite":
+                return "TIMITE";
 
             default:
                 return null;

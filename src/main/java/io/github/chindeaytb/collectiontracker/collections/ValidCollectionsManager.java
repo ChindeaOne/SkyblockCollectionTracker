@@ -75,6 +75,7 @@ public class ValidCollectionsManager {
             case "agaricus cap":
             case "hemovibe":
             case "half-eaten carrot":
+            case "timite":
                 return true;
             default:
                 return false;
