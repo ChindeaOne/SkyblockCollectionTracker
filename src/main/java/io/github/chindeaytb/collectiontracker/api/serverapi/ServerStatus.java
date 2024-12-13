@@ -16,9 +16,9 @@ public class ServerStatus {
     public static boolean checkServer() {
         HttpURLConnection connection = null;
         try {
-            URL url = new URL(URLManager.ACTIVITY_URL);
+            URL url = new URL(URLManager.STATUS_URL);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("HEAD"); // Lightweight check
+            connection.setRequestMethod("HEAD");
             connection.setConnectTimeout(TIMEOUT);
             connection.setReadTimeout(TIMEOUT);
 

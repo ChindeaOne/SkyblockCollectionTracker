@@ -192,7 +192,7 @@ blossom {
     replaceToken("sctVersion", project.version)
     replaceToken("@TOKEN_URL@", System.getenv("TOKEN_URL"))
     replaceToken("@COLLECTION_URL@", System.getenv("COLLECTION_URL"))
-    replaceToken("@ACTIVITY_URL@", System.getenv("ACTIVITY_URL"))
+    replaceToken("@STATUS_URL@", System.getenv("STATUS_URL"))
     replaceToken("@AGENT@", System.getenv("AGENT"))
 }
 
