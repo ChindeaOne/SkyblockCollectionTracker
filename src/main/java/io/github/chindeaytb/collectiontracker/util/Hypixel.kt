@@ -71,7 +71,7 @@ object Hypixel {
                         }
                     }
                     RepoUtils.checkForUpdates()
-                    if (ModInitialization.version != RepoUtils.latestVersion) {
+                    if (hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
                             ChatComponentText("§aNew SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
                                 .appendSibling(
@@ -117,6 +117,20 @@ object Hypixel {
         val displayName = objective.displayName
         val scoreboardTitle = displayName.removeColor()
         return scoreboardTitlePattern.matches(scoreboardTitle)
+    }
+
+    fun hasNewestVersion(currentVersion: String, latestVersion: String): Boolean {
+        val currentParts = currentVersion.removePrefix("v").split(".")
+        val latestParts = latestVersion.removePrefix("v").split(".")
+
+        val maxLength = maxOf(currentParts.size, latestParts.size)
+        for (i in 0 until maxLength) {
+            val currentPart = currentParts.getOrNull(i)?.toIntOrNull() ?: 0
+            val latestPart = latestParts.getOrNull(i)?.toIntOrNull() ?: 0
+            if (currentPart < latestPart) return true
+            if (currentPart > latestPart) return false
+        }
+        return false
     }
 
     // Method taken from Skyhanni mod

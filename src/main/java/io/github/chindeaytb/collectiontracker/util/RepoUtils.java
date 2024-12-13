@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.chindeaytb.collectiontracker.ModInitialization;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,9 +17,8 @@ import java.net.URL;
 public class RepoUtils {
 
     private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
-    public static final String MODRINTH_URL = "https://modrinth.com/mod/sct/versions";
+    public static final String MODRINTH_URL = "https://modrinth.com/mod/sct/versions/v" + ModInitialization.getVersion();
     public static String latestVersion;
-    public static String releasePageUrl;
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
 
     public static void checkForUpdates() {

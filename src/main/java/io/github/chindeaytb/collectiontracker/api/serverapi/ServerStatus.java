@@ -11,7 +11,7 @@ import java.net.URL;
 public class ServerStatus {
 
     private static final Logger logger = LogManager.getLogger(ServerStatus.class);
-    private static final int TIMEOUT = 15000; // 15 seconds
+    private static final int TIMEOUT = 5000; // 5 seconds
 
     public static boolean checkServer() {
         HttpURLConnection connection = null;
@@ -19,6 +19,7 @@ public class ServerStatus {
             URL url = new URL(URLManager.STATUS_URL);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("HEAD");
+            connection.setRequestProperty("User-Agent", URLManager.AGENT);
             connection.setConnectTimeout(TIMEOUT);
             connection.setReadTimeout(TIMEOUT);
 
