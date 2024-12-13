@@ -76,6 +76,27 @@ public class TrackingHandlerClass {
         }
     }
 
+    public static void stopTracking() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdownNow();
+            logger.info("Tracking stopped because of offline server.");
+
+            isTracking = false;
+            lastTrackTime = System.currentTimeMillis();
+            previousCollection = -1;
+            sessionStartCollection = 0;
+
+            if (collectionOverlay != null) {
+                CollectionOverlay.stopTracking();
+                collectionOverlay = null;
+            }
+        } else {
+            logger.warn("Attempted to stop tracking, but no tracking is active.");
+        }
+    }
+
+
+
     public static void pauseTracking() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdownNow();
