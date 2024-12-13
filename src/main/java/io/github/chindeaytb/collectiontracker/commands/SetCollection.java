@@ -7,12 +7,17 @@ import net.minecraft.util.ChatComponentText;
 import io.github.chindeaytb.collectiontracker.util.HypixelUtils;
 
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
+
 import io.github.chindeaytb.collectiontracker.collections.ValidCollectionsManager;
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SetCollection extends CommandBase {
 
     public static String collection = "";
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public String getCommandName() {
@@ -27,42 +32,47 @@ public class SetCollection extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         try {
-            if(!HypixelUtils.isOnSkyblock()){
+            if (!HypixelUtils.isOnSkyblock()) {
                 sender.addChatMessage(new ChatComponentText("§cYou must be on Hypixel Skyblock to use this command!"));
                 return;
             }
 
-            if(!ServerStatus.checkServer()){
-                sender.addChatMessage(new ChatComponentText("§cThe Mod's server is currently down."));
-                return;
-            }
-
-            if (args[0].equalsIgnoreCase("track")) {
-                if (args.length < 2) {
-                    sender.addChatMessage(new ChatComponentText("Use: /sct track <collection>"));
-                    return;
-                }
-
-                StringBuilder keyBuilder = new StringBuilder();
-                for (int i = 1; i < args.length; i++) {
-                    keyBuilder.append(args[i]);
-                    if (i < args.length - 1) {
-                        keyBuilder.append(" ");
+            executor.submit(() -> {
+                try {
+                    if (!ServerStatus.checkServer()) {
+                        sender.addChatMessage(new ChatComponentText("§cYou can't use any commands for this mod at the moment."));
+                        return;
                     }
-                }
 
-                if (!isTracking) {
-                    collection = keyBuilder.toString().trim().toLowerCase();
-                    if (!ValidCollectionsManager.isValidCollection(collection)) {
-                        sender.addChatMessage(new ChatComponentText("§4Invalid collection!"));
-                    } else{
-                        TrackingHandlerClass.startTracking(sender);
+                    if (args[0].equalsIgnoreCase("track")) {
+                        if (args.length < 2) {
+                            sender.addChatMessage(new ChatComponentText("Use: /sct track <collection>"));
+                            return;
+                        }
+
+                        StringBuilder keyBuilder = new StringBuilder();
+                        for (int i = 1; i < args.length; i++) {
+                            keyBuilder.append(args[i]);
+                            if (i < args.length - 1) {
+                                keyBuilder.append(" ");
+                            }
+                        }
+
+                        if (!isTracking) {
+                            collection = keyBuilder.toString().trim().toLowerCase();
+                            if (!ValidCollectionsManager.isValidCollection(collection)) {
+                                sender.addChatMessage(new ChatComponentText("§4Invalid collection!"));
+                            } else {
+                                TrackingHandlerClass.startTracking(sender);
+                            }
+                        } else {
+                            sender.addChatMessage(new ChatComponentText("§cAlready tracking a collection."));
+                        }
                     }
-                } else {
-                    sender.addChatMessage(new ChatComponentText("§cAlready tracking a collection."));
+                } catch (Exception e) {
+                    sender.addChatMessage(new ChatComponentText("§cAn error occurred while processing the command."));
                 }
-            }
-
+            });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -73,3 +83,4 @@ public class SetCollection extends CommandBase {
         return true;
     }
 }
+
