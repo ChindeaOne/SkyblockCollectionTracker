@@ -54,6 +54,11 @@ public class DataFetcher {
             // Fetch new data from the API and cache it
             String jsonData = HypixelApiFetcher.fetchJsonData(playerUUID, TokenManager.getToken(), collection);
 
+            if(jsonData == null) {
+                logger.error("Failed to fetch data from the server");
+                return;
+            }
+
             collectionCache.put(cacheKey, new CachedData(jsonData, System.currentTimeMillis()));
 
             TrackCollection.displayCollection(jsonData);
