@@ -16,6 +16,7 @@ import java.net.URL;
 public class RepoUtils {
 
     private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
+    public static final String MODRINTH_URL = "https://modrinth.com/mod/sct/versions";
     public static String latestVersion;
     public static String releasePageUrl;
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
@@ -40,7 +41,7 @@ public class RepoUtils {
 
                 if (latestRelease != null) {
                     latestVersion = latestRelease.get("tag_name").getAsString().replaceFirst("^v", "");
-                    releasePageUrl = latestRelease.get("html_url").getAsString();
+                    logger.info("A new version (v{}) is available! Download it from Modrinth: {}", latestVersion, MODRINTH_URL);
                 } else {
                     logger.warn("No releases found.");
                 }
