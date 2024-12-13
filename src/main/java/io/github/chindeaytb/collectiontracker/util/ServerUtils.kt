@@ -13,10 +13,10 @@ object ServerUtils {
 
     var serverStatus = false
 
-    private const val NORMAL_CHECK_INTERVAL = 1200  // 1 minute
+    private const val NORMAL_CHECK_INTERVAL = 6000  // 5 minute
     private var tickCounter = 0
     private var currentCheckInterval = NORMAL_CHECK_INTERVAL
-    private const val COOLDOWN_CHECK_INTERVAL = 2400  // 2 minutes
+    private const val COOLDOWN_CHECK_INTERVAL = 12000  // 10 minutes
     private var consecutiveFailures = 0
 
     private val executorService = Executors.newSingleThreadExecutor()
