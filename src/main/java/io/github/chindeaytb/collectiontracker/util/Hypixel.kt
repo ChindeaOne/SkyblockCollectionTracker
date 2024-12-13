@@ -7,6 +7,7 @@ package io.github.chindeaytb.collectiontracker.util
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
+import io.github.chindeaytb.collectiontracker.util.ServerUtils.serverStatus
 import net.minecraft.client.Minecraft
 import net.minecraft.event.ClickEvent
 import net.minecraft.util.ChatComponentText
@@ -26,14 +27,13 @@ object Hypixel {
     var skyblock = false
     var playerLoaded = false
 
-    private val serverStatus = ServerStatus.checkServer()
-
     @SubscribeEvent
     fun onDisconnect(event: ClientDisconnectionFromServerEvent) {
         DisconnectHandlerClass.onServerDisconnect()
         server = false
         skyblock = false
         playerLoaded = false
+        serverStatus = false
     }
 
     // Method taken from Skyhanni mod
@@ -60,34 +60,32 @@ object Hypixel {
             if (HypixelUtils.isInHypixel && !playerLoaded) {
                 loadPlayerData()
                 if (playerLoaded) {
-
-                    if(!serverStatus){
+                    serverStatus = ServerStatus.checkServer()
+                    if (!serverStatus) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
                             ChatComponentText("§cSkyblockCollectionTracker's server is down at the moment. Sorry for the inconvenience.")
                         )
+                    } else {
+                        if (TokenManager.getToken() == null) {
+                            TokenManager.fetchAndStoreToken()
+                        }
                     }
-                    else{
-                        TokenManager.fetchAndStoreToken()
-                    }
-
                     RepoUtils.checkForUpdates()
                     if (ModInitialization.version != RepoUtils.latestVersion) {
-                        if (RepoUtils.releasePageUrl != null) {
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(
-                                ChatComponentText("§aNew SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
-                                    .appendSibling(
-                                        ChatComponentText("§9${RepoUtils.releasePageUrl}")
-                                            .apply {
-                                                chatStyle = ChatStyle().apply {
-                                                    chatClickEvent = ClickEvent(
-                                                        ClickEvent.Action.OPEN_URL,
-                                                        RepoUtils.releasePageUrl
-                                                    )
-                                                }
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(
+                            ChatComponentText("§aNew SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
+                                .appendSibling(
+                                    ChatComponentText("§9${RepoUtils.MODRINTH_URL}")
+                                        .apply {
+                                            chatStyle = ChatStyle().apply {
+                                                chatClickEvent = ClickEvent(
+                                                    ClickEvent.Action.OPEN_URL,
+                                                    RepoUtils.MODRINTH_URL
+                                                )
                                             }
-                                    )
-                            )
-                        }
+                                        }
+                                )
+                        )
                     }
                 }
             }
