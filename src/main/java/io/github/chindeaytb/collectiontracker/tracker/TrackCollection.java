@@ -16,6 +16,7 @@ import static io.github.chindeaytb.collectiontracker.commands.SetCollection.coll
 public class TrackCollection {
 
     private static final Logger logger = LogManager.getLogger(TrackCollection.class);
+
     public static long previousCollection = -1;
     public static long sessionStartCollection = 0;
 
@@ -34,20 +35,30 @@ public class TrackCollection {
 
                     String collectionPerHour;
                     String collectionMade;
-                    if (previousCollection > 0) {
-                        long collectedIn3Min = currentCollection - previousCollection;
-                        long perHour = collectedIn3Min * 20;
-                        sessionStartCollection = sessionStartCollection + collectedIn3Min;
 
-                        if (collectedIn3Min == 0) {
+                    if (previousCollection > 0) {
+                        if (currentCollection == previousCollection) {
                             collectionPerHour = "Paused";
                             collectionMade = "Paused";
                             TrackingHandlerClass.pauseTracking();
                         } else {
-                            collectionPerHour = formatNumber(perHour);
-                            collectionMade = formatNumber(sessionStartCollection);
+                            long collectedSinceStart = currentCollection - sessionStartCollection;
+
+                            long elapsedSeconds = (System.currentTimeMillis() - CollectionOverlay.startTime) / 1000;
+
+                            if (elapsedSeconds > 0) {
+                                double averagePerSecond = collectedSinceStart / (double) elapsedSeconds;
+                                double projectedPerHour = averagePerSecond * 3600;
+
+                                collectionPerHour = formatNumber((long) projectedPerHour);
+                                collectionMade = formatNumber(collectedSinceStart);
+                            } else {
+                                collectionPerHour = "Calculating...";
+                                collectionMade = "Calculating...";
+                            }
                         }
                     } else {
+                        sessionStartCollection = currentCollection;
                         collectionPerHour = "Calculating...";
                         collectionMade = "Calculating...";
                     }
@@ -90,3 +101,4 @@ public class TrackCollection {
         }
     }
 }
+

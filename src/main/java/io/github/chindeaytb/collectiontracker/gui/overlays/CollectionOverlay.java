@@ -24,7 +24,7 @@ public class CollectionOverlay {
     private static String collectionAmount = "";
     private static String collectionPerHour = "";
     private static String collectionMade = "";
-    private static long startTime = 0;
+    public static long startTime = 0;
 
     private static int overlayX;
     private static int overlayY;
