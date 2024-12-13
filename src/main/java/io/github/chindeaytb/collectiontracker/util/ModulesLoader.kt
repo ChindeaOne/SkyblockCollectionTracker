@@ -7,6 +7,6 @@ object ModulesLoader {
         add(DisconnectHandlerClass())
         add(CollectionOverlay())
         add(Hypixel)
-
+        add(ServerUtils)
     }
 }
