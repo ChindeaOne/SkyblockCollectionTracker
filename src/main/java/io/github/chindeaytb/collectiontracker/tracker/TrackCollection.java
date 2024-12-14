@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
+import io.github.chindeaytb.collectiontracker.collections.prices.NPCPrice;
 import io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,14 +36,18 @@ public class TrackCollection {
 
                     String collectionPerHour;
                     String collectionMade;
+                    String npcMoneyPerHour;
+                    long npcMoney;
 
                     if (previousCollection > 0) {
                         if (currentCollection == previousCollection) {
                             collectionPerHour = "Paused";
                             collectionMade = "Paused";
+                            npcMoneyPerHour = "Paused";
                             TrackingHandlerClass.pauseTracking();
                         } else {
                             long collectedSinceStart = currentCollection - sessionStartCollection;
+                            npcMoney = collectedSinceStart * NPCPrice.getNpcPrice(collection);
 
                             long elapsedSeconds = (System.currentTimeMillis() - CollectionOverlay.startTime) / 1000;
 
@@ -52,15 +57,20 @@ public class TrackCollection {
 
                                 collectionPerHour = formatNumber((long) projectedPerHour);
                                 collectionMade = formatNumber(collectedSinceStart);
+
+                                npcMoneyPerHour = formatNumber((long) (npcMoney / (elapsedSeconds / 3600.0)));
                             } else {
                                 collectionPerHour = "Calculating...";
                                 collectionMade = "Calculating...";
+                                npcMoneyPerHour = "Calculating...";
                             }
                         }
                     } else {
                         sessionStartCollection = currentCollection;
                         collectionPerHour = "Calculating...";
                         collectionMade = "Calculating...";
+                        npcMoneyPerHour = "Calculating...";
+
                     }
 
                     logger.info("New collection value: {}", currentCollection);
@@ -70,7 +80,8 @@ public class TrackCollection {
                             formattedCollection,
                             formatNumber(currentCollection),
                             collectionPerHour,
-                            collectionMade
+                            collectionMade,
+                            npcMoneyPerHour
                     );
 
                     previousCollection = currentCollection;

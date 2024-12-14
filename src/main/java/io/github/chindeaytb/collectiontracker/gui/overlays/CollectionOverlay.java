@@ -24,6 +24,7 @@ public class CollectionOverlay {
     private static String collectionAmount = "";
     private static String collectionPerHour = "";
     private static String collectionMade = "";
+    private static String moneyPerHour = "";
     public static long startTime = 0;
 
     private static int overlayX;
@@ -65,11 +66,12 @@ public class CollectionOverlay {
         }
     }
 
-    public static void updateCollectionData(String name, String amount, String perHour, String made) {
+    public static void updateCollectionData(String name, String amount, String perHour, String made, String money) {
         collectionName = name != null ? name : "";
         collectionAmount = amount != null ? amount : "";
         collectionPerHour = perHour != null ? perHour : "";
         collectionMade = made != null ? made : "";
+        moneyPerHour = money != null ? money : "";
 
         if (isTracking && startTime == 0) {
             startTime = System.currentTimeMillis();
@@ -132,6 +134,11 @@ public class CollectionOverlay {
                     }
                     break;
                 case 3:
+                    if (!moneyPerHour.isEmpty()) {
+                        overlayLines.add("§a$/h (NPC) §f> " + moneyPerHour);
+                    }
+                    break;
+                case 4:
                     if (startTime != 0) {
                         overlayLines.add("§aUptime §f> " + getUptime());
                     }
@@ -154,7 +161,7 @@ public class CollectionOverlay {
 
     public static void stopTracking() {
         startTime = 0;
-        updateCollectionData(null, null, null, null);
+        updateCollectionData(null, null, null, null, null);
         setVisible(false);
     }
 }

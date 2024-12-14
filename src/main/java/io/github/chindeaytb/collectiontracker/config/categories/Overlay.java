@@ -25,10 +25,11 @@ public class Overlay {
     )
     @ConfigEditorDraggableList(
             exampleText = {
-                    "§a Gold collection §f> 200.000M",
-                    "§a Gold collection made §f> 10.000M",
-                    "§a Coll/h §f> Calculating...",
-                    "§a Uptime §f> 01:30:20"
+                    "§aGold collection §f> 200.000M",
+                    "§aGold collection made §f> 10.000M",
+                    "§aColl/h §f> Calculating...",
+                    "§a$/h (NPC) §f> 100k/h",
+                    "§aUptime §f> 01:30:20"
             }
     )
     @ConfigAccordionId(id = 0)
