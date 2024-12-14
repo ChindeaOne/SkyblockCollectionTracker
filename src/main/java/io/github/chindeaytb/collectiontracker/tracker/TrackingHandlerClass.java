@@ -11,22 +11,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.previousCollection;
 import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.scheduler;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.previousCollection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.sessionStartCollection;
 
 public class TrackingHandlerClass {
 
     private static final Logger logger = LogManager.getLogger(TrackingHandlerClass.class);
-
-    public static boolean isTracking = false;
-
-    private static long lastTrackTime = 0;
-    private static final int COOLDOWN_PERIOD = 30;
-
-    private static CollectionOverlay collectionOverlay = null;
-
+    private static final int COOLDOWN_PERIOD = 15;
     private static final int PAUSE_PERIOD = 600;
+    public static boolean isTracking = false;
+    private static long lastTrackTime = 0;
+    private static CollectionOverlay collectionOverlay = null;
 
     public static void startTracking(ICommandSender sender) {
         long currentTime = System.currentTimeMillis();
@@ -94,7 +90,6 @@ public class TrackingHandlerClass {
             logger.warn("Attempted to stop tracking, but no tracking is active.");
         }
     }
-
 
 
     public static void pauseTracking() {
