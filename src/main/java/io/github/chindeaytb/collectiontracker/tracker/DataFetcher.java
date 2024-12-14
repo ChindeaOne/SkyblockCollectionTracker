@@ -3,6 +3,7 @@ package io.github.chindeaytb.collectiontracker.tracker;
 import io.github.chindeaytb.collectiontracker.api.hypixelapi.HypixelApiFetcher;
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager;
 import io.github.chindeaytb.collectiontracker.util.PlayerData;
+import io.github.chindeaytb.collectiontracker.util.ServerUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,19 +13,16 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
-import io.github.chindeaytb.collectiontracker.util.ServerUtils;
 
 public class DataFetcher {
 
     private static final Logger logger = LogManager.getLogger(DataFetcher.class);
-
-    public static ScheduledExecutorService scheduler;
-
     private static final Map<CacheKey, CachedData> collectionCache = new HashMap<>();
     private static final int CACHE_EXPIRATION = 150;
+    public static ScheduledExecutorService scheduler;
 
     public static void scheduleDataFetch() {
-        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 10, 180, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 5, 180, TimeUnit.SECONDS);
         logger.info("Data fetching scheduled to run every 180 seconds");
     }
 
@@ -54,7 +52,7 @@ public class DataFetcher {
             // Fetch new data from the API and cache it
             String jsonData = HypixelApiFetcher.fetchJsonData(playerUUID, TokenManager.getToken(), collection);
 
-            if(jsonData == null) {
+            if (jsonData == null) {
                 logger.error("Failed to fetch data from the server");
                 return;
             }
