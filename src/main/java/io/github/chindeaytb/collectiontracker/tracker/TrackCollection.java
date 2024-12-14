@@ -18,8 +18,8 @@ public class TrackCollection {
 
     private static final Logger logger = LogManager.getLogger(TrackCollection.class);
 
-    public static long previousCollection = -1;
-    public static long sessionStartCollection = 0;
+    public static float previousCollection = -1;
+    public static float sessionStartCollection = 0;
 
     public static void displayCollection(String jsonResponse) {
         try (JsonReader reader = new JsonReader(new StringReader(jsonResponse))) {
@@ -31,13 +31,13 @@ public class TrackCollection {
 
                 String HypixelCollection = CollectionsManager.toHypixelCollection(collection);
                 if (jsonObject.has(HypixelCollection)) {
-                    long currentCollection = jsonObject.get(HypixelCollection).getAsLong();
+                    float currentCollection = jsonObject.get(HypixelCollection).getAsLong();
                     String formattedCollection = formatCollectionName(collection);
 
                     String collectionPerHour;
                     String collectionMade;
                     String npcMoneyPerHour;
-                    long npcMoney;
+                    float npcMoney = 0;
 
                     if (previousCollection > 0) {
                         if (currentCollection == previousCollection) {
@@ -46,8 +46,11 @@ public class TrackCollection {
                             npcMoneyPerHour = "Paused";
                             TrackingHandlerClass.pauseTracking();
                         } else {
-                            long collectedSinceStart = currentCollection - sessionStartCollection;
-                            npcMoney = collectedSinceStart * NPCPrice.getNpcPrice(collection);
+                            float collectedSinceStart = currentCollection - sessionStartCollection;
+
+                            if (NPCPrice.notRiftCollection(collection)) {
+                                npcMoney = collectedSinceStart * NPCPrice.getNpcPrice(collection);
+                            }
 
                             long elapsedSeconds = (System.currentTimeMillis() - CollectionOverlay.startTime) / 1000;
 
@@ -55,10 +58,11 @@ public class TrackCollection {
                                 double averagePerSecond = collectedSinceStart / (double) elapsedSeconds;
                                 double projectedPerHour = averagePerSecond * 3600;
 
-                                collectionPerHour = formatNumber((long) projectedPerHour);
+                                collectionPerHour = formatNumber((float) projectedPerHour);
                                 collectionMade = formatNumber(collectedSinceStart);
 
-                                npcMoneyPerHour = formatNumber((long) (npcMoney / (elapsedSeconds / 3600.0)));
+                                npcMoneyPerHour = formatNumber((float) (npcMoney / (elapsedSeconds / 3600.0)));
+
                             } else {
                                 collectionPerHour = "Calculating...";
                                 collectionMade = "Calculating...";
@@ -73,16 +77,14 @@ public class TrackCollection {
 
                     }
 
+                    if(!NPCPrice.notRiftCollection(collection)) {
+                        npcMoneyPerHour = null;
+                    }
+
                     logger.info("New collection value: {}", currentCollection);
                     logger.info("Previous collection value: {}", previousCollection);
 
-                    CollectionOverlay.updateCollectionData(
-                            formattedCollection,
-                            formatNumber(currentCollection),
-                            collectionPerHour,
-                            collectionMade,
-                            npcMoneyPerHour
-                    );
+                    CollectionOverlay.updateCollectionData(formattedCollection, formatNumber(currentCollection), collectionPerHour, collectionMade, npcMoneyPerHour);
 
                     previousCollection = currentCollection;
                 } else {
@@ -100,7 +102,7 @@ public class TrackCollection {
         return collection.substring(0, 1).toUpperCase() + collection.substring(1).toLowerCase();
     }
 
-    private static String formatNumber(long number) {
+    private static String formatNumber(float number) {
         if (number < 1000) {
             return String.valueOf(number);
         } else if (number < 1_000_000) {
