@@ -35,12 +35,10 @@ public class SCT_Commands extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            // Provide completions for the first argument (commands)
             return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
-            // Provide completions for the second argument (collection names) when the first argument is 'track'
             return CommandBase.getListOfStringsMatchingLastWord(args,
                     "gold", "iron", "redstone", "cobblestone", "netherrack", "endstone",
                     "diamond", "quartz", "obsidian", "gemstone", "umber", "coal", "mithril",
@@ -55,9 +53,8 @@ public class SCT_Commands extends CommandBase {
                     "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon",
                     "magmafish", "prismarine crystal", "clay", "sponge", "wilted berberis",
                     "living metal heart", "caducous stem", "agaricus cap", "hemovibe",
-                    "half-eaten carrot");
+                    "half-eaten carrot, timite");
         }
-
         return Collections.emptyList();
     }
 
@@ -68,7 +65,6 @@ public class SCT_Commands extends CommandBase {
             return;
         }
 
-        // Route commands to their respective handlers
         switch (args[0].toLowerCase()) {
             case "help":
                 commandHelper.processCommand(sender, args);
