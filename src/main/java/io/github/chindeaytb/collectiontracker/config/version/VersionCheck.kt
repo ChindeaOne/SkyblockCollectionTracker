@@ -23,13 +23,7 @@ class VersionCheck(option: ProcessedOption) : GuiOptionEditor(option) {
         GlStateManager.translate(x.toFloat() + 10, y.toFloat(), 1F)
         GlStateManager.scale(2F, 2F, 1F)
         TextRenderUtils.drawStringCenteredScaledMaxWidth(
-            "${GREEN}$currentVersion",
-            fr,
-            widthRemaining / 4F,
-            10F,
-            true,
-            widthRemaining / 2,
-            -1
+            "${GREEN}$currentVersion", fr, widthRemaining / 4F, 10F, true, widthRemaining / 2, -1
         )
         GlStateManager.popMatrix()
 

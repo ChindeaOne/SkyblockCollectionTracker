@@ -9,7 +9,7 @@ public class ValidCollectionsManager {
             case "redstone":
             case "cobblestone":
             case "netherrack":
-            case "endstone":
+            case "end stone":
             case "diamond":
             case "quartz":
             case "obsidian":
@@ -52,12 +52,12 @@ public class ValidCollectionsManager {
             case "bone":
             case "blaze rod":
             case "string":
-            case "acacia wood":
-            case "spruce wood":
-            case "jungle wood":
-            case "birch wood":
-            case "oak wood":
-            case "dark oak wood":
+            case "acacia":
+            case "spruce":
+            case "jungle":
+            case "birch":
+            case "oak":
+            case "dark oak":
             case "lily pad":
             case "prismarine shard":
             case "ink sac":
@@ -66,7 +66,7 @@ public class ValidCollectionsManager {
             case "clownfish":
             case "raw salmon":
             case "magmafish":
-            case "prismarine crystal":
+            case "prismarine crystals":
             case "clay":
             case "sponge":
             case "wilted berberis":

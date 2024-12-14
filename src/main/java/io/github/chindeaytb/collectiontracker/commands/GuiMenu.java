@@ -12,12 +12,12 @@ public class GuiMenu extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender)  {
+    public String getCommandUsage(ICommandSender sender) {
         return "/sct";
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args){
+    public void processCommand(ICommandSender sender, String[] args) {
         ModInitialization.configManager.openConfigGui();
     }
 

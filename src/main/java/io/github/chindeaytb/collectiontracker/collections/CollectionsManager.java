@@ -51,7 +51,7 @@ public class CollectionsManager {
                 return "COAL";
             case "mycelium":
                 return "MYCEL";
-            case "endstone":
+            case "end stone":
                 return "ENDER_STONE";
             case "quartz":
                 return "QUARTZ";
@@ -117,17 +117,17 @@ public class CollectionsManager {
                 return "STRING";
 
             // Foraging
-            case "acacia wood":
+            case "acacia":
                 return "LOG_2";
-            case "spruce wood":
+            case "spruce":
                 return "LOG:1";
-            case "jungle wood":
+            case "jungle":
                 return "LOG:3";
-            case "birch wood":
+            case "birch":
                 return "LOG:2";
-            case "oak wood":
+            case "oak":
                 return "LOG";
-            case "dark oak wood":
+            case "dark oak":
                 return "LOG_2:1";
 
             // Fishing
@@ -147,7 +147,7 @@ public class CollectionsManager {
                 return "RAW_FISH:1";
             case "magmafish":
                 return "MAGMA_FISH";
-            case "prismarine crystal":
+            case "prismarine crystals":
                 return "PRISMARINE_CRYSTALS";
             case "clay":
                 return "CLAY_BALL";

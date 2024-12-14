@@ -2,7 +2,6 @@ package io.github.chindeaytb.collectiontracker
 
 import io.github.chindeaytb.collectiontracker.commands.*
 import io.github.chindeaytb.collectiontracker.config.ConfigManager
-import io.github.chindeaytb.collectiontracker.commands.GuiMenu
 import io.github.chindeaytb.collectiontracker.util.ModulesLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -17,14 +16,14 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = ModInitialization.MODID, clientSideOnly = true,useMetadata = true, version = "sctVersion")
+@Mod(modid = ModInitialization.MODID, clientSideOnly = true, useMetadata = true, version = "sctVersion")
 class ModInitialization {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
 
         loadModule(this)
-        ModulesLoader.modules.forEach { loadModule(it)}
+        ModulesLoader.modules.forEach { loadModule(it) }
 
         logger.info("Skyblock Collections Tracker pre-initialization complete.")
     }

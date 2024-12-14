@@ -1,17 +1,16 @@
 package io.github.chindeaytb.collectiontracker.api.tokenapi;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import io.github.chindeaytb.collectiontracker.api.URLManager;
 import io.github.chindeaytb.collectiontracker.util.PlayerData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
-import io.github.chindeaytb.collectiontracker.api.URLManager;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class TokenFetcher {
 

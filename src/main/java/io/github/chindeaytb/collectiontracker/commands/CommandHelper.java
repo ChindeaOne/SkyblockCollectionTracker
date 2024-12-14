@@ -17,7 +17,7 @@ public class CommandHelper extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args){
+    public void processCommand(ICommandSender sender, String[] args) {
         if (args[0].equalsIgnoreCase("help")) {
             sendHelpMessage(sender);
         } else {

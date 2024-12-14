@@ -2,9 +2,9 @@ package io.github.chindeaytb.collectiontracker.gui.overlays;
 
 import io.github.chindeaytb.collectiontracker.config.core.Position;
 import io.github.chindeaytb.collectiontracker.mixins.AccessorGuiContainer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
@@ -33,6 +33,7 @@ public class DummyOverlay extends GuiScreen {
         }
         super.initGui();
     }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if (CollectionOverlay.isVisible()) {
@@ -52,10 +53,7 @@ public class DummyOverlay extends GuiScreen {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
         List<String> overlayLines = CollectionOverlay.getStrings();
-        int maxWidth = overlayLines.stream()
-                .mapToInt(fontRenderer::getStringWidth)
-                .max()
-                .orElse(0);
+        int maxWidth = overlayLines.stream().mapToInt(fontRenderer::getStringWidth).max().orElse(0);
 
         int effectiveWidth = Math.max(overlayPosition.getWidth(), maxWidth);
         int effectiveHeight = overlayPosition.getHeight();
@@ -67,9 +65,7 @@ public class DummyOverlay extends GuiScreen {
         GlStateManager.scale(overlayPosition.getScaleX(), overlayPosition.getScaleY(), 1.0f);
         GlStateManager.translate(-overlayPosition.getX(), -overlayPosition.getY(), 0);
 
-        drawRect(overlayPosition.getX(), overlayPosition.getY(),
-                overlayPosition.getX() + effectiveWidth,
-                overlayPosition.getY() + effectiveHeight, -0x7fbfbfc0);
+        drawRect(overlayPosition.getX(), overlayPosition.getY(), overlayPosition.getX() + effectiveWidth, overlayPosition.getY() + effectiveHeight, -0x7fbfbfc0);
 
         String overlayText = "§aMove the overlay";
         int textWidth = fontRenderer.getStringWidth(overlayText);
@@ -87,10 +83,7 @@ public class DummyOverlay extends GuiScreen {
         if (dragging) {
             overlayPosition.setPosition(mouseX - dragOffsetX, mouseY - dragOffsetY);
         } else if (resizing) {
-            overlayPosition.setDimensions(
-                    Math.max(50, mouseX - overlayPosition.getX()),
-                    Math.max(20, mouseY - overlayPosition.getY())
-            );
+            overlayPosition.setDimensions(Math.max(50, mouseX - overlayPosition.getX()), Math.max(20, mouseY - overlayPosition.getY()));
         }
     }
 
@@ -109,11 +102,9 @@ public class DummyOverlay extends GuiScreen {
         super.keyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_EQUALS || keyCode == Keyboard.KEY_ADD) {
-            overlayPosition.setScaling(overlayPosition.getScaleX() + 0.1f,
-                    overlayPosition.getScaleY() + 0.1f);
+            overlayPosition.setScaling(overlayPosition.getScaleX() + 0.1f, overlayPosition.getScaleY() + 0.1f);
         } else if (keyCode == Keyboard.KEY_MINUS || keyCode == Keyboard.KEY_SUBTRACT) {
-            overlayPosition.setScaling(Math.max(0.1f, overlayPosition.getScaleX() - 0.1f),
-                    Math.max(0.1f, overlayPosition.getScaleY() - 0.1f));
+            overlayPosition.setScaling(Math.max(0.1f, overlayPosition.getScaleX() - 0.1f), Math.max(0.1f, overlayPosition.getScaleY() - 0.1f));
         }
     }
 
@@ -137,14 +128,12 @@ public class DummyOverlay extends GuiScreen {
     }
 
     private boolean isMouseOverOverlay(int mouseX, int mouseY) {
-        return mouseX >= overlayPosition.getX() && mouseX <= overlayPosition.getX() + overlayPosition.getWidth() &&
-                mouseY >= overlayPosition.getY() && mouseY <= overlayPosition.getY() + overlayPosition.getHeight();
+        return mouseX >= overlayPosition.getX() && mouseX <= overlayPosition.getX() + overlayPosition.getWidth() && mouseY >= overlayPosition.getY() && mouseY <= overlayPosition.getY() + overlayPosition.getHeight();
     }
 
     private boolean isMouseOverResizeHandle(int mouseX, int mouseY) {
         int handleSize = 10;
-        return mouseX >= overlayPosition.getX() + overlayPosition.getWidth() - handleSize && mouseX <= overlayPosition.getX() + overlayPosition.getWidth() &&
-                mouseY >= overlayPosition.getY() + overlayPosition.getHeight() - handleSize && mouseY <= overlayPosition.getY() + overlayPosition.getHeight();
+        return mouseX >= overlayPosition.getX() + overlayPosition.getWidth() - handleSize && mouseX <= overlayPosition.getX() + overlayPosition.getWidth() && mouseY >= overlayPosition.getY() + overlayPosition.getHeight() - handleSize && mouseY <= overlayPosition.getY() + overlayPosition.getHeight();
     }
 
     @Override
@@ -154,12 +143,6 @@ public class DummyOverlay extends GuiScreen {
     }
 
     private void saveOverlayPositionAndSize() {
-        CollectionOverlay.updateOverlayPositionAndSize(
-                overlayPosition.getX(),
-                overlayPosition.getY(),
-                overlayPosition.getWidth(),
-                overlayPosition.getHeight(),
-                overlayPosition.getScaleX(),
-                overlayPosition.getScaleY());
+        CollectionOverlay.updateOverlayPositionAndSize(overlayPosition.getX(), overlayPosition.getY(), overlayPosition.getWidth(), overlayPosition.getHeight(), overlayPosition.getScaleX(), overlayPosition.getScaleY());
     }
 }

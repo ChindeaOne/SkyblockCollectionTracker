@@ -5,13 +5,13 @@ import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import io.github.chindeaytb.collectiontracker.config.error.ConfigError
-import io.github.moulberry.moulconfig.gui.MoulConfigEditor
+import io.github.chindeaytb.collectiontracker.config.version.VersionManager
 import io.github.moulberry.moulconfig.gui.GuiScreenElementWrapper
+import io.github.moulberry.moulconfig.gui.MoulConfigEditor
 import io.github.moulberry.moulconfig.observer.PropertyTypeAdapterFactory
 import io.github.moulberry.moulconfig.processor.BuiltinMoulConfigGuis
 import io.github.moulberry.moulconfig.processor.ConfigProcessorDriver
 import io.github.moulberry.moulconfig.processor.MoulConfigProcessor
-import io.github.chindeaytb.collectiontracker.config.version.VersionManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -24,10 +24,8 @@ import java.util.*
 
 class ConfigManager {
     companion object {
-        val gson = GsonBuilder().setPrettyPrinting()
-            .excludeFieldsWithoutExposeAnnotation()
-            .serializeSpecialFloatingPointValues()
-            .registerTypeAdapterFactory(PropertyTypeAdapterFactory())
+        val gson = GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation()
+            .serializeSpecialFloatingPointValues().registerTypeAdapterFactory(PropertyTypeAdapterFactory())
             .registerTypeAdapter(UUID::class.java, object : TypeAdapter<UUID>() {
                 override fun write(out: JsonWriter, value: UUID) {
                     out.value(value.toString())
@@ -36,9 +34,7 @@ class ConfigManager {
                 override fun read(reader: JsonReader): UUID {
                     return UUID.fromString(reader.nextString())
                 }
-            }.nullSafe())
-            .enableComplexMapKeySerialization()
-            .create()
+            }.nullSafe()).enableComplexMapKeySerialization().create()
     }
 
     private var configDirectory = File("config/sct")
@@ -68,9 +64,7 @@ class ConfigManager {
         BuiltinMoulConfigGuis.addProcessors(processor)
         VersionManager.injectConfigProcessor(processor)
         ConfigProcessorDriver.processConfig(
-            config.javaClass,
-            config,
-            processor
+            config.javaClass, config, processor
         )
 
         Runtime.getRuntime().addShutdownHook(Thread {
@@ -110,10 +104,7 @@ class ConfigManager {
                 writer.write(gson.toJson(config))
             }
             Files.move(
-                unit.toPath(),
-                configFile.toPath(),
-                StandardCopyOption.REPLACE_EXISTING,
-                StandardCopyOption.ATOMIC_MOVE
+                unit.toPath(), configFile.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
             )
         } catch (e: IOException) {
             throw ConfigError("Could not save config", e)

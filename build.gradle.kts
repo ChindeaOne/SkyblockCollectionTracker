@@ -1,7 +1,7 @@
-import sct.setVersionFromGit
 import org.apache.commons.lang3.SystemUtils
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import sct.setVersionFromGit
 
 plugins {
     idea
@@ -40,8 +40,7 @@ loom {
         pack200Provider.set(dev.architectury.pack200.java.Pack200Adapter())
         mixinConfig("mixins.sct.json")
     }
-    @Suppress("UnstableApiUsage")
-    mixin {
+    @Suppress("UnstableApiUsage") mixin {
         defaultRefmapName.set("mixins.sct.refmap.json")
     }
 }
@@ -142,7 +141,7 @@ tasks.withType(org.gradle.jvm.tasks.Jar::class) {
 
 tasks.processResources {
     inputs.property("version", version)
-    filesMatching(listOf("mcmod.info","mixins.sct.json")) {
+    filesMatching(listOf("mcmod.info", "mixins.sct.json")) {
         expand("version" to version)
     }
 }
@@ -184,7 +183,7 @@ tasks.shadowJar {
         }
     }
     exclude("META-INF/versions/**")
-    relocate("io.github.notenoughupdates.moulconfig","io.github.chindeaytb.collectiontracker.deps.moulconfig")
+    relocate("io.github.notenoughupdates.moulconfig", "io.github.chindeaytb.collectiontracker.deps.moulconfig")
     relocate("moe.nea.libautoupdate", "io.github.chindeaytb.collectiontracker.deps.libautoupdate")
 }
 

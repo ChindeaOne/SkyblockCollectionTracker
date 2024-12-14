@@ -1,23 +1,22 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
+import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus;
+import io.github.chindeaytb.collectiontracker.collections.ValidCollectionsManager;
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
+import io.github.chindeaytb.collectiontracker.util.HypixelUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
-import io.github.chindeaytb.collectiontracker.util.HypixelUtils;
-
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
-
-import io.github.chindeaytb.collectiontracker.collections.ValidCollectionsManager;
-import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
+
 public class SetCollection extends CommandBase {
 
-    public static String collection = "";
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    public static String collection = "";
 
     @Override
     public String getCommandName() {

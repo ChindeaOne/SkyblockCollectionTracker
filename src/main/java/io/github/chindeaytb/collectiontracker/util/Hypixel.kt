@@ -73,19 +73,14 @@ object Hypixel {
                     RepoUtils.checkForUpdates()
                     if (hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
-                            ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
-                                .appendSibling(
-                                    ChatComponentText("§a${RepoUtils.MODRINTH_URL}")
-                                        .apply {
-                                            chatStyle = ChatStyle().apply {
-                                                chatClickEvent = ClickEvent(
-                                                    ClickEvent.Action.OPEN_URL,
-                                                    RepoUtils.MODRINTH_URL
-                                                )
-                                            }
+                            ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
+                                ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
+                                        chatStyle = ChatStyle().apply {
+                                            chatClickEvent = ClickEvent(
+                                                ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
+                                            )
                                         }
-                                )
-                        )
+                                    }))
                     }
                 }
             }

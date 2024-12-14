@@ -1,16 +1,25 @@
 package io.github.chindeaytb.collectiontracker.config;
 
 import com.google.gson.annotations.Expose;
+import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.config.categories.About;
 import io.github.chindeaytb.collectiontracker.config.categories.GUIConfig;
-import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
 import io.github.moulberry.moulconfig.Config;
-
 import io.github.moulberry.moulconfig.annotations.Category;
 
 @SuppressWarnings("unused")
 public class ModConfig extends Config {
+
+    @Expose
+    @Category(name = "About", desc = "")
+    public About about = new About();
+    @Expose
+    @Category(name = "GUI", desc = "Change the location of GUI")
+    public GUIConfig gui = new GUIConfig();
+    @Expose
+    @Category(name = "Overlay", desc = "Overlay settings")
+    public Overlay overlay = new Overlay();
 
     @Override
     public String getTitle() {
@@ -22,16 +31,4 @@ public class ModConfig extends Config {
     public void saveNow() {
         ModInitialization.configManager.save();
     }
-
-    @Expose
-    @Category(name = "About", desc = "")
-    public About about = new About();
-
-    @Expose
-    @Category(name = "GUI", desc = "Change the location of GUI")
-    public GUIConfig gui = new GUIConfig();
-
-    @Expose
-    @Category(name = "Overlay", desc = "Overlay settings")
-    public Overlay overlay = new Overlay();
 }

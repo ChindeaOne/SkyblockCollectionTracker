@@ -20,13 +20,12 @@ import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClas
 
 public class CollectionOverlay {
 
+    public static long startTime = 0;
     private static String collectionName = "";
     private static String collectionAmount = "";
     private static String collectionPerHour = "";
     private static String collectionMade = "";
     private static String moneyPerHour = "";
-    public static long startTime = 0;
-
     private static int overlayX;
     private static int overlayY;
     private static int boxWidth;
@@ -35,20 +34,14 @@ public class CollectionOverlay {
     private static float scaleY;
 
     private static boolean visible = true;
-    private static ModConfig config ;
+    private static ModConfig config;
 
-    @SubscribeEvent
-    public void setConfig(TickEvent.ClientTickEvent event) {
-        if(config != null) return;
-        config = ModInitialization.configManager.getConfig();
+    public static boolean isVisible() {
+        return visible;
     }
 
     public static void setVisible(boolean visibility) {
         visible = visibility;
-    }
-
-    public static boolean isVisible() {
-        return visible;
     }
 
     public static void updateOverlayPositionAndSize(int newX, int newY, int newWidth, int newHeight, float newScaleX, float newScaleY) {
@@ -76,40 +69,6 @@ public class CollectionOverlay {
         if (isTracking && startTime == 0) {
             startTime = System.currentTimeMillis();
         }
-    }
-
-    @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
-        if (!isTracking || !visible || config == null) return;
-
-        Minecraft mc = Minecraft.getMinecraft();
-        FontRenderer fontRenderer = mc.fontRendererObj;
-
-        List<String> overlayLines = getStrings();
-        if (overlayLines.isEmpty()) return;
-
-        Position position = config.overlay.overlayPosition;
-        overlayX = position.getX();
-        overlayY = position.getY();
-        boxWidth = position.getWidth();
-        boxHeight = position.getHeight();
-        scaleX = position.getScaleX();
-        scaleY = position.getScaleY();
-
-        Gui.drawRect(overlayX, overlayY, overlayX + boxWidth, overlayY + boxHeight, 0x10000000);
-
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(scaleX, scaleY, 1.0f);
-
-        int scaledOverlayX = (int) (overlayX / scaleX);
-        int scaledOverlayY = (int) (overlayY / scaleY);
-        int textY = scaledOverlayY + 2;
-
-        for (String line : overlayLines) {
-            fontRenderer.drawString(line, scaledOverlayX + 1, textY, 0xFFFFFF);
-            textY += fontRenderer.FONT_HEIGHT;
-        }
-        GlStateManager.popMatrix();
     }
 
     public static @NotNull List<String> getStrings() {
@@ -163,5 +122,45 @@ public class CollectionOverlay {
         startTime = 0;
         updateCollectionData(null, null, null, null, null);
         setVisible(false);
+    }
+
+    @SubscribeEvent
+    public void setConfig(TickEvent.ClientTickEvent event) {
+        if (config != null) return;
+        config = ModInitialization.configManager.getConfig();
+    }
+
+    @SubscribeEvent
+    public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
+        if (!isTracking || !visible || config == null) return;
+
+        Minecraft mc = Minecraft.getMinecraft();
+        FontRenderer fontRenderer = mc.fontRendererObj;
+
+        List<String> overlayLines = getStrings();
+        if (overlayLines.isEmpty()) return;
+
+        Position position = config.overlay.overlayPosition;
+        overlayX = position.getX();
+        overlayY = position.getY();
+        boxWidth = position.getWidth();
+        boxHeight = position.getHeight();
+        scaleX = position.getScaleX();
+        scaleY = position.getScaleY();
+
+        Gui.drawRect(overlayX, overlayY, overlayX + boxWidth, overlayY + boxHeight, 0x10000000);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(scaleX, scaleY, 1.0f);
+
+        int scaledOverlayX = (int) (overlayX / scaleX);
+        int scaledOverlayY = (int) (overlayY / scaleY);
+        int textY = scaledOverlayY + 2;
+
+        for (String line : overlayLines) {
+            fontRenderer.drawString(line, scaledOverlayX + 1, textY, 0xFFFFFF);
+            textY += fontRenderer.FONT_HEIGHT;
+        }
+        GlStateManager.popMatrix();
     }
 }

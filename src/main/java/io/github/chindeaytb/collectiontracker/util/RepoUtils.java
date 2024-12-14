@@ -16,10 +16,10 @@ import java.net.URL;
 
 public class RepoUtils {
 
-    private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
     public static final String MODRINTH_URL = "https://modrinth.com/mod/sct/versions/v" + ModInitialization.getVersion();
-    public static String latestVersion;
+    private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
+    public static String latestVersion;
 
     public static void checkForUpdates() {
         try {
