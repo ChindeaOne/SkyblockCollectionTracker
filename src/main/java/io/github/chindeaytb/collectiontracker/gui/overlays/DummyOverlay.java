@@ -96,12 +96,12 @@ public class DummyOverlay extends GuiScreen {
 
     private void drawStaticText(FontRenderer fontRenderer) {
         int screenWidth = width;
-        int textWidth = fontRenderer.getStringWidth("§aUse +/- keys to resize the overlay");
+        int textWidth = fontRenderer.getStringWidth("§aUse -/+ keys to resize the overlay");
 
         int textX = (screenWidth - textWidth) / 2;
         int textY = 10;
 
-        fontRenderer.drawString("§aUse +/- keys to resize the overlay", textX, textY, 0xFFFFFF);
+        fontRenderer.drawString("§aUse -/+ keys to resize the overlay", textX, textY, 0xFFFFFF);
     }
 
     @Override
