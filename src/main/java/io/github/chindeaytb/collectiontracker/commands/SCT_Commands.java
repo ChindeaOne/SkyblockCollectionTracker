@@ -35,7 +35,7 @@ public class SCT_Commands extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop", "pause", "resume");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {

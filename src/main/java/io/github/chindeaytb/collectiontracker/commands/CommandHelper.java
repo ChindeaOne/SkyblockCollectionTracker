@@ -30,6 +30,8 @@ public class CommandHelper extends CommandBase {
         sender.addChatMessage(new ChatComponentText("§a◆/sct => Opens the gui."));
         sender.addChatMessage(new ChatComponentText("§a◆/sct track => Tracks your Skyblock collection."));
         sender.addChatMessage(new ChatComponentText("§a◆/sct stop => Stops tracking."));
+        sender.addChatMessage(new ChatComponentText("§a◆/sct pause => Pauses tracking."));
+        sender.addChatMessage(new ChatComponentText("§a◆/sct resume => Resumes tracking."));
     }
 
     @Override
