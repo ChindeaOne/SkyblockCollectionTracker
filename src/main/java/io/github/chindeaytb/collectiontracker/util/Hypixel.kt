@@ -71,16 +71,19 @@ object Hypixel {
                         }
                     }
                     RepoUtils.checkForUpdates()
-                    if (!hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)) {
+
+                    if (!hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion) ||
+                        (hasNewestVersion(RepoUtils.latestVersion, ModInitialization.version) && RepoUtils.latestVersion.contains("-"))
+                    ) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
                             ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
                                 ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
-                                        chatStyle = ChatStyle().apply {
-                                            chatClickEvent = ClickEvent(
-                                                ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
-                                            )
-                                        }
-                                    }))
+                                    chatStyle = ChatStyle().apply {
+                                        chatClickEvent = ClickEvent(
+                                            ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
+                                        )
+                                    }
+                                }))
                     }
                 }
             }
@@ -125,22 +128,23 @@ object Hypixel {
         for (i in 0 until maxLength) {
             val currentPart = currentNumericParts.getOrNull(i)?.toIntOrNull() ?: 0
             val latestPart = latestNumericParts.getOrNull(i)?.toIntOrNull() ?: 0
-            if (currentPart < latestPart) return true
-            if (currentPart > latestPart) return false
+            if (currentPart < latestPart) return false
+            if (currentPart > latestPart) return true
         }
 
-        // If numeric parts are equal, compare pre-release tags
+        // Compare pre-release tags
         val currentPreRelease = currentParts.getOrNull(1)
         val latestPreRelease = latestParts.getOrNull(1)
 
-        if (currentPreRelease == null && latestPreRelease != null) return true
-        if (currentPreRelease != null && latestPreRelease == null) return false
+        if (currentPreRelease == null && latestPreRelease != null) return false
+        if (currentPreRelease != null && latestPreRelease == null) return true
         if (currentPreRelease != null && latestPreRelease != null) {
-            return currentPreRelease < latestPreRelease
+            return currentPreRelease >= latestPreRelease
         }
 
-        return false
+        return true
     }
+
     // Method taken from Skyhanni mod
     private fun CharSequence.removeColor(keepFormatting: Boolean = false): String {
         // Glossary:
