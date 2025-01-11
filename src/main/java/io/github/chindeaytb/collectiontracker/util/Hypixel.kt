@@ -72,8 +72,9 @@ object Hypixel {
                     }
                     RepoUtils.checkForUpdates()
 
-                    if (!hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion) ||
-                        (hasNewestVersion(RepoUtils.latestVersion, ModInitialization.version) && RepoUtils.latestVersion.contains("-"))
+                    if (ModInitialization.version != RepoUtils.latestVersion &&
+                        (!hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion) ||
+                                (ModInitialization.version.contains("-") && !RepoUtils.latestVersion.contains("-")))
                     ) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
                             ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
@@ -83,7 +84,8 @@ object Hypixel {
                                             ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
                                         )
                                     }
-                                }))
+                                })
+                        )
                     }
                 }
             }
