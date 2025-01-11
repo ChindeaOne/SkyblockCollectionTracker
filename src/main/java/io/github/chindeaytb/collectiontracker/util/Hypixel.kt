@@ -71,7 +71,7 @@ object Hypixel {
                         }
                     }
                     RepoUtils.checkForUpdates()
-                    if (hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)) {
+                    if (!hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
                             ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
                                 ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
