@@ -40,20 +40,20 @@ public class SCT_Commands extends CommandBase {
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
             return CommandBase.getListOfStringsMatchingLastWord(args,
-                    "gold", "iron", "redstone", "cobblestone", "netherrack", "endstone",
-                    "diamond", "quartz", "obsidian", "gemstone", "umber", "coal", "mithril",
-                    "emerald", "glacite", "tungsten", "mycelium", "red sand", "hard stone",
                     "cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane",
                     "pumpkin", "wheat", "seeds", "mushroom", "raw rabbit", "nether wart",
                     "mutton", "melon", "potato", "leather", "porkchop", "feather",
-                    "lapis lazuli", "glowstone", "gravel", "slimeball", "magma cream",
+                    "lapis lazuli", "redstone", "umber", "coal", "mycelium", "end stone",
+                    "quartz", "sand", "iron", "gemstone", "tungsten", "obsidian",
+                    "diamond", "cobblestone", "glowstone", "gold", "gravel", "hard stone",
+                    "mithril", "emerald", "red sand", "ice", "glacite", "sulphur",
+                    "netherrack", "ender pearl", "chili pepper", "slimeball", "magma cream",
                     "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone",
-                    "blaze rod", "string", "acacia wood", "spruce wood", "jungle wood",
-                    "birch wood", "oak wood", "dark oak wood", "lily pad", "prismarine shard",
-                    "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon",
-                    "magmafish", "prismarine crystal", "clay", "sponge", "wilted berberis",
-                    "living metal heart", "caducous stem", "agaricus cap", "hemovibe",
-                    "half-eaten carrot, timite");
+                    "blaze rod", "string", "acacia", "spruce", "jungle", "birch", "oak",
+                    "dark oak", "lily pad", "prismarine shard", "ink sac", "raw fish",
+                    "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals",
+                    "clay", "sponge", "wilted berberis", "living metal heart", "caducous stem",
+                    "agaricus cap", "hemovibe", "half-eaten carrot", "timite");
         }
         return Collections.emptyList();
     }

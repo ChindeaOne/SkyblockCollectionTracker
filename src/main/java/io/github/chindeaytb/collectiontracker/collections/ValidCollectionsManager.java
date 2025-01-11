@@ -4,25 +4,7 @@ public class ValidCollectionsManager {
 
     public static boolean isValidCollection(String collectionName) {
         switch (collectionName) {
-            case "gold":
-            case "iron":
-            case "redstone":
-            case "cobblestone":
-            case "netherrack":
-            case "end stone":
-            case "diamond":
-            case "quartz":
-            case "obsidian":
-            case "gemstone":
-            case "umber":
-            case "coal":
-            case "emerald":
-            case "glacite":
-            case "tungsten":
-            case "mithril":
-            case "mycelium":
-            case "red sand":
-            case "hard stone":
+            // Farming
             case "cocoa beans":
             case "carrot":
             case "cactus":
@@ -40,9 +22,37 @@ public class ValidCollectionsManager {
             case "leather":
             case "porkchop":
             case "feather":
+
+                // Mining
             case "lapis lazuli":
+            case "redstone":
+            case "umber":
+            case "coal":
+            case "mycelium":
+            case "end stone":
+            case "quartz":
+            case "sand":
+            case "iron":
+            case "gemstone":
+            case "tungsten":
+            case "obsidian":
+            case "diamond":
+            case "cobblestone":
             case "glowstone":
+            case "gold":
             case "gravel":
+            case "hard stone":
+            case "mithril":
+            case "emerald":
+            case "red sand":
+            case "ice":
+            case "glacite":
+            case "sulphur":
+            case "netherrack":
+
+                // Combat
+            case "ender pearl":
+            case "chili pepper":
             case "slimeball":
             case "magma cream":
             case "ghast tear":
@@ -52,12 +62,16 @@ public class ValidCollectionsManager {
             case "bone":
             case "blaze rod":
             case "string":
+
+                // Foraging
             case "acacia":
             case "spruce":
             case "jungle":
             case "birch":
             case "oak":
             case "dark oak":
+
+                // Fishing
             case "lily pad":
             case "prismarine shard":
             case "ink sac":
@@ -69,6 +83,8 @@ public class ValidCollectionsManager {
             case "prismarine crystals":
             case "clay":
             case "sponge":
+
+                // Rift
             case "wilted berberis":
             case "living metal heart":
             case "caducous stem":
@@ -81,5 +97,4 @@ public class ValidCollectionsManager {
                 return false;
         }
     }
-
 }
