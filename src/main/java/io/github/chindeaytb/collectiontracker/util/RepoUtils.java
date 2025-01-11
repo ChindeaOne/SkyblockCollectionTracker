@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.chindeaytb.collectiontracker.ModInitialization;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +15,7 @@ import java.net.URL;
 
 public class RepoUtils {
 
-    public static final String MODRINTH_URL = "https://modrinth.com/mod/sct/versions/v" + ModInitialization.getVersion();
+    public static String MODRINTH_URL = "https://modrinth.com/mod/sct/version/v";
     private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
     public static String latestVersion;
@@ -41,9 +40,10 @@ public class RepoUtils {
 
                 if (latestRelease != null) {
                     latestVersion = latestRelease.get("tag_name").getAsString().replaceFirst("^v", "");
+                    MODRINTH_URL += latestVersion;
                     logger.info("A new version (v{}) is available! Download it from Modrinth: {}", latestVersion, MODRINTH_URL);
                 } else {
-                    logger.warn("No releases found.");
+                    logger.info("You are using the latest version.");
                 }
             } else {
                 logger.error("Failed to check for updates. HTTP Response Code: {}", connection.getResponseCode());

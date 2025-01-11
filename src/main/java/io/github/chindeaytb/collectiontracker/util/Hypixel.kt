@@ -63,7 +63,7 @@ object Hypixel {
                     serverStatus = ServerStatus.checkServer()
                     if (!serverStatus) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
-                            ChatComponentText("§cSkyblockCollectionTracker's server is down at the moment. Sorry for the inconvenience.")
+                            ChatComponentText("§cThe API server is down at the moment. Sorry for the inconvenience.")
                         )
                     } else {
                         if (TokenManager.getToken() == null) {
@@ -115,19 +115,32 @@ object Hypixel {
     }
 
     fun hasNewestVersion(currentVersion: String, latestVersion: String): Boolean {
-        val currentParts = currentVersion.removePrefix("v").split(".")
-        val latestParts = latestVersion.removePrefix("v").split(".")
+        val currentParts = currentVersion.removePrefix("v").split("-", limit = 2)
+        val latestParts = latestVersion.removePrefix("v").split("-", limit = 2)
 
-        val maxLength = maxOf(currentParts.size, latestParts.size)
+        val currentNumericParts = currentParts[0].split(".")
+        val latestNumericParts = latestParts[0].split(".")
+
+        val maxLength = maxOf(currentNumericParts.size, latestNumericParts.size)
         for (i in 0 until maxLength) {
-            val currentPart = currentParts.getOrNull(i)?.toIntOrNull() ?: 0
-            val latestPart = latestParts.getOrNull(i)?.toIntOrNull() ?: 0
+            val currentPart = currentNumericParts.getOrNull(i)?.toIntOrNull() ?: 0
+            val latestPart = latestNumericParts.getOrNull(i)?.toIntOrNull() ?: 0
             if (currentPart < latestPart) return true
             if (currentPart > latestPart) return false
         }
+
+        // If numeric parts are equal, compare pre-release tags
+        val currentPreRelease = currentParts.getOrNull(1)
+        val latestPreRelease = latestParts.getOrNull(1)
+
+        if (currentPreRelease == null && latestPreRelease != null) return true
+        if (currentPreRelease != null && latestPreRelease == null) return false
+        if (currentPreRelease != null && latestPreRelease != null) {
+            return currentPreRelease < latestPreRelease
+        }
+
         return false
     }
-
     // Method taken from Skyhanni mod
     private fun CharSequence.removeColor(keepFormatting: Boolean = false): String {
         // Glossary:
