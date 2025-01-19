@@ -13,17 +13,19 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 
 public class DataFetcher {
 
     private static final Logger logger = LogManager.getLogger(DataFetcher.class);
-    private static final Map<CacheKey, CachedData> collectionCache = new HashMap<>();
-    private static final int CACHE_EXPIRATION = 150;
+    private static final Map<CacheKey, String> collectionCache = new HashMap<>();
+    private static final Map<CacheKey, Long> cacheTimestamps = new HashMap<>();
+    private static final long CACHE_LIFESPAN = 120000; // 2 minutes
     public static ScheduledExecutorService scheduler;
 
     public static void scheduleDataFetch() {
         scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 5, 180, TimeUnit.SECONDS);
-        logger.info("Data fetching scheduled to run every 180 seconds");
+        logger.info("Data fetching scheduled to run every 60 seconds");
     }
 
     public static void fetchData() {
@@ -33,56 +35,46 @@ public class DataFetcher {
                 TrackingHandlerClass.stopTracking();
                 return;
             }
+            if(isPaused) return;
+
+            startTime = 0;
+            lastTime = 0;
 
             String playerUUID = PlayerData.INSTANCE.getPlayerUUID();
-            CacheKey cacheKey = new CacheKey(playerUUID, collection);
 
-            // Check if cached data exists and is valid for the current UUID and collection
-            if (collectionCache.containsKey(cacheKey)) {
-                CachedData cachedData = collectionCache.get(cacheKey);
-                if (cachedData.isValid()) {
-                    logger.info("Using cached data for player with UUID: {} and collection: {}", playerUUID, collection);
-                    TrackCollection.displayCollection(cachedData.getJsonData());
-                    return;
-                } else {
-                    collectionCache.remove(cacheKey);
-                }
-            }
-
-            // Fetch new data from the API and cache it
-            String jsonData = HypixelApiFetcher.fetchJsonData(playerUUID, TokenManager.getToken(), collection);
+            String jsonData = getData(playerUUID, collection);
 
             if (jsonData == null) {
-                logger.error("Failed to fetch data from the server");
+                logger.error("Failed to fetch or retrieve data from the cache");
                 return;
             }
 
-            collectionCache.put(cacheKey, new CachedData(jsonData, System.currentTimeMillis()));
-
             TrackCollection.displayCollection(jsonData);
-            logger.info("Data successfully fetched and displayed for player with UUID: {} and collection: {}", playerUUID, collection);
+            logger.info("Data successfully fetched or retrieved and displayed for player with UUID: {} and collection: {}", playerUUID, collection);
 
         } catch (Exception e) {
             logger.error("Error fetching data from the Hypixel API: {}", e.getMessage(), e);
         }
     }
 
-    private static class CachedData {
-        private final String jsonData;
-        private final long timestamp;
+    public static String getData(String playerUUID, String collection) {
+        CacheKey cacheKey = new CacheKey(playerUUID, collection);
+        Long lastFetched = cacheTimestamps.get(cacheKey);
 
-        public CachedData(String jsonData, long timestamp) {
-            this.jsonData = jsonData;
-            this.timestamp = timestamp;
+        if (lastFetched != null && (System.currentTimeMillis() - lastFetched) < CACHE_LIFESPAN) {
+            logger.info("Returning cached data for player with UUID: {} and collection: {}", playerUUID, collection);
+            return collectionCache.get(cacheKey);
         }
 
-        public String getJsonData() {
-            return jsonData;
+        logger.info("Cache expired or missing. Fetching new data for player with UUID: {} and collection: {}", playerUUID, collection);
+        String jsonData = HypixelApiFetcher.fetchJsonData(playerUUID, TokenManager.getToken(), collection);
+
+        if (jsonData != null) {
+            collectionCache.put(cacheKey, jsonData);
+            cacheTimestamps.put(cacheKey, System.currentTimeMillis());
         }
 
-        public boolean isValid() {
-            return (System.currentTimeMillis() - timestamp) < CACHE_EXPIRATION * 1000;
-        }
+        return jsonData;
     }
 
     private static class CacheKey {

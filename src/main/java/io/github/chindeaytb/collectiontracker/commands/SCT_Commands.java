@@ -7,18 +7,25 @@ import net.minecraft.util.ChatComponentText;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SCT_Commands extends CommandBase {
 
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final CommandHelper commandHelper;
     private final SetCollection setCollection;
     private final StopTracker stopTracker;
+    private final PauseTracker pauseTracker;
+    private final ResumeTracker resumeTracker;
     private final GuiMenu guiMenu;
 
-    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, GuiMenu guiMenu) {
+    public SCT_Commands(CommandHelper commandHelper, SetCollection setCollection, StopTracker stopTracker, PauseTracker pauseTracker, ResumeTracker resumeTracker, GuiMenu guiMenu) {
         this.commandHelper = commandHelper;
         this.setCollection = setCollection;
         this.stopTracker = stopTracker;
+        this.pauseTracker = pauseTracker;
+        this.resumeTracker = resumeTracker;
         this.guiMenu = guiMenu;
     }
 
@@ -39,46 +46,40 @@ public class SCT_Commands extends CommandBase {
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
-            return CommandBase.getListOfStringsMatchingLastWord(args,
-                    "cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane",
-                    "pumpkin", "wheat", "seeds", "mushroom", "raw rabbit", "nether wart",
-                    "mutton", "melon", "potato", "leather", "porkchop", "feather",
-                    "lapis lazuli", "redstone", "umber", "coal", "mycelium", "end stone",
-                    "quartz", "sand", "iron", "gemstone", "tungsten", "obsidian",
-                    "diamond", "cobblestone", "glowstone", "gold", "gravel", "hard stone",
-                    "mithril", "emerald", "red sand", "ice", "glacite", "sulphur",
-                    "netherrack", "ender pearl", "chili pepper", "slimeball", "magma cream",
-                    "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone",
-                    "blaze rod", "string", "acacia", "spruce", "jungle", "birch", "oak",
-                    "dark oak", "lily pad", "prismarine shard", "ink sac", "raw fish",
-                    "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals",
-                    "clay", "sponge", "wilted berberis", "living metal heart", "caducous stem",
-                    "agaricus cap", "hemovibe", "half-eaten carrot", "timite");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane", "pumpkin", "wheat", "seeds", "mushroom", "raw rabbit", "nether wart", "mutton", "melon", "potato", "leather", "porkchop", "feather", "lapis lazuli", "redstone", "umber", "coal", "mycelium", "end stone", "quartz", "sand", "iron", "gemstone:amber", "gemstone:topaz", "gemstone:sapphire", "gemstone:amethyst", "gemstone:jasper", "gemstone:ruby", "gemstone:jade", "gemstone:opal", "gemstone:aquamarine", "gemstone:citrine", "gemstone:onyx", "gemstone:peridot" , "tungsten", "obsidian", "diamond", "cobblestone", "glowstone", "gold", "gravel", "hard stone", "mithril", "emerald", "red sand", "ice", "glacite", "sulphur", "netherrack", "ender pearl", "chili pepper", "slimeball", "magma cream", "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone", "blaze rod", "string", "acacia", "spruce", "jungle", "birch", "oak", "dark oak", "lily pad", "prismarine shard", "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals", "clay", "sponge", "wilted berberis", "living metal heart", "caducous stem", "agaricus cap", "hemovibe", "half-eaten carrot", "timite");
         }
         return Collections.emptyList();
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args){
-        if (args.length == 0) {
-            guiMenu.processCommand(sender, args);
-            return;
-        }
+    public void processCommand(ICommandSender sender, String[] args) {
+        executor.submit(() -> {
+            if (args.length == 0) {
+                guiMenu.processCommand(sender, args);
+                return;
+            }
 
-        switch (args[0].toLowerCase()) {
-            case "help":
-                commandHelper.processCommand(sender, args);
-                break;
-            case "track":
-                setCollection.processCommand(sender, args);
-                break;
-            case "stop":
-                stopTracker.processCommand(sender, args);
-                break;
-            default:
-                sender.addChatMessage(new ChatComponentText("Unknown command. Use /sct help."));
-                break;
-        }
+            switch (args[0].toLowerCase()) {
+                case "help":
+                    commandHelper.processCommand(sender, args);
+                    break;
+                case "track":
+                    setCollection.processCommand(sender, args);
+                    break;
+                case "stop":
+                    stopTracker.processCommand(sender, args);
+                    break;
+                case "pause":
+                    pauseTracker.processCommand(sender, args);
+                    break;
+                case "resume":
+                    resumeTracker.processCommand(sender, args);
+                    break;
+                default:
+                    sender.addChatMessage(new ChatComponentText("Unknown command. Use /sct help."));
+                    break;
+            }
+        });
     }
 
     @Override

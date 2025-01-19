@@ -12,17 +12,19 @@ import java.util.concurrent.TimeUnit;
 
 import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.scheduler;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.previousCollection;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.sessionStartCollection;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.*;
 
 public class TrackingHandlerClass {
 
     private static final Logger logger = LogManager.getLogger(TrackingHandlerClass.class);
     private static final int COOLDOWN_PERIOD = 15;
-    private static final int PAUSE_PERIOD = 600;
     public static boolean isTracking = false;
+    public static boolean isPaused = false;
     private static long lastTrackTime = 0;
     private static CollectionOverlay collectionOverlay = null;
+
+    public static long startTime;
+    public static long lastTime;
 
     public static void startTracking(ICommandSender sender) {
         long currentTime = System.currentTimeMillis();
@@ -44,6 +46,7 @@ public class TrackingHandlerClass {
 
         lastTrackTime = currentTime;
         isTracking = true;
+        isPaused = false;
 
         CollectionOverlay.setVisible(true);
         logger.info("Tracking started for player: {}", PlayerData.INSTANCE.getPlayerName());
@@ -53,12 +56,22 @@ public class TrackingHandlerClass {
 
     public static void stopTracking(ICommandSender sender) {
         if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdownNow();
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
             sender.addChatMessage(new ChatComponentText("§cStopped tracking!"));
             logger.info("Tracking stopped.");
 
             isTracking = false;
             lastTrackTime = System.currentTimeMillis();
+            startTime = 0;
+            lastTime = 0;
             previousCollection = -1;
             sessionStartCollection = 0;
 
@@ -74,11 +87,25 @@ public class TrackingHandlerClass {
 
     public static void stopTracking() {
         if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdownNow();
-            logger.info("Tracking stopped because of offline server.");
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+            if(afk) {
+                logger.info("Tracking stopped because the player went AFK.");
+            } else {
+                logger.info("Tracking stopped because the api server is offline.");
+            }
 
             isTracking = false;
             lastTrackTime = System.currentTimeMillis();
+            startTime = 0;
+            lastTime = 0;
             previousCollection = -1;
             sessionStartCollection = 0;
 
@@ -91,25 +118,42 @@ public class TrackingHandlerClass {
         }
     }
 
-
-    public static void pauseTracking() {
+    public static void pauseTracking(ICommandSender sender) {
         if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdownNow();
-            logger.info("Tracking paused. Will check again in {} seconds.", PAUSE_PERIOD);
-
-            scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.schedule(TrackingHandlerClass::resumeTracking, PAUSE_PERIOD, TimeUnit.SECONDS);
+            if (isPaused) {
+                sender.addChatMessage(new ChatComponentText("§cTracking is already paused!"));
+                logger.warn("Attempted to pause tracking, but tracking is already paused.");
+                return;
+            }
+            isPaused = true;
+            lastTime += (System.currentTimeMillis() - startTime) / 1000;
+            sender.addChatMessage(new ChatComponentText("§cTracking paused."));
+            logger.info("Tracking paused.");
+        } else {
+            sender.addChatMessage(new ChatComponentText("§cNo tracking active!"));
+            logger.warn("Attempted to pause tracking, but no tracking is active.");
         }
     }
 
-    public static void resumeTracking() {
-        logger.info("Resuming tracking to check for updates.");
-
-        if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdownNow();
+    public static void resumeTracking(ICommandSender sender) {
+        if (scheduler == null || scheduler.isShutdown()) {
+            sender.addChatMessage(new ChatComponentText("§cNo tracking active!"));
+            logger.warn("Attempted to resume tracking, but no tracking is active.");
+            return;
         }
 
-        scheduler = Executors.newScheduledThreadPool(1);
-        DataFetcher.scheduleDataFetch();
+        if (isTracking && isPaused) {
+            sender.addChatMessage(new ChatComponentText("§aResuming tracking."));
+            logger.info("Resuming tracking.");
+
+            startTime = System.currentTimeMillis();
+            isPaused = false;
+        } else if (isTracking) {
+            sender.addChatMessage(new ChatComponentText("§cTracking is already active!"));
+            logger.warn("Attempted to resume tracking, but tracking is already active.");
+        } else {
+            sender.addChatMessage(new ChatComponentText("§cTracking has not been started yet!"));
+            logger.warn("Attempted to resume tracking, but tracking has not been started.");
+        }
     }
 }
