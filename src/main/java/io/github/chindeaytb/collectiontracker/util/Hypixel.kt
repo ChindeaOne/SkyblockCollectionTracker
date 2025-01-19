@@ -7,6 +7,7 @@ package io.github.chindeaytb.collectiontracker.util
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
+import io.github.chindeaytb.collectiontracker.config.categories.About
 import io.github.chindeaytb.collectiontracker.util.ServerUtils.serverStatus
 import net.minecraft.client.Minecraft
 import net.minecraft.event.ClickEvent
@@ -15,6 +16,8 @@ import net.minecraft.util.ChatStyle
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 object Hypixel {
 
@@ -27,6 +30,10 @@ object Hypixel {
     var skyblock = false
     var playerLoaded = false
 
+    private val about = About()
+
+    private val logger: Logger = LogManager.getLogger(Hypixel::class.java)
+
     @SubscribeEvent
     fun onDisconnect(event: ClientDisconnectionFromServerEvent) {
         DisconnectHandlerClass.onServerDisconnect()
@@ -36,7 +43,6 @@ object Hypixel {
         serverStatus = false
     }
 
-    // Method taken from Skyhanni mod
     private fun checkServer() {
         val mc = Minecraft.getMinecraft()
         val player = mc.thePlayer ?: return
@@ -52,7 +58,6 @@ object Hypixel {
         server = hypixel
     }
 
-    // Method taken from Skyhanni mod
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
         if (!HypixelUtils.isInHypixel) {
@@ -70,11 +75,11 @@ object Hypixel {
                             TokenManager.fetchAndStoreToken()
                         }
                     }
-                    RepoUtils.checkForUpdates()
+                    RepoUtils.checkForUpdates(about.update)
 
-                    if (ModInitialization.version != RepoUtils.latestVersion &&
-                        (!hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion) ||
-                                (ModInitialization.version.contains("-") && !RepoUtils.latestVersion.contains("-")))
+                    if (RepoUtils.latestVersion != null &&
+                        ModInitialization.version != RepoUtils.latestVersion.removePrefix("v") &&
+                        !hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)
                     ) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(
                             ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
@@ -86,17 +91,42 @@ object Hypixel {
                                     }
                                 })
                         )
+                        logger.info("New version found: ${RepoUtils.latestVersion}")
                     }
                 }
             }
         }
 
         val inSkyblock = checkScoreboard()
-
         if (inSkyblock == skyblock) return
-
         skyblock = inSkyblock
     }
+
+    fun hasNewestVersion(currentVersion: String, latestVersion: String): Boolean {
+        val currentParts = currentVersion.removePrefix("v").split("-", limit = 2)
+        val latestParts = latestVersion.removePrefix("v").split("-", limit = 2)
+
+        val currentNumericParts = currentParts[0].split(".").map { it.toIntOrNull() ?: 0 }
+        val latestNumericParts = latestParts[0].split(".").map { it.toIntOrNull() ?: 0 }
+
+        for (i in 0 until maxOf(currentNumericParts.size, latestNumericParts.size)) {
+            val currentPart = currentNumericParts.getOrElse(i) { 0 }
+            val latestPart = latestNumericParts.getOrElse(i) { 0 }
+            if (currentPart < latestPart) return false
+            if (currentPart > latestPart) return true
+        }
+
+        val currentPreRelease = currentParts.getOrNull(1)
+        val latestPreRelease = latestParts.getOrNull(1)
+
+        return when {
+            currentPreRelease == null && latestPreRelease != null -> false
+            currentPreRelease != null && latestPreRelease == null -> true
+            currentPreRelease != null && latestPreRelease != null -> currentPreRelease >= latestPreRelease
+            else -> true
+        }
+    }
+
 
     fun loadPlayerData() {
         val mc = Minecraft.getMinecraft()
@@ -108,7 +138,6 @@ object Hypixel {
         }
     }
 
-    // Method taken from Skyhanni mod
     private fun checkScoreboard(): Boolean {
         val minecraft = Minecraft.getMinecraft()
         val world = minecraft.theWorld ?: return false
@@ -117,34 +146,6 @@ object Hypixel {
         val displayName = objective.displayName
         val scoreboardTitle = displayName.removeColor()
         return scoreboardTitlePattern.matches(scoreboardTitle)
-    }
-
-    fun hasNewestVersion(currentVersion: String, latestVersion: String): Boolean {
-        val currentParts = currentVersion.removePrefix("v").split("-", limit = 2)
-        val latestParts = latestVersion.removePrefix("v").split("-", limit = 2)
-
-        val currentNumericParts = currentParts[0].split(".")
-        val latestNumericParts = latestParts[0].split(".")
-
-        val maxLength = maxOf(currentNumericParts.size, latestNumericParts.size)
-        for (i in 0 until maxLength) {
-            val currentPart = currentNumericParts.getOrNull(i)?.toIntOrNull() ?: 0
-            val latestPart = latestNumericParts.getOrNull(i)?.toIntOrNull() ?: 0
-            if (currentPart < latestPart) return false
-            if (currentPart > latestPart) return true
-        }
-
-        // Compare pre-release tags
-        val currentPreRelease = currentParts.getOrNull(1)
-        val latestPreRelease = latestParts.getOrNull(1)
-
-        if (currentPreRelease == null && latestPreRelease != null) return false
-        if (currentPreRelease != null && latestPreRelease == null) return true
-        if (currentPreRelease != null && latestPreRelease != null) {
-            return currentPreRelease >= latestPreRelease
-        }
-
-        return true
     }
 
     // Method taken from Skyhanni mod

@@ -14,13 +14,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class RepoUtils {
-
-    public static String MODRINTH_URL = "https://modrinth.com/mod/sct/version/v";
+    public static String MODRINTH_URL = "https://modrinth.com/mod/sct/version/";
     private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
     public static String latestVersion;
+    public static String latestStableVersion;
+    public static String latestBetaVersion;
 
-    public static void checkForUpdates() {
+    public static void checkForUpdates(int update) {
         try {
             URL url = new URL(API_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -30,20 +31,33 @@ public class RepoUtils {
             if (connection.getResponseCode() == 200) {
                 JsonArray releases = getJsonArray(connection);
 
-                JsonObject latestRelease = null;
+                latestStableVersion = null;
+                latestBetaVersion = null;
+
                 for (JsonElement element : releases) {
                     JsonObject release = element.getAsJsonObject();
-                    if (latestRelease == null || isNewerVersion(release, latestRelease)) {
-                        latestRelease = release;
+                    boolean isPreRelease = release.get("prerelease").getAsBoolean();
+
+                    if (!isPreRelease && (latestStableVersion == null || isNewerVersion(release, latestStableVersion))) {
+                        latestStableVersion = release.get("tag_name").getAsString();
+                    }
+                    if (isPreRelease && (latestBetaVersion == null || isNewerVersion(release, latestBetaVersion))) {
+                        latestBetaVersion = release.get("tag_name").getAsString();
                     }
                 }
 
-                if (latestRelease != null) {
-                    latestVersion = latestRelease.get("tag_name").getAsString().replaceFirst("^v", "");
-                    MODRINTH_URL += latestVersion;
-                    logger.info("A new version (v{}) is available! Download it from Modrinth: {}", latestVersion, MODRINTH_URL);
+                // Set latestVersion based on the update level
+                if (update == 1 && latestStableVersion != null) {
+                    latestVersion = latestStableVersion;
+                } else if (update == 2 && latestBetaVersion != null) {
+                    latestVersion = latestBetaVersion;
                 } else {
-                    logger.info("You are using the latest version.");
+                    latestVersion = null;
+                }
+
+                if (latestVersion != null) {
+                    MODRINTH_URL += latestVersion;
+                    logger.info("The latest version of the mod is {}", latestVersion);
                 }
             } else {
                 logger.error("Failed to check for updates. HTTP Response Code: {}", connection.getResponseCode());
@@ -68,9 +82,8 @@ public class RepoUtils {
         return jsonElement.getAsJsonArray();
     }
 
-    private static boolean isNewerVersion(JsonObject candidate, JsonObject current) {
-        String candidateDate = candidate.get("created_at").getAsString();
-        String currentDate = current.get("created_at").getAsString();
-        return candidateDate.compareTo(currentDate) > 0;
+    public static boolean isNewerVersion(JsonObject candidate, String currentVersion) {
+        String candidateTag = candidate.get("tag_name").getAsString();
+        return candidateTag.compareTo(currentVersion) > 0;
     }
 }
