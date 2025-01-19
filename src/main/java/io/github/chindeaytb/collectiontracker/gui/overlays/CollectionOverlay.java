@@ -16,11 +16,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isPaused;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.lastTime;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.startTime;
 
 public class CollectionOverlay {
 
-    public static long startTime = 0;
     private static String collectionName = "";
     private static String collectionAmount = "";
     private static String collectionPerHour = "";
@@ -66,7 +68,7 @@ public class CollectionOverlay {
         collectionMade = made != null ? made : "";
         moneyPerHour = money != null ? money : "";
 
-        if (isTracking && startTime == 0) {
+        if(startTime == 0){
             startTime = System.currentTimeMillis();
         }
     }
@@ -110,7 +112,14 @@ public class CollectionOverlay {
     private static String getUptime() {
         if (startTime == 0) return "00:00:00";
 
-        long uptime = (System.currentTimeMillis() - startTime) / 1000;
+        long uptime;
+
+        if (isPaused) {
+            uptime = lastTime;
+        } else {
+            uptime = lastTime + (System.currentTimeMillis() - startTime) / 1000;
+        }
+
         long hours = uptime / 3600;
         long minutes = (uptime % 3600) / 60;
         long seconds = uptime % 60;
@@ -119,7 +128,6 @@ public class CollectionOverlay {
     }
 
     public static void stopTracking() {
-        startTime = 0;
         updateCollectionData(null, null, null, null, null);
         setVisible(false);
     }

@@ -20,6 +20,7 @@ public class TrackCollection {
 
     public static float previousCollection = -1;
     public static float sessionStartCollection = 0;
+    public static boolean afk = false;
 
     public static void displayCollection(String jsonResponse) {
         try (JsonReader reader = new JsonReader(new StringReader(jsonResponse))) {
@@ -34,17 +35,15 @@ public class TrackCollection {
                     float currentCollection = jsonObject.get(HypixelCollection).getAsLong();
                     String formattedCollection = formatCollectionName(collection);
 
-                    String collectionPerHour;
-                    String collectionMade;
-                    String npcMoneyPerHour;
+                    String collectionPerHour = null;
+                    String collectionMade = null;
+                    String npcMoneyPerHour = null;
                     float npcMoney = 0;
 
                     if (previousCollection > 0) {
                         if (currentCollection == previousCollection) {
-                            collectionPerHour = "Paused";
-                            collectionMade = "Paused";
-                            npcMoneyPerHour = "Paused";
-                            TrackingHandlerClass.pauseTracking();
+                            afk = true;
+                            TrackingHandlerClass.stopTracking();
                         } else {
                             float collectedSinceStart = currentCollection - sessionStartCollection;
 
@@ -52,7 +51,7 @@ public class TrackCollection {
                                 npcMoney = collectedSinceStart * NPCPrice.getNpcPrice(collection);
                             }
 
-                            long elapsedSeconds = (System.currentTimeMillis() - CollectionOverlay.startTime) / 1000;
+                            long elapsedSeconds = (System.currentTimeMillis() - TrackingHandlerClass.startTime) / 1000;
 
                             if (elapsedSeconds > 0) {
                                 double averagePerSecond = collectedSinceStart / (double) elapsedSeconds;
@@ -99,7 +98,29 @@ public class TrackCollection {
     }
 
     private static String formatCollectionName(String collection) {
-        return collection.substring(0, 1).toUpperCase() + collection.substring(1).toLowerCase();
+        if (!collection.contains(":")) {
+            String[] words = collection.split("\\s+");
+            StringBuilder formattedName = new StringBuilder();
+
+            for (int i = 0; i < words.length; i++) {
+                String word = words[i];
+                if (i == 0) {
+                    formattedName.append(word.substring(0, 1).toUpperCase())
+                            .append(word.substring(1).toLowerCase());
+                } else {
+                    formattedName.append(" ").append(word.toLowerCase());
+                }
+            }
+            return formattedName.toString();
+        } else {
+            String[] parts = collection.split(":");
+            if (parts.length > 1) {
+                String secondPart = parts[1];
+                return secondPart.substring(0, 1).toUpperCase() + secondPart.substring(1).toLowerCase();
+            } else {
+                return collection;
+            }
+        }
     }
 
     private static String formatNumber(float number) {
