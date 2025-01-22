@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
 import io.github.chindeaytb.collectiontracker.collections.prices.NPCPrice;
 import io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.StringReader;
 
-import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
+import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.getUptimeInSeconds;
 
 public class TrackCollection {
 
@@ -30,9 +30,9 @@ public class TrackCollection {
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
 
-                String HypixelCollection = CollectionsManager.toHypixelCollection(collection);
-                if (jsonObject.has(HypixelCollection)) {
-                    float currentCollection = jsonObject.get(HypixelCollection).getAsLong();
+                if (!jsonObject.entrySet().isEmpty()) {
+                    String key = jsonObject.entrySet().iterator().next().getKey();
+                    float currentCollection = jsonObject.get(key).getAsFloat();
                     String formattedCollection = formatCollectionName(collection);
 
                     String collectionPerHour = null;
@@ -44,23 +44,25 @@ public class TrackCollection {
                         if (currentCollection == previousCollection) {
                             afk = true;
                             TrackingHandlerClass.stopTracking();
+                            return;
                         } else {
+                            afk = false;
                             float collectedSinceStart = currentCollection - sessionStartCollection;
 
                             if (NPCPrice.notRiftCollection(collection)) {
                                 npcMoney = collectedSinceStart * NPCPrice.getNpcPrice(collection);
                             }
 
-                            long elapsedSeconds = (System.currentTimeMillis() - TrackingHandlerClass.startTime) / 1000;
+                            long uptime = getUptimeInSeconds();
 
-                            if (elapsedSeconds > 0) {
-                                double averagePerSecond = collectedSinceStart / (double) elapsedSeconds;
+                            if (uptime > 0) {
+                                double averagePerSecond = collectedSinceStart / (double) uptime;
                                 double projectedPerHour = averagePerSecond * 3600;
 
                                 collectionPerHour = formatNumber((float) projectedPerHour);
                                 collectionMade = formatNumber(collectedSinceStart);
 
-                                npcMoneyPerHour = formatNumber((float) (npcMoney / (elapsedSeconds / 3600.0)));
+                                npcMoneyPerHour = formatNumber((float) (npcMoney / (uptime / 3600.0)));
 
                             } else {
                                 collectionPerHour = "Calculating...";
@@ -98,29 +100,19 @@ public class TrackCollection {
     }
 
     private static String formatCollectionName(String collection) {
-        if (!collection.contains(":")) {
-            String[] words = collection.split("\\s+");
-            StringBuilder formattedName = new StringBuilder();
+        String[] words = collection.split("\\s+");
+        StringBuilder formattedName = new StringBuilder();
 
-            for (int i = 0; i < words.length; i++) {
-                String word = words[i];
-                if (i == 0) {
-                    formattedName.append(word.substring(0, 1).toUpperCase())
-                            .append(word.substring(1).toLowerCase());
-                } else {
-                    formattedName.append(" ").append(word.toLowerCase());
-                }
-            }
-            return formattedName.toString();
-        } else {
-            String[] parts = collection.split(":");
-            if (parts.length > 1) {
-                String secondPart = parts[1];
-                return secondPart.substring(0, 1).toUpperCase() + secondPart.substring(1).toLowerCase();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (i == 0) {
+                formattedName.append(word.substring(0, 1).toUpperCase())
+                        .append(word.substring(1).toLowerCase());
             } else {
-                return collection;
+                formattedName.append(" ").append(word.toLowerCase());
             }
         }
+        return formattedName.toString();
     }
 
     private static String formatNumber(float number) {

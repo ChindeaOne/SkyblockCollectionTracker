@@ -1,6 +1,7 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
 import io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay;
+import io.github.chindeaytb.collectiontracker.util.Hypixel;
 import io.github.chindeaytb.collectiontracker.util.PlayerData;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -10,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
+import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.scheduler;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.*;
 
@@ -21,7 +22,6 @@ public class TrackingHandlerClass {
     public static boolean isTracking = false;
     public static boolean isPaused = false;
     private static long lastTrackTime = 0;
-    private static CollectionOverlay collectionOverlay = null;
 
     public static long startTime;
     public static long lastTime;
@@ -40,22 +40,22 @@ public class TrackingHandlerClass {
             scheduler = Executors.newScheduledThreadPool(1);
         }
 
-        if (collectionOverlay == null) {
-            collectionOverlay = new CollectionOverlay();
-        }
-
         lastTrackTime = currentTime;
         isTracking = true;
         isPaused = false;
 
         CollectionOverlay.setVisible(true);
+
+        startTime = 0;
+        lastTime = 0;
+
         logger.info("Tracking started for player: {}", PlayerData.INSTANCE.getPlayerName());
 
         DataFetcher.scheduleDataFetch();
     }
 
     public static void stopTracking(ICommandSender sender) {
-        if (scheduler != null && !scheduler.isShutdown()) {
+            if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
             try {
                 if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
@@ -69,16 +69,14 @@ public class TrackingHandlerClass {
             logger.info("Tracking stopped.");
 
             isTracking = false;
+            isPaused = false;
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
             lastTime = 0;
             previousCollection = -1;
             sessionStartCollection = 0;
 
-            if (collectionOverlay != null) {
-                CollectionOverlay.stopTracking();
-                collectionOverlay = null;
-            }
+            CollectionOverlay.stopTracking();
         } else {
             sender.addChatMessage(new ChatComponentText("§cNo tracking active!"));
             logger.warn("Attempted to stop tracking, but no tracking is active.");
@@ -96,23 +94,23 @@ public class TrackingHandlerClass {
                 scheduler.shutdownNow();
                 Thread.currentThread().interrupt();
             }
-            if(afk) {
+            if(!Hypixel.INSTANCE.getServer()){
+                logger.info("Tracking stopped because player disconnected from the server.");
+            }else if(afk) {
                 logger.info("Tracking stopped because the player went AFK.");
             } else {
                 logger.info("Tracking stopped because the api server is offline.");
             }
 
             isTracking = false;
+            isPaused = false;
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
             lastTime = 0;
             previousCollection = -1;
             sessionStartCollection = 0;
 
-            if (collectionOverlay != null) {
-                CollectionOverlay.stopTracking();
-                collectionOverlay = null;
-            }
+            CollectionOverlay.stopTracking();
         } else {
             logger.warn("Attempted to stop tracking, but no tracking is active.");
         }
@@ -127,7 +125,7 @@ public class TrackingHandlerClass {
             }
             isPaused = true;
             lastTime += (System.currentTimeMillis() - startTime) / 1000;
-            sender.addChatMessage(new ChatComponentText("§cTracking paused."));
+            sender.addChatMessage(new ChatComponentText("§7Tracking paused."));
             logger.info("Tracking paused.");
         } else {
             sender.addChatMessage(new ChatComponentText("§cNo tracking active!"));
@@ -136,16 +134,15 @@ public class TrackingHandlerClass {
     }
 
     public static void resumeTracking(ICommandSender sender) {
-        if (scheduler == null || scheduler.isShutdown()) {
+        if (scheduler == null || scheduler.isShutdown() && !isTracking) {
             sender.addChatMessage(new ChatComponentText("§cNo tracking active!"));
             logger.warn("Attempted to resume tracking, but no tracking is active.");
             return;
         }
 
         if (isTracking && isPaused) {
-            sender.addChatMessage(new ChatComponentText("§aResuming tracking."));
+            sender.addChatMessage(new ChatComponentText("§7Resuming tracking."));
             logger.info("Resuming tracking.");
-
             startTime = System.currentTimeMillis();
             isPaused = false;
         } else if (isTracking) {
@@ -155,5 +152,35 @@ public class TrackingHandlerClass {
             sender.addChatMessage(new ChatComponentText("§cTracking has not been started yet!"));
             logger.warn("Attempted to resume tracking, but tracking has not been started.");
         }
+    }
+
+    public static long getUptimeInSeconds() {
+        if (startTime == 0) {
+            return 0;
+        }
+
+        if (isPaused) {
+            return lastTime;
+        } else {
+            return lastTime + (System.currentTimeMillis() - startTime) / 1000;
+        }
+    }
+
+    public static String getUptime() {
+        if (startTime == 0) return "00:00:00";
+
+        long uptime;
+
+        if (isPaused) {
+            uptime = lastTime;
+        } else {
+            uptime = lastTime + (System.currentTimeMillis() - startTime) / 1000;
+        }
+
+        long hours = uptime / 3600;
+        long minutes = (uptime % 3600) / 60;
+        long seconds = uptime % 60;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 }
