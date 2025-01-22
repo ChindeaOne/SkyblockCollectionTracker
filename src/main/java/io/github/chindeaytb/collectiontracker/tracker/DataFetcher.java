@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static io.github.chindeaytb.collectiontracker.commands.SetCollection.collection;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
+import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isPaused;
 
 public class DataFetcher {
 
@@ -23,9 +23,10 @@ public class DataFetcher {
     private static final long CACHE_LIFESPAN = 120000; // 2 minutes
     public static ScheduledExecutorService scheduler;
 
+
     public static void scheduleDataFetch() {
         scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 5, 180, TimeUnit.SECONDS);
-        logger.info("Data fetching scheduled to run every 60 seconds");
+        logger.info("Data fetching scheduled to run every 180 seconds");
     }
 
     public static void fetchData() {
@@ -35,13 +36,9 @@ public class DataFetcher {
                 TrackingHandlerClass.stopTracking();
                 return;
             }
-            if(isPaused) return;
-
-            startTime = 0;
-            lastTime = 0;
+            if (isPaused) return;
 
             String playerUUID = PlayerData.INSTANCE.getPlayerUUID();
-
             String jsonData = getData(playerUUID, collection);
 
             if (jsonData == null) {
