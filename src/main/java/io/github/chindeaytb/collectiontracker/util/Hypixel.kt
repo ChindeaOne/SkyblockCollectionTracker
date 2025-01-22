@@ -7,7 +7,7 @@ package io.github.chindeaytb.collectiontracker.util
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
-import io.github.chindeaytb.collectiontracker.config.categories.About
+import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
 import io.github.chindeaytb.collectiontracker.util.ServerUtils.serverStatus
 import net.minecraft.client.Minecraft
 import net.minecraft.event.ClickEvent
@@ -30,17 +30,16 @@ object Hypixel {
     var skyblock = false
     var playerLoaded = false
 
-    private val about = About()
-
     private val logger: Logger = LogManager.getLogger(Hypixel::class.java)
 
     @SubscribeEvent
     fun onDisconnect(event: ClientDisconnectionFromServerEvent) {
-        DisconnectHandlerClass.onServerDisconnect()
+        logger.info("Player has disconnected from the server.")
         server = false
         skyblock = false
         playerLoaded = false
         serverStatus = false
+        TrackingHandlerClass.stopTracking()
     }
 
     private fun checkServer() {
@@ -75,23 +74,28 @@ object Hypixel {
                             TokenManager.fetchAndStoreToken()
                         }
                     }
-                    RepoUtils.checkForUpdates(about.update)
 
-                    if (RepoUtils.latestVersion != null &&
-                        ModInitialization.version != RepoUtils.latestVersion.removePrefix("v") &&
-                        !hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)
-                    ) {
-                        Minecraft.getMinecraft().thePlayer.addChatMessage(
-                            ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
-                                ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
-                                    chatStyle = ChatStyle().apply {
-                                        chatClickEvent = ClickEvent(
-                                            ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
-                                        )
-                                    }
-                                })
-                        )
-                        logger.info("New version found: ${RepoUtils.latestVersion}")
+                    logger.info ("Update stream status: {}", ModInitialization.configManager.config?.about?.update)
+
+                    if(ModInitialization.configManager.config?.about?.update != 0){
+                        RepoUtils.checkForUpdates(ModInitialization.configManager.config?.about?.update?:0)
+
+                        if (RepoUtils.latestVersion != null &&
+                            ModInitialization.version != RepoUtils.latestVersion.removePrefix("v") &&
+                            !hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)
+                        ) {
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(
+                                ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
+                                    ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
+                                        chatStyle = ChatStyle().apply {
+                                            chatClickEvent = ClickEvent(
+                                                ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
+                                            )
+                                        }
+                                    })
+                            )
+                            logger.info("New version found: ${RepoUtils.latestVersion}")
+                        }
                     }
                 }
             }
@@ -126,7 +130,6 @@ object Hypixel {
             else -> true
         }
     }
-
 
     fun loadPlayerData() {
         val mc = Minecraft.getMinecraft()

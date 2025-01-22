@@ -46,11 +46,12 @@ public class RepoUtils {
                     }
                 }
 
-                // Set latestVersion based on the update level
                 if (update == 1 && latestStableVersion != null) {
                     latestVersion = latestStableVersion;
                 } else if (update == 2 && latestBetaVersion != null) {
                     latestVersion = latestBetaVersion;
+                } else if (update == 2 && latestStableVersion != null) {
+                    latestVersion = latestStableVersion;
                 } else {
                     latestVersion = null;
                 }
