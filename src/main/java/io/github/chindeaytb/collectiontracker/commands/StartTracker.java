@@ -11,7 +11,7 @@ import net.minecraft.util.ChatComponentText;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isPaused;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
 
-public class SetCollection extends CommandBase {
+public class StartTracker extends CommandBase {
 
     public static String collection = "";
 
