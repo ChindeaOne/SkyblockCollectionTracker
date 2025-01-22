@@ -16,10 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isPaused;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.lastTime;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.startTime;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 
 public class CollectionOverlay {
 
@@ -107,24 +104,6 @@ public class CollectionOverlay {
             }
         }
         return overlayLines;
-    }
-
-    private static String getUptime() {
-        if (startTime == 0) return "00:00:00";
-
-        long uptime;
-
-        if (isPaused) {
-            uptime = lastTime;
-        } else {
-            uptime = lastTime + (System.currentTimeMillis() - startTime) / 1000;
-        }
-
-        long hours = uptime / 3600;
-        long minutes = (uptime % 3600) / 60;
-        long seconds = uptime % 60;
-
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public static void stopTracking() {
