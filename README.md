@@ -15,10 +15,10 @@
 
 ## Installation
 
-1. Download the latest version from [here](https://github.com/ChindeaYTB/SkyblockCollectionTracker/releases) 
-2. Add the mod to your mods folder (`.minecraft/mods`)
-3. Run Minecraft with the [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html) installation
-4. Use `/sct help` to get started
+1. Download the latest version from [here](https://github.com/ChindeaYTB/SkyblockCollectionTracker/releases). 
+2. Add the mod to your mods folder (`.minecraft/mods`).
+3. Run Minecraft with the [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html) installation.
+4. Use `/sct help` to get started.
 
 ---
 
@@ -27,15 +27,15 @@
   - Configure your tracking settings through the in-game GUI, accesible via `/sct`.
      
 - **Customizable overlay**
-  - Enable color-coded text for each individual collection 
-  - Configure what stats you want to see displayed in the Overlay category
+  - Enable color-coded text for each individual collection.
+  - Configure what stats you want to see displayed in the Overlay category.
     
 - **Tracking mechanics**
   - Use `/sct track <collection>` to start tracking a collection.
   - Need a break? Simply pause tracking with `/sct pause` and resume anytime with `/sct resume`.
 
 - **Choose your pricing**
-  - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category
+  - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category.
     
 ---
 
