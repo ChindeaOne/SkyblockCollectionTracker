@@ -29,11 +29,10 @@ public class Overlay {
                     "§aGold collection made §f> 10.000M",
                     "§aColl/h §f> Calculating...",
                     "§a$/h (NPC) §f> 100k/h",
-                    "§aUptime §f> 01:30:20"
             }
     )
     @ConfigAccordionId(id = 0)
-    public List<Integer> statsText = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4));
+    public List<Integer> statsText = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
 
     @Expose
     @ConfigLink(owner = Overlay.class, field = "statsOverlay")
