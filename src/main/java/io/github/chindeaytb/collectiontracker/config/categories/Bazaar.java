@@ -6,16 +6,12 @@ import io.github.moulberry.moulconfig.annotations.ConfigEditorBoolean;
 import io.github.moulberry.moulconfig.annotations.ConfigEditorDropdown;
 import io.github.moulberry.moulconfig.annotations.ConfigOption;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class Bazaar {
 
     @Expose
     @ConfigOption(
             name = "Use Bazaar Prices",
-            desc = "Use bazaar prices instead of NPC prices"
+            desc = "Toggle to use bazaar prices instead of NPC prices"
     )
     @ConfigEditorBoolean
     @ConfigAccordionId(id = 0)
@@ -30,5 +26,5 @@ public class Bazaar {
             values = {"Enchanted version", "Enchanted block version"}
     )
     @ConfigAccordionId(id = 0)
-    public List<Integer> bazaarType = new ArrayList<>(Arrays.asList(0, 1));
+    public int bazaarType = 0;
 }
