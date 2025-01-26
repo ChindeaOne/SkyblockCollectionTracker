@@ -66,9 +66,8 @@ object Hypixel {
                 if (playerLoaded) {
                     serverStatus = ServerStatus.checkServer()
                     if (!serverStatus) {
-                        Minecraft.getMinecraft().thePlayer.addChatMessage(
-                            ChatComponentText("§cThe API server is down at the moment. Sorry for the inconvenience.")
-                        )
+                        ChatUtils.sendMessage("§cThe API server is down at the moment. Sorry for the inconvenience.")
+
                     } else {
                         if (TokenManager.getToken() == null) {
                             TokenManager.fetchAndStoreToken()
@@ -84,15 +83,17 @@ object Hypixel {
                             ModInitialization.version != RepoUtils.latestVersion.removePrefix("v") &&
                             !hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)
                         ) {
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(
-                                ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
-                                    ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
-                                        chatStyle = ChatStyle().apply {
-                                            chatClickEvent = ClickEvent(
-                                                ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
-                                            )
+                            ChatUtils.sendMessage(
+                                ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
+                                    .appendSibling(
+                                        ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
+                                            chatStyle = ChatStyle().apply {
+                                                chatClickEvent = ClickEvent(
+                                                    ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
+                                                )
+                                            }
                                         }
-                                    })
+                                    ).toString()
                             )
                             logger.info("New version found: ${RepoUtils.latestVersion}")
                         }

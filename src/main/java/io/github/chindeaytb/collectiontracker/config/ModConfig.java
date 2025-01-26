@@ -21,7 +21,7 @@ public class ModConfig extends Config {
     @Expose
     @Category(name = "Overlay", desc = "Overlay settings")
     public Overlay overlay = new Overlay();
-    @Category(name = "Baazar", desc = "Toggle bazaar prices")
+    @Category(name = "Bazaar", desc = "Toggle bazaar prices")
     public Bazaar bazaar = new Bazaar();
 
     @Override

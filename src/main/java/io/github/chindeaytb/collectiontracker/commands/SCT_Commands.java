@@ -1,5 +1,6 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
+import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -76,7 +77,7 @@ public class SCT_Commands extends CommandBase {
                     resumeTracker.processCommand(sender, args);
                     break;
                 default:
-                    sender.addChatMessage(new ChatComponentText("Unknown command. Use /sct help."));
+                    ChatUtils.INSTANCE.sendMessage("Unknown command. Use /sct help.");
                     break;
             }
         });
