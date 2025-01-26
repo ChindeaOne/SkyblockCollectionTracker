@@ -21,10 +21,9 @@ public class TrackingHandlerClass {
     private static final int COOLDOWN_PERIOD = 15;
     public static boolean isTracking = false;
     public static boolean isPaused = false;
-    private static long lastTrackTime = 0;
-
     public static long startTime;
     public static long lastTime;
+    private static long lastTrackTime = 0;
 
     public static void startTracking(ICommandSender sender) {
         long currentTime = System.currentTimeMillis();
@@ -55,7 +54,9 @@ public class TrackingHandlerClass {
     }
 
     public static void stopTracking(ICommandSender sender) {
-            if (scheduler != null && !scheduler.isShutdown()) {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            isTracking = false;
+            isPaused = false;
             scheduler.shutdown();
             try {
                 if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
@@ -68,8 +69,7 @@ public class TrackingHandlerClass {
             sender.addChatMessage(new ChatComponentText("§cStopped tracking!"));
             logger.info("Tracking stopped.");
 
-            isTracking = false;
-            isPaused = false;
+
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
             lastTime = 0;
@@ -85,6 +85,9 @@ public class TrackingHandlerClass {
 
     public static void stopTracking() {
         if (scheduler != null && !scheduler.isShutdown()) {
+            isTracking = false;
+            isPaused = false;
+            afk = false;
             scheduler.shutdown();
             try {
                 if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
@@ -94,17 +97,15 @@ public class TrackingHandlerClass {
                 scheduler.shutdownNow();
                 Thread.currentThread().interrupt();
             }
-            if(!Hypixel.INSTANCE.getServer()){
+
+            if (!Hypixel.INSTANCE.getServer()) {
                 logger.info("Tracking stopped because player disconnected from the server.");
-            }else if(afk) {
+            } else if (afk) {
                 logger.info("Tracking stopped because the player went AFK.");
             } else {
                 logger.info("Tracking stopped because the api server is offline.");
             }
 
-            afk = false;
-            isTracking = false;
-            isPaused = false;
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
             lastTime = 0;

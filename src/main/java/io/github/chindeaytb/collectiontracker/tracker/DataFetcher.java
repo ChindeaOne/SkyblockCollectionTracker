@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isPaused;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
 
 public class DataFetcher {
 
@@ -36,6 +37,8 @@ public class DataFetcher {
                 TrackingHandlerClass.stopTracking();
                 return;
             }
+
+            if (!isTracking) return;
             if (isPaused) return;
 
             String playerUUID = PlayerData.INSTANCE.getPlayerUUID();
