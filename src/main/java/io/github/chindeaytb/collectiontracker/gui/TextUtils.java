@@ -6,9 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.getUptime;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.startTime;
+import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.*;
 import static io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay.config;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 
 public class TextUtils {
 
@@ -28,6 +29,55 @@ public class TextUtils {
     public static final String LIGHT_PURPLE = "§d";
     public static final String YELLOW = "§e";
     public static final String WHITE = "§f";
+
+    static List<String> overlayLines = new ArrayList<>();
+
+    public static void updateStats(){
+        Overlay overlay = config.overlay;
+
+        if(startTime == 0){
+            startTime = System.currentTimeMillis();
+        }
+
+        if(!isTracking){
+            overlayLines.clear();
+            return;
+        }
+
+        overlayLines.clear();
+        for (int id : overlay.statsText) {
+            switch (id) {
+                case 0:
+                    if (collection != null && collectionAmount >= 0) {
+                        overlayLines.add(WHITE + formatCollectionName(collection) + " collection " + WHITE + "> " + formatNumber(collectionAmount));
+                    }
+                    break;
+                case 1:
+                    if (collection != null) {
+                        if (collectionMade > 0) {
+                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made " + WHITE + "> " + formatNumber(collectionMade));
+                        } else {
+                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made " + WHITE + "> Calculating...");
+                        }
+                    }
+                    break;
+                case 2:
+                    if (collectionPerHour > 0) {
+                        overlayLines.add(WHITE + "Coll/h " + WHITE + "> " + formatNumber(collectionPerHour));
+                    } else {
+                        overlayLines.add(WHITE + "Coll/h " + WHITE + "> Calculating...");
+                    }
+                    break;
+                case 3:
+                    if (moneyPerHour > 0) {
+                        overlayLines.add(WHITE + "$/h (NPC) " + WHITE + "> " + formatNumber(moneyPerHour));
+                    } else {
+                        overlayLines.add(WHITE + "$/h (NPC) " + WHITE + "> Calculating...");
+                    }
+                    break;
+            }
+        }
+    }
 
     private static String formatCollectionName(String collection) {
         String[] words = collection.split("\\s+");
@@ -51,48 +101,17 @@ public class TextUtils {
         if (number < 1_000) {
             return String.valueOf((int) number);
         } else if (number < 1_000_000) {
-            return String.format("%.1fk", number / 1_000.0);
+            return String.format("%.2fk", number / 1_000.0);
         } else if (number < 1_000_000_000) {
-            return String.format("%.1fM", number / 1_000_000.0);
+            return String.format("%.2fM", number / 1_000_000.0);
         } else {
-            return String.format("%.1fB", number / 1_000_000_000.0);
+            return String.format("%.2fB", number / 1_000_000_000.0);
         }
     }
 
-    public static @NotNull List<String> getStrings(String collectionName, float collectionAmount, float collectionPerHour, float collectionMade, float moneyPerHour) {
-        List<String> overlayLines = new ArrayList<>();
-        Overlay overlay = config.overlay;
-
-        for (int id : overlay.statsText) {
-            switch (id) {
-                case 0:
-                    if (collectionName != null && collectionAmount >= 0) {
-                        overlayLines.add(WHITE + formatCollectionName(collectionName) + " collection " + WHITE + "> " + formatNumber(collectionAmount));
-                    }
-                    break;
-                case 1:
-                    if (collectionName != null && collectionMade >= 0) {
-                        overlayLines.add(WHITE + formatCollectionName(collectionName) + " collection made " + WHITE + "> " + formatNumber(collectionMade));
-                    }
-                    break;
-                case 2:
-                    if (collectionPerHour >= 0) {
-                        overlayLines.add(WHITE + "Coll/h " + WHITE + "> " + formatNumber(collectionPerHour));
-                    }
-                    break;
-                case 3:
-                    if (moneyPerHour >= 0) {
-                        overlayLines.add(WHITE + "$/h (NPC) " + WHITE + "> " + formatNumber(moneyPerHour));
-                    }
-                    break;
-                case 4:
-                    if (startTime != 0) {
-                        overlayLines.add(WHITE + "Uptime " + WHITE + "> " + getUptime());
-                    }
-                    break;
-            }
-        }
-        return overlayLines;
+    public static @NotNull List<String> getStrings() {
+        List<String> updatedOverlayLines = new ArrayList<>(overlayLines);
+        updatedOverlayLines.add(WHITE + "Uptime " + WHITE + "> " + getUptime());
+        return updatedOverlayLines;
     }
-
 }

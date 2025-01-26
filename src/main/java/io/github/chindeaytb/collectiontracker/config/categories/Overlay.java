@@ -33,7 +33,7 @@ public class Overlay {
             }
     )
     @ConfigAccordionId(id = 0)
-    public List<Integer> statsText = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
+    public List<Integer> statsText = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4));
 
     @Expose
     @ConfigLink(owner = Overlay.class, field = "statsOverlay")

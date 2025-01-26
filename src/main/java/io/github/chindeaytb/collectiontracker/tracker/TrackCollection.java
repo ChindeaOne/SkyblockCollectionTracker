@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.StringReader;
 
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
+import static io.github.chindeaytb.collectiontracker.gui.TextUtils.updateStats;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.getUptimeInSeconds;
 
 public class TrackCollection {
@@ -21,7 +22,6 @@ public class TrackCollection {
     public static float sessionStartCollection = 0;
     public static boolean afk = false;
 
-    public static String collectionName;
     public static float collectionAmount;
     public static float collectionPerHour;
     public static float collectionMade;
@@ -55,11 +55,11 @@ public class TrackCollection {
                     float collectedSinceStart = currentCollection - sessionStartCollection;
                     float npcMoney = NPCPrice.notRiftCollection(collection) ? collectedSinceStart * NPCPrice.getNpcPrice(collection) : 0;
 
-                    collectionName = collection;
                     collectionAmount = (float) Math.floor(currentCollection);
                     collectionPerHour = uptime > 0 ? (float) Math.floor((collectedSinceStart / uptime) * 3600) : 0;
                     collectionMade = (float) Math.floor(collectedSinceStart);
                     moneyPerHour = uptime > 0 ? (float) Math.floor(npcMoney / (uptime / 3600.0f)) : 0;
+                    updateStats();
 
                     previousCollection = currentCollection;
                 } else {
