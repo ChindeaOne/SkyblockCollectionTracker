@@ -9,7 +9,7 @@
 
 ## Acknowledgments
 
-**Huge thanks to:** nea89, Ninjune, Moulberry, hannibal2 and the SkyHanni team. Full credits and acknowledgments can be found in `CREDITS.md`.
+**Huge thanks to:** nea89, Ninjune, Moulberry, hannibal2 and the SkyHanni team. Full credits and acknowledgments can be found [here](CREDITS.md).
 
 ---
 
