@@ -17,13 +17,10 @@ object GuiManager {
 
         val currentX = config?.overlay?.overlayPosition?.x ?: 4
         val currentY = config?.overlay?.overlayPosition?.y ?: 150
-        val currentWidth = config?.overlay?.overlayPosition?.width ?: 100
-        val currentHeight = config?.overlay?.overlayPosition?.height ?: 28
-        val scaleX = config?.overlay?.overlayPosition?.scaleX ?: 1.0f
-        val scaleY = config?.overlay?.overlayPosition?.scaleY ?: 1.0f
+        val scale = config?.overlay?.overlayPosition?.scale ?: 1.0f
 
-        val position = Position(currentX, currentY, currentWidth, currentHeight)
-        position.setScaling(scaleX, scaleY)
+        val position = Position(currentX, currentY)
+        position.setScaling(scale)
         ModInitialization.screenToOpen = DummyOverlay(
             position, Minecraft.getMinecraft().currentScreen as? GuiContainer
         )

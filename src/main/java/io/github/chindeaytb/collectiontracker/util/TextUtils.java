@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.gui;
+package io.github.chindeaytb.collectiontracker.util;
 
 import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
 import org.jetbrains.annotations.NotNull;
@@ -49,30 +49,30 @@ public class TextUtils {
             switch (id) {
                 case 0:
                     if (collection != null && collectionAmount >= 0) {
-                        overlayLines.add(WHITE + formatCollectionName(collection) + " collection " + WHITE + "> " + formatNumber(collectionAmount));
+                        overlayLines.add(WHITE + formatCollectionName(collection) + " collection " + WHITE + ": " + formatNumber(collectionAmount));
                     }
                     break;
                 case 1:
                     if (collection != null) {
                         if (collectionMade > 0) {
-                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made " + WHITE + "> " + formatNumber(collectionMade));
+                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made " + WHITE + ": " + formatNumber(collectionMade));
                         } else {
-                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made " + WHITE + "> Calculating...");
+                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made " + WHITE + ": Calculating...");
                         }
                     }
                     break;
                 case 2:
                     if (collectionPerHour > 0) {
-                        overlayLines.add(WHITE + "Coll/h " + WHITE + "> " + formatNumber(collectionPerHour));
+                        overlayLines.add(WHITE + "Coll/h " + WHITE + ": " + formatNumber(collectionPerHour));
                     } else {
-                        overlayLines.add(WHITE + "Coll/h " + WHITE + "> Calculating...");
+                        overlayLines.add(WHITE + "Coll/h " + WHITE + ": Calculating...");
                     }
                     break;
                 case 3:
                     if (moneyPerHour > 0) {
-                        overlayLines.add(WHITE + "$/h (NPC) " + WHITE + "> " + formatNumber(moneyPerHour));
+                        overlayLines.add(WHITE + "$/h (NPC) " + WHITE + ": " + formatNumber(moneyPerHour));
                     } else {
-                        overlayLines.add(WHITE + "$/h (NPC) " + WHITE + "> Calculating...");
+                        overlayLines.add(WHITE + "$/h (NPC) " + WHITE + ": Calculating...");
                     }
                     break;
             }
@@ -110,8 +110,7 @@ public class TextUtils {
     }
 
     public static @NotNull List<String> getStrings() {
-        List<String> updatedOverlayLines = new ArrayList<>(overlayLines);
-        updatedOverlayLines.add(WHITE + "Uptime " + WHITE + "> " + getUptime());
-        return updatedOverlayLines;
+        overlayLines.add(WHITE + "Uptime " + WHITE + ": " + getUptime());
+        return overlayLines;
     }
 }

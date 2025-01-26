@@ -28,7 +28,7 @@ public class Overlay {
                     "§aGold collection §f> 200.000M",
                     "§aGold collection made §f> 10.000M",
                     "§aColl/h §f> Calculating...",
-                    "§a$/h (NPC) §f> 100k/h",
+                    "§a$/h (NPC/Bazaar) §f> 100k/h",
             }
     )
     @ConfigAccordionId(id = 0)
@@ -36,5 +36,5 @@ public class Overlay {
 
     @Expose
     @ConfigLink(owner = Overlay.class, field = "statsOverlay")
-    public Position overlayPosition = new Position(4, 150, 100, 28);
+    public Position overlayPosition = new Position(4, 150);
 }

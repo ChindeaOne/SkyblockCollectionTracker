@@ -3,7 +3,7 @@ package io.github.chindeaytb.collectiontracker.gui.overlays;
 import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.config.ModConfig;
 import io.github.chindeaytb.collectiontracker.config.core.Position;
-import io.github.chindeaytb.collectiontracker.gui.TextUtils;
+import io.github.chindeaytb.collectiontracker.util.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -14,17 +14,14 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.List;
 
-import static io.github.chindeaytb.collectiontracker.gui.TextUtils.updateStats;
+import static io.github.chindeaytb.collectiontracker.util.TextUtils.updateStats;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 
 public class CollectionOverlay {
 
     private static int overlayX;
     private static int overlayY;
-    private static int boxWidth;
-    private static int boxHeight;
-    private static float scaleX;
-    private static float scaleY;
+    private static float scale;
 
     private static boolean visible = true;
     public static ModConfig config;
@@ -37,18 +34,14 @@ public class CollectionOverlay {
         visible = visibility;
     }
 
-    public static void updateOverlayPositionAndSize(int newX, int newY, int newWidth, int newHeight, float newScaleX, float newScaleY) {
+    public static void updateOverlayPositionAndSize(int newX, int newY, float newScale) {
         overlayX = newX;
         overlayY = newY;
-        boxWidth = newWidth;
-        boxHeight = newHeight;
-        scaleX = newScaleX;
-        scaleY = newScaleY;
+        scale = newScale;
 
         if (config != null) {
             config.overlay.overlayPosition.setPosition(newX, newY);
-            config.overlay.overlayPosition.setDimensions(newWidth, newHeight);
-            config.overlay.overlayPosition.setScaling(newScaleX, newScaleY);
+            config.overlay.overlayPosition.setScaling(newScale);
         }
     }
 
@@ -83,22 +76,19 @@ public class CollectionOverlay {
         }
 
         int textHeight = fontRenderer.FONT_HEIGHT * overlayLines.size();
-        boxWidth += maxWidth + 2 * padding;
-        boxHeight += textHeight + 2 * padding;
+        int boxWidth = maxWidth + 2 * padding;
+        int boxHeight = textHeight + 2 * padding;
 
         Position position = config.overlay.overlayPosition;
         setPositions(position);
 
-        overlayX = position.getX();
-        overlayY = position.getY();
-
         Gui.drawRect(overlayX, overlayY, overlayX + boxWidth, overlayY + boxHeight, 0x10000000);
 
         GlStateManager.pushMatrix();
-        GlStateManager.scale(scaleX, scaleY, 1.0f);
+        GlStateManager.scale(scale, scale, 1.0f);
 
-        int scaledOverlayX = (int) (overlayX / scaleX) + padding;
-        int scaledOverlayY = (int) (overlayY / scaleY) + padding;
+        int scaledOverlayX = (int) (overlayX / scale) + padding;
+        int scaledOverlayY = (int) (overlayY / scale) + padding;
 
         if (startTime != 0) {
             for (String line : overlayLines) {
@@ -112,9 +102,6 @@ public class CollectionOverlay {
     private void setPositions(Position position){
         overlayX = position.getX();
         overlayY = position.getY();
-        boxWidth = position.getWidth();
-        boxHeight = position.getHeight();
-        scaleX = position.getScaleX();
-        scaleY = position.getScaleY();
+        scale = position.getScale();
     }
 }

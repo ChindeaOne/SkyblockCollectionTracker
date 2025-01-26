@@ -2,6 +2,7 @@ package io.github.chindeaytb.collectiontracker.gui.overlays;
 
 import io.github.chindeaytb.collectiontracker.config.core.Position;
 import io.github.chindeaytb.collectiontracker.mixins.AccessorGuiContainer;
+import io.github.chindeaytb.collectiontracker.util.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,15 +11,18 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
+import java.util.List;
 
 public class DummyOverlay extends GuiScreen {
 
     private final Position overlayPosition;
 
     private boolean dragging = false;
-    private boolean resizing = false;
     private int dragOffsetX, dragOffsetY;
     private GuiContainer oldScreen = null;
+
+    private int boxWidth;
+    private int boxHeight;
 
     public DummyOverlay(Position position, GuiContainer oldScreen) {
         this.overlayPosition = position;
@@ -51,24 +55,34 @@ public class DummyOverlay extends GuiScreen {
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-        int effectiveWidth = Math.max(overlayPosition.getWidth(), 10);
-        int effectiveHeight = overlayPosition.getHeight();
+        List<String> overlayLines = TextUtils.getStrings();
+        if (overlayLines.isEmpty()) return;
 
-        overlayPosition.setDimensions(effectiveWidth, effectiveHeight);
+        int padding = 5;
+        int maxWidth = 0;
+        for (String line : overlayLines) {
+            int lineWidth = fontRenderer.getStringWidth(line);
+            if (lineWidth > maxWidth) {
+                maxWidth = lineWidth;
+            }
+        }
+
+        int textHeight = fontRenderer.FONT_HEIGHT * overlayLines.size();
+        boxWidth = maxWidth + 2 * padding;
+        boxHeight = textHeight + 2 * padding;
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(overlayPosition.getX(), overlayPosition.getY(), 0);
-        GlStateManager.scale(overlayPosition.getScaleX(), overlayPosition.getScaleY(), 1.0f);
+        GlStateManager.scale(overlayPosition.getScale(), overlayPosition.getScale(), 1.0f);
         GlStateManager.translate(-overlayPosition.getX(), -overlayPosition.getY(), 0);
 
-        drawRect(overlayPosition.getX(), overlayPosition.getY(), overlayPosition.getX() + effectiveWidth, overlayPosition.getY() + effectiveHeight, -0x7fbfbfc0);
+        drawRect(overlayPosition.getX(), overlayPosition.getY(), overlayPosition.getX() + boxWidth, overlayPosition.getY() + boxHeight, -0x7fbfbfc0);
 
         String overlayText = "§aMove the overlay";
         int textWidth = fontRenderer.getStringWidth(overlayText);
-        int textHeight = fontRenderer.FONT_HEIGHT;
 
-        int textX = overlayPosition.getX() + (effectiveWidth - textWidth) / 2;
-        int textY = overlayPosition.getY() + (effectiveHeight - textHeight) / 2;
+        int textX = overlayPosition.getX() + (boxWidth - textWidth) / 2;
+        int textY = overlayPosition.getY() + textHeight / 2;
         fontRenderer.drawString(overlayText, textX, textY, 0xFFFFFF);
         GlStateManager.popMatrix();
 
@@ -78,8 +92,6 @@ public class DummyOverlay extends GuiScreen {
 
         if (dragging) {
             overlayPosition.setPosition(mouseX - dragOffsetX, mouseY - dragOffsetY);
-        } else if (resizing) {
-            overlayPosition.setDimensions(Math.max(50, mouseX - overlayPosition.getX()), Math.max(20, mouseY - overlayPosition.getY()));
         }
     }
 
@@ -98,9 +110,9 @@ public class DummyOverlay extends GuiScreen {
         super.keyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_EQUALS || keyCode == Keyboard.KEY_ADD) {
-            overlayPosition.setScaling(overlayPosition.getScaleX() + 0.1f, overlayPosition.getScaleY() + 0.1f);
+            overlayPosition.setScaling(overlayPosition.getScale() + 0.1f);
         } else if (keyCode == Keyboard.KEY_MINUS || keyCode == Keyboard.KEY_SUBTRACT) {
-            overlayPosition.setScaling(Math.max(0.1f, overlayPosition.getScaleX() - 0.1f), Math.max(0.1f, overlayPosition.getScaleY() - 0.1f));
+            overlayPosition.setScaling(Math.max(0.1f, overlayPosition.getScale() - 0.1f));
         }
     }
 
@@ -111,8 +123,6 @@ public class DummyOverlay extends GuiScreen {
                 dragging = true;
                 dragOffsetX = mouseX - overlayPosition.getX();
                 dragOffsetY = mouseY - overlayPosition.getY();
-            } else if (isMouseOverResizeHandle(mouseX, mouseY)) {
-                resizing = true;
             }
         }
     }
@@ -120,16 +130,10 @@ public class DummyOverlay extends GuiScreen {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         dragging = false;
-        resizing = false;
     }
 
     private boolean isMouseOverOverlay(int mouseX, int mouseY) {
-        return mouseX >= overlayPosition.getX() && mouseX <= overlayPosition.getX() + overlayPosition.getWidth() && mouseY >= overlayPosition.getY() && mouseY <= overlayPosition.getY() + overlayPosition.getHeight();
-    }
-
-    private boolean isMouseOverResizeHandle(int mouseX, int mouseY) {
-        int handleSize = 10;
-        return mouseX >= overlayPosition.getX() + overlayPosition.getWidth() - handleSize && mouseX <= overlayPosition.getX() + overlayPosition.getWidth() && mouseY >= overlayPosition.getY() + overlayPosition.getHeight() - handleSize && mouseY <= overlayPosition.getY() + overlayPosition.getHeight();
+        return mouseX >= overlayPosition.getX() && mouseX <= overlayPosition.getX() + boxWidth && mouseY >= overlayPosition.getY() && mouseY <= overlayPosition.getY() + boxHeight;
     }
 
     @Override
@@ -139,6 +143,6 @@ public class DummyOverlay extends GuiScreen {
     }
 
     private void saveOverlayPositionAndSize() {
-        CollectionOverlay.updateOverlayPositionAndSize(overlayPosition.getX(), overlayPosition.getY(), overlayPosition.getWidth(), overlayPosition.getHeight(), overlayPosition.getScaleX(), overlayPosition.getScaleY());
+        CollectionOverlay.updateOverlayPositionAndSize(overlayPosition.getX(), overlayPosition.getY(), overlayPosition.getScale());
     }
 }
