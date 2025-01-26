@@ -26,8 +26,8 @@
 - **MoulConfig GUI**
   - Configure your tracking settings through the in-game GUI, accesible via `/sct`.
      
-- **Customizable overlay**
-  - Enable color-coded text for each individual collection.
+- **Customizable overlay** 
+  - Enable color-coded text for each individual collection. (WIP)
   - Configure what stats you want to see displayed in the Overlay category.
     
 - **Tracking mechanics**
@@ -35,7 +35,7 @@
   - Need a break? Simply pause tracking with `/sct pause` and resume anytime with `/sct resume`.
 
 - **Choose your pricing**
-  - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category.
+  - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category. (WIP)
     
 ---
 
