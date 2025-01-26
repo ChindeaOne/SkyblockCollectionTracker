@@ -1,3 +1,7 @@
+/*
+ * This kotlin object is derived from the NotEnoughUpdates mod.
+ */
+
 package io.github.chindeaytb.collectiontracker.util
 
 import io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay
