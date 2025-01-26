@@ -48,6 +48,7 @@ loom {
 // Repositories
 repositories {
     mavenCentral()
+    mavenLocal()
     maven("https://repo.spongepowered.org/maven/")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven("https://repo.nea.moe/releases")
@@ -55,6 +56,11 @@ repositories {
     maven("https://jitpack.io") {
         content {
             includeGroupByRegex("(com|io)\\.github\\..*")
+        }
+    }
+    maven("https://maven.minecraftforge.net") {
+        metadataSources {
+            artifact()
         }
     }
 }
