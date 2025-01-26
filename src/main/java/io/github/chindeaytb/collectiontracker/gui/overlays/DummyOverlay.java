@@ -1,6 +1,7 @@
 package io.github.chindeaytb.collectiontracker.gui.overlays;
 
 import io.github.chindeaytb.collectiontracker.config.core.Position;
+import io.github.chindeaytb.collectiontracker.gui.TextUtils;
 import io.github.chindeaytb.collectiontracker.mixins.AccessorGuiContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -52,7 +53,7 @@ public class DummyOverlay extends GuiScreen {
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-        List<String> overlayLines = CollectionOverlay.getStrings();
+        List<String> overlayLines = TextUtils.getStrings(null, 0, 0, 0, 0);
         int maxWidth = overlayLines.stream().mapToInt(fontRenderer::getStringWidth).max().orElse(0);
 
         int effectiveWidth = Math.max(overlayPosition.getWidth(), maxWidth);

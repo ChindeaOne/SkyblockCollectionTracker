@@ -2,8 +2,9 @@ package io.github.chindeaytb.collectiontracker.gui.overlays;
 
 import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.config.ModConfig;
-import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
 import io.github.chindeaytb.collectiontracker.config.core.Position;
+import io.github.chindeaytb.collectiontracker.gui.TextUtils;
+import io.github.chindeaytb.collectiontracker.tracker.TrackCollection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -11,20 +12,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.chindeaytb.collectiontracker.gui.TextUtils.getStrings;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 
 public class CollectionOverlay {
 
-    private static String collectionName = "";
-    private static String collectionAmount = "";
-    private static String collectionPerHour = "";
-    private static String collectionMade = "";
-    private static String moneyPerHour = "";
     private static int overlayX;
     private static int overlayY;
     private static int boxWidth;
@@ -33,7 +28,7 @@ public class CollectionOverlay {
     private static float scaleY;
 
     private static boolean visible = true;
-    private static ModConfig config;
+    public static ModConfig config;
 
     public static boolean isVisible() {
         return visible;
@@ -58,56 +53,7 @@ public class CollectionOverlay {
         }
     }
 
-    public static void updateCollectionData(String name, String amount, String perHour, String made, String money) {
-        collectionName = name != null ? name : "";
-        collectionAmount = amount != null ? amount : "";
-        collectionPerHour = perHour != null ? perHour : "";
-        collectionMade = made != null ? made : "";
-        moneyPerHour = money != null ? money : "";
-
-        if(startTime == 0){
-            startTime = System.currentTimeMillis();
-        }
-    }
-
-    public static @NotNull List<String> getStrings() {
-        List<String> overlayLines = new ArrayList<>();
-        Overlay overlay = config.overlay;
-
-        for (int id : overlay.statsText) {
-            switch (id) {
-                case 0:
-                    if (!collectionName.isEmpty() && !collectionAmount.isEmpty()) {
-                        overlayLines.add("§a" + collectionName + " collection §f> " + collectionAmount);
-                    }
-                    break;
-                case 1:
-                    if (!collectionName.isEmpty() && !collectionMade.isEmpty()) {
-                        overlayLines.add("§a" + collectionName + " collection made §f> " + collectionMade);
-                    }
-                    break;
-                case 2:
-                    if (!collectionPerHour.isEmpty()) {
-                        overlayLines.add("§aColl/h §f> " + collectionPerHour);
-                    }
-                    break;
-                case 3:
-                    if (!moneyPerHour.isEmpty()) {
-                        overlayLines.add("§a$/h (NPC) §f> " + moneyPerHour);
-                    }
-                    break;
-                case 4:
-                    if (startTime != 0) {
-                        overlayLines.add("§aUptime §f> " + getUptime());
-                    }
-                    break;
-            }
-        }
-        return overlayLines;
-    }
-
     public static void stopTracking() {
-        updateCollectionData(null, null, null, null, null);
         setVisible(false);
     }
 
@@ -124,16 +70,16 @@ public class CollectionOverlay {
         Minecraft mc = Minecraft.getMinecraft();
         FontRenderer fontRenderer = mc.fontRendererObj;
 
-        List<String> overlayLines = getStrings();
-        if (overlayLines.isEmpty()) return;
+        List<String> overlayLines = TextUtils.getStrings(
+                TrackCollection.collectionName,
+                TrackCollection.collectionAmount,
+                TrackCollection.collectionPerHour,
+                TrackCollection.collectionMade,
+                TrackCollection.moneyPerHour
+        );        if (overlayLines.isEmpty()) return;
 
         Position position = config.overlay.overlayPosition;
-        overlayX = position.getX();
-        overlayY = position.getY();
-        boxWidth = position.getWidth();
-        boxHeight = position.getHeight();
-        scaleX = position.getScaleX();
-        scaleY = position.getScaleY();
+        setPositions(position);
 
         Gui.drawRect(overlayX, overlayY, overlayX + boxWidth, overlayY + boxHeight, 0x10000000);
 
@@ -141,13 +87,21 @@ public class CollectionOverlay {
         GlStateManager.scale(scaleX, scaleY, 1.0f);
 
         int scaledOverlayX = (int) (overlayX / scaleX);
-        int scaledOverlayY = (int) (overlayY / scaleY);
-        int textY = scaledOverlayY + 2;
+        int scaledOverlayY = (int) (overlayY / scaleY) + 2;
 
         for (String line : overlayLines) {
-            fontRenderer.drawString(line, scaledOverlayX + 1, textY, 0xFFFFFF);
-            textY += fontRenderer.FONT_HEIGHT;
+            fontRenderer.drawString(line, scaledOverlayX + 1, scaledOverlayY, 0xFFFFFF);
+            scaledOverlayY += fontRenderer.FONT_HEIGHT;
         }
         GlStateManager.popMatrix();
+    }
+
+    private void setPositions(Position position){
+        overlayX = position.getX();
+        overlayY = position.getY();
+        boxWidth = position.getWidth();
+        boxHeight = position.getHeight();
+        scaleX = position.getScaleX();
+        scaleY = position.getScaleY();
     }
 }

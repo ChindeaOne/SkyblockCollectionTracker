@@ -102,6 +102,7 @@ public class TrackingHandlerClass {
                 logger.info("Tracking stopped because the api server is offline.");
             }
 
+            afk = false;
             isTracking = false;
             isPaused = false;
             lastTrackTime = System.currentTimeMillis();
