@@ -110,7 +110,7 @@ public class DummyOverlay extends GuiScreen {
         super.keyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_EQUALS || keyCode == Keyboard.KEY_ADD) {
-            overlayPosition.setScaling(overlayPosition.getScale() + 0.1f);
+            overlayPosition.setScaling(Math.min(10.0f, overlayPosition.getScale() + 0.1f));
         } else if (keyCode == Keyboard.KEY_MINUS || keyCode == Keyboard.KEY_SUBTRACT) {
             overlayPosition.setScaling(Math.max(0.1f, overlayPosition.getScale() - 0.1f));
         }

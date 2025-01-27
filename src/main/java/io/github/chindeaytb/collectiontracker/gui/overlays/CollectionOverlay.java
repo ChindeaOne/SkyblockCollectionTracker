@@ -16,6 +16,7 @@ import java.util.List;
 
 import static io.github.chindeaytb.collectiontracker.util.TextUtils.updateStats;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
+import static io.github.chindeaytb.collectiontracker.util.TextUtils.uptimeString;
 
 public class CollectionOverlay {
 
@@ -76,13 +77,17 @@ public class CollectionOverlay {
         }
 
         int textHeight = fontRenderer.FONT_HEIGHT * overlayLines.size();
-        int boxWidth = maxWidth + 2 * padding;
-        int boxHeight = textHeight + 2 * padding;
 
         Position position = config.overlay.overlayPosition;
         setPositions(position);
 
-        Gui.drawRect(overlayX, overlayY, overlayX + boxWidth, overlayY + boxHeight, 0x10000000);
+        Gui.drawRect(
+                overlayX,
+                overlayY,
+                overlayX + (maxWidth + 2 * padding) * (int) scale ,
+                overlayY + (textHeight + 2 * padding) * (int) scale,
+                0x10000000
+        );
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(scale, scale, 1.0f);
@@ -95,13 +100,14 @@ public class CollectionOverlay {
                 fontRenderer.drawString(line, scaledOverlayX, scaledOverlayY, 0xFFFFFF);
                 scaledOverlayY += fontRenderer.FONT_HEIGHT;
             }
+            fontRenderer.drawString(uptimeString(), scaledOverlayX, scaledOverlayY, 0xFFFFFF);
         }
         GlStateManager.popMatrix();
     }
 
     private void setPositions(Position position){
-        overlayX = position.getX();
-        overlayY = position.getY();
+        overlayX = position.getX() < 0 ? 4 : position.getX();
+        overlayY = position.getY() < 0 ? 150 : position.getY();
         scale = position.getScale();
     }
 }

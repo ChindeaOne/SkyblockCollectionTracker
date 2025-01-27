@@ -15,9 +15,12 @@ object GuiManager {
 
         val config = ModInitialization.configManager.config
 
-        val currentX = config?.overlay?.overlayPosition?.x ?: 4
-        val currentY = config?.overlay?.overlayPosition?.y ?: 150
+        var currentX = config?.overlay?.overlayPosition?.x ?: 4
+        var currentY = config?.overlay?.overlayPosition?.y ?: 150
         val scale = config?.overlay?.overlayPosition?.scale ?: 1.0f
+
+        if (currentX < 0) currentX = 4
+        if (currentY < 0) currentY = 150
 
         val position = Position(currentX, currentY)
         position.setScaling(scale)
