@@ -7,6 +7,7 @@ package io.github.chindeaytb.collectiontracker.util
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
+import io.github.chindeaytb.collectiontracker.config.ModConfig
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
 import io.github.chindeaytb.collectiontracker.util.ServerUtils.serverStatus
 import net.minecraft.client.Minecraft
@@ -29,6 +30,8 @@ object Hypixel {
     var server = false
     var skyblock = false
     var playerLoaded = false
+
+    var config: ModConfig? = null
 
     private val logger: Logger = LogManager.getLogger(Hypixel::class.java)
 
@@ -64,6 +67,8 @@ object Hypixel {
             if (HypixelUtils.isInHypixel && !playerLoaded) {
                 loadPlayerData()
                 if (playerLoaded) {
+                    setConfig()
+                    logger.info("Config loaded.")
                     serverStatus = ServerStatus.checkServer()
                     if (!serverStatus) {
                         ChatUtils.sendMessage("§cThe API server is down at the moment. Sorry for the inconvenience.")
@@ -107,7 +112,12 @@ object Hypixel {
         skyblock = inSkyblock
     }
 
-    fun hasNewestVersion(currentVersion: String, latestVersion: String): Boolean {
+    private fun setConfig() {
+        if (config != null) return
+        config = ModInitialization.configManager.config!!
+    }
+
+    private fun hasNewestVersion(currentVersion: String, latestVersion: String): Boolean {
         val currentParts = currentVersion.removePrefix("v").split("-", limit = 2)
         val latestParts = latestVersion.removePrefix("v").split("-", limit = 2)
 
@@ -132,7 +142,7 @@ object Hypixel {
         }
     }
 
-    fun loadPlayerData() {
+    private fun loadPlayerData() {
         val mc = Minecraft.getMinecraft()
         val player = mc.thePlayer
         if (player != null) {
