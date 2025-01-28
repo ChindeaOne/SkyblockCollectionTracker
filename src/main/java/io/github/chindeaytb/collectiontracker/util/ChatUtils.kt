@@ -3,6 +3,7 @@ package io.github.chindeaytb.collectiontracker.util
 import net.minecraft.client.Minecraft
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.IChatComponent
 
 object ChatUtils {
 
@@ -11,5 +12,8 @@ object ChatUtils {
 
     fun sendMessage(message: String) {
         Minecraft.getMinecraft().thePlayer?.addChatMessage(ChatComponentText("$PREFIX$message"))
+    }
+    fun sendMessage(message: IChatComponent) {
+        Minecraft.getMinecraft().thePlayer?.addChatMessage(ChatComponentText(PREFIX).appendSibling(message))
     }
 }

@@ -89,16 +89,13 @@ object Hypixel {
                             !hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)
                         ) {
                             ChatUtils.sendMessage(
-                                ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n")
-                                    .appendSibling(
-                                        ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
-                                            chatStyle = ChatStyle().apply {
-                                                chatClickEvent = ClickEvent(
-                                                    ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL
-                                                )
-                                            }
+                                ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
+                                    ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
+                                        chatStyle = ChatStyle().apply {
+                                            chatClickEvent = ClickEvent(ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL)
                                         }
-                                    ).toString()
+                                    }
+                                )
                             )
                             logger.info("New version found: ${RepoUtils.latestVersion}")
                         }
