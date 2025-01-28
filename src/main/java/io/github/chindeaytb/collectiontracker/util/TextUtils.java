@@ -4,43 +4,25 @@ import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.*;
-import static io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay.config;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 
 public class TextUtils {
 
-    public static final String BLACK = "§0";
-    public static final String DARK_BLUE = "§1";
-    public static final String DARK_GREEN = "§2";
-    public static final String DARK_AQUA = "§3";
-    public static final String DARK_RED = "§4";
-    public static final String DARK_PURPLE = "§5";
-    public static final String GOLD = "§6";
-    public static final String GRAY = "§7";
-    public static final String DARK_GRAY = "§8";
-    public static final String BLUE = "§9";
-    public static final String GREEN = "§a";
-    public static final String AQUA = "§b";
-    public static final String RED = "§c";
-    public static final String LIGHT_PURPLE = "§d";
-    public static final String YELLOW = "§e";
-    public static final String WHITE = "§f";
-
     static List<String> overlayLines = new ArrayList<>();
 
-    public static void updateStats(){
-        Overlay overlay = config.overlay;
+    public static void updateStats() {
+        Overlay overlay = Objects.requireNonNull(Hypixel.INSTANCE.getConfig()).overlay;
 
-        if(startTime == 0){
+        if (startTime == 0) {
             startTime = System.currentTimeMillis();
         }
 
-        if(!isTracking){
+        if (!isTracking) {
             overlayLines.clear();
             return;
         }
@@ -50,45 +32,54 @@ public class TextUtils {
             switch (id) {
                 case 0:
                     if (collection != null && collectionAmount >= 0) {
-                        overlayLines.add(WHITE + formatCollectionName(collection) + " collection" + WHITE + ": " + formatNumber(collectionAmount));
+                        overlayLines.add(formatCollectionName(collection) + " collection: " + formatNumber(collectionAmount));
                     }
                     break;
                 case 1:
                     if (collection != null) {
                         if (collectionMade > 0) {
-                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made" + WHITE + ": " + formatNumber(collectionMade));
+                            overlayLines.add(formatCollectionName(collection) + " collection (session): " + formatNumber(collectionMade));
                         } else {
-                            overlayLines.add(WHITE + formatCollectionName(collection) + " collection made" + WHITE + ": Calculating...");
+                            overlayLines.add(formatCollectionName(collection) + " collection (session): Calculating...");
                         }
                     }
                     break;
                 case 2:
                     if (collectionPerHour > 0) {
-                        overlayLines.add(WHITE + "Coll/h" + WHITE + ": " + formatNumber(collectionPerHour));
+                        overlayLines.add("Coll/h: " + formatNumber(collectionPerHour));
                     } else {
-                        overlayLines.add(WHITE + "Coll/h" + WHITE + ": Calculating...");
+                        overlayLines.add("Coll/h: Calculating...");
                     }
                     break;
                 case 3:
                     if (moneyPerHour > 0) {
-                        overlayLines.add(WHITE + "$/h (NPC)" + WHITE + ": " + formatNumber(moneyPerHour));
+                        if(Objects.requireNonNull(Hypixel.INSTANCE.getConfig()).bazaar.useBazaar){
+                            overlayLines.add("$/h (Bazaar): " + formatNumber(moneyPerHour));
+                        } else {
+                            overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHour));
+                        }
                     } else {
-                        overlayLines.add(WHITE + "$/h (NPC)" + WHITE + ": Calculating...");
+                        if(Objects.requireNonNull(Hypixel.INSTANCE.getConfig()).bazaar.useBazaar){
+                            overlayLines.add("$/h (Bazaar): Calculating...");
+                        }
+                        else{
+                            overlayLines.add("$/h (NPC): Calculating...");
+                        }
                     }
                     break;
             }
         }
     }
-
     public static @NotNull List<String> getStrings() {
+        updateStats();
         return overlayLines;
     }
 
     public static String uptimeString() {
-        return (WHITE + "Uptime" + WHITE + ": " + getUptime());
+        return ("Uptime: " + getUptime());
     }
 
-    private static String formatCollectionName(String collection) {
+    public static String formatCollectionName(String collection) {
         String[] words = collection.split("\\s+");
         StringBuilder formattedName = new StringBuilder();
 
