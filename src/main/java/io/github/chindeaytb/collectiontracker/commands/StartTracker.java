@@ -7,10 +7,10 @@ import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import io.github.chindeaytb.collectiontracker.util.HypixelUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
 
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isPaused;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
+import static io.github.chindeaytb.collectiontracker.util.TextUtils.formatCollectionName;
 
 public class StartTracker extends CommandBase {
 
@@ -56,7 +56,7 @@ public class StartTracker extends CommandBase {
                     if (!isTracking && !isPaused) {
                         collection = keyBuilder.toString().trim().toLowerCase();
                         if (!ValidCollectionsManager.isValidCollection(collection)) {
-                            ChatUtils.INSTANCE.sendMessage("§4Invalid collection!");
+                            ChatUtils.INSTANCE.sendMessage("§4" + formatCollectionName(collection) + " collection is not supported!");
                         } else {
                             TrackingHandlerClass.startTracking(sender);
                         }
