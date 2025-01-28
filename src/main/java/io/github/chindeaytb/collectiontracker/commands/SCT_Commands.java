@@ -4,7 +4,6 @@ import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 
 import java.util.Collections;
 import java.util.List;

@@ -5,7 +5,6 @@ import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import io.github.chindeaytb.collectiontracker.util.Hypixel;
 import io.github.chindeaytb.collectiontracker.util.PlayerData;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
