@@ -34,6 +34,10 @@ object RenderUtils {
     }
 
     fun drawRect(fontRenderer: FontRenderer) {
+        // For newer versions
+        if(position.scale == 0.0f){
+            position.setScaling(1.0f)
+        }
 
         GlStateManager.pushMatrix()
         GlStateManager.scale(position.scale, position.scale, 1.0f)
