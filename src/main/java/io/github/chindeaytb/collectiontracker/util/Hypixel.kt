@@ -11,9 +11,7 @@ import io.github.chindeaytb.collectiontracker.config.ModConfig
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
 import io.github.chindeaytb.collectiontracker.util.ServerUtils.serverStatus
 import net.minecraft.client.Minecraft
-import net.minecraft.event.ClickEvent
 import net.minecraft.util.ChatComponentText
-import net.minecraft.util.ChatStyle
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
@@ -29,11 +27,11 @@ object Hypixel {
 
     var server = false
     var skyblock = false
-    var playerLoaded = false
+    private var playerLoaded = false
 
     var config: ModConfig? = null
 
-    private val logger: Logger = LogManager.getLogger(Hypixel::class.java)
+    private var logger: Logger = LogManager.getLogger(Hypixel::class.java)
 
     @SubscribeEvent
     fun onDisconnect(event: ClientDisconnectionFromServerEvent) {
@@ -69,6 +67,7 @@ object Hypixel {
                 if (playerLoaded) {
                     setConfig()
                     logger.info("Config loaded.")
+
                     serverStatus = ServerStatus.checkServer()
                     if (!serverStatus) {
                         ChatUtils.sendMessage("§cThe API server is down at the moment. Sorry for the inconvenience.")
@@ -79,26 +78,24 @@ object Hypixel {
                         }
                     }
 
-                    logger.info ("Update stream status: {}", ModInitialization.configManager.config?.about?.update)
+                    logger.info("Update stream status: {}", ModInitialization.configManager.config?.about?.update)
 
-                    if(ModInitialization.configManager.config?.about?.update != 0){
-                        RepoUtils.checkForUpdates(ModInitialization.configManager.config?.about?.update?:0)
+                    if (ModInitialization.configManager.config?.about?.update != 0) {
+                        RepoUtils.checkForUpdates(ModInitialization.configManager.config?.about?.update ?: 0)
 
-                        if (RepoUtils.latestVersion != null &&
-                            ModInitialization.version != RepoUtils.latestVersion.removePrefix("v") &&
-                            !hasNewestVersion(ModInitialization.version, RepoUtils.latestVersion)
-                        ) {
-                            ChatUtils.sendMessage(
-                                ChatComponentText("§3New SkyblockCollectionTracker version found: ${RepoUtils.latestVersion}\n").appendSibling(
-                                    ChatComponentText("§a${RepoUtils.MODRINTH_URL}").apply {
-                                        chatStyle = ChatStyle().apply {
-                                            chatClickEvent = ClickEvent(ClickEvent.Action.OPEN_URL, RepoUtils.MODRINTH_URL)
-                                        }
-                                    }
-                                )
-                            )
+                        if (isUpdateAvailable()) {
                             logger.info("New version found: ${RepoUtils.latestVersion}")
+
+                            ChatUtils.sendMessage(
+                                ChatComponentText("§eA new version for SkyblockCollectionTracker found: §a${RepoUtils.latestVersion}§e. It will be downloaded after closing the game.")
+                            )
+                            logger.info("The new version will be downloaded after closing the client.")
+
+                        } else {
+                            logger.info("No new version found.")
                         }
+                    } else{
+                        logger.info("Update stream is disabled.")
                     }
                 }
             }
@@ -114,7 +111,12 @@ object Hypixel {
         config = ModInitialization.configManager.config!!
     }
 
-    private fun hasNewestVersion(currentVersion: String, latestVersion: String): Boolean {
+    private fun isUpdateAvailable(): Boolean {
+        val currentVersion = ModInitialization.version
+        val latestVersion = RepoUtils.latestVersion
+
+        if (currentVersion == latestVersion) return false
+
         val currentParts = currentVersion.removePrefix("v").split("-", limit = 2)
         val latestParts = latestVersion.removePrefix("v").split("-", limit = 2)
 
@@ -124,8 +126,8 @@ object Hypixel {
         for (i in 0 until maxOf(currentNumericParts.size, latestNumericParts.size)) {
             val currentPart = currentNumericParts.getOrElse(i) { 0 }
             val latestPart = latestNumericParts.getOrElse(i) { 0 }
-            if (currentPart < latestPart) return false
-            if (currentPart > latestPart) return true
+            if (currentPart < latestPart) return true
+            if (currentPart > latestPart) return false
         }
 
         val currentPreRelease = currentParts.getOrNull(1)
@@ -134,8 +136,8 @@ object Hypixel {
         return when {
             currentPreRelease == null && latestPreRelease != null -> false
             currentPreRelease != null && latestPreRelease == null -> true
-            currentPreRelease != null && latestPreRelease != null -> currentPreRelease >= latestPreRelease
-            else -> true
+            currentPreRelease != null && latestPreRelease != null -> currentPreRelease < latestPreRelease
+            else -> false
         }
     }
 
