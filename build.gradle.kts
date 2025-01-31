@@ -94,9 +94,9 @@ dependencies {
     }
 
     shadowModImpl(libs.moulconfig)
-    shadowImpl(libs.libautoupdate) {
-        exclude(module = "gson")
-    }
+//    shadowModImpl(libs.modrinthautoupd) {
+//        exclude(group = "gson")
+//    }
 
     shadowImpl("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
 
@@ -126,7 +126,6 @@ kotlin {
 }
 
 // Tasks
-
 tasks.compileJava {
     dependsOn(tasks.processResources)
 }
@@ -190,7 +189,6 @@ tasks.shadowJar {
     }
     exclude("META-INF/versions/**")
     relocate("io.github.notenoughupdates.moulconfig", "io.github.chindeaytb.collectiontracker.deps.moulconfig")
-    relocate("moe.nea.libautoupdate", "io.github.chindeaytb.collectiontracker.deps.libautoupdate")
 }
 
 blossom {
