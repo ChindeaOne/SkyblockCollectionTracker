@@ -8,7 +8,6 @@ import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
 import io.github.chindeaytb.collectiontracker.autoupdate.UpdaterManager
-import io.github.chindeaytb.collectiontracker.config.ModConfig
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
 import io.github.chindeaytb.collectiontracker.util.ServerUtils.serverStatus
 import net.minecraft.client.Minecraft
@@ -29,8 +28,6 @@ object Hypixel {
     var server = false
     var skyblock = false
     private var playerLoaded = false
-
-    var config: ModConfig? = null
 
     private var logger: Logger = LogManager.getLogger(Hypixel::class.java)
 
@@ -67,6 +64,9 @@ object Hypixel {
                 loadPlayerData()
                 if (playerLoaded) {
                     serverStatus = ServerStatus.checkServer()
+
+                    setConfigForNewVersion()
+
                     if (!serverStatus) {
                         ChatUtils.sendMessage("§cThe API server is down at the moment. Sorry for the inconvenience.")
 
@@ -104,6 +104,13 @@ object Hypixel {
         val inSkyblock = checkScoreboard()
         if (inSkyblock == skyblock) return
         skyblock = inSkyblock
+    }
+
+    private fun setConfigForNewVersion() {
+        val scale = ModInitialization.configManager.config!!.overlay.overlayPosition.scale
+        if(scale == 0.0f){
+            ModInitialization.configManager.config!!.overlay.overlayPosition.setScaling(1.0f)
+        }
     }
 
     private fun isUpdateAvailable(): Boolean {
