@@ -26,10 +26,9 @@ public class Overlay {
     @ConfigEditorDraggableList(
             exampleText = {
                     "§aGold collection §f> 200.000M",
-                    "§aGold collection made §f> 10.000M",
+                    "§aGold collection (session) §f> 10.000M",
                     "§aColl/h §f> Calculating...",
-                    "§a$/h (NPC) §f> 100k/h",
-                    "§aUptime §f> 01:30:20"
+                    "§a$/h (NPC/Bazaar) §f> 100k/h",
             }
     )
     @ConfigAccordionId(id = 0)
@@ -37,5 +36,13 @@ public class Overlay {
 
     @Expose
     @ConfigLink(owner = Overlay.class, field = "statsOverlay")
-    public Position overlayPosition = new Position(4, 150, 100, 28);
+    public Position overlayPosition = new Position(4, 150);
+
+    @Expose
+    @ConfigOption(
+            name = "Overlay Text Color",
+            desc = "Toggle this to enable color-coded text."
+    )
+    @ConfigEditorBoolean
+    public boolean overlayTextColor = false;
 }

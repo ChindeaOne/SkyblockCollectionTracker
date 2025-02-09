@@ -48,6 +48,7 @@ loom {
 // Repositories
 repositories {
     mavenCentral()
+    mavenLocal()
     maven("https://repo.spongepowered.org/maven/")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven("https://repo.nea.moe/releases")
@@ -55,6 +56,11 @@ repositories {
     maven("https://jitpack.io") {
         content {
             includeGroupByRegex("(com|io)\\.github\\..*")
+        }
+    }
+    maven("https://maven.minecraftforge.net") {
+        metadataSources {
+            artifact()
         }
     }
 }
@@ -88,8 +94,8 @@ dependencies {
     }
 
     shadowModImpl(libs.moulconfig)
-    shadowImpl(libs.libautoupdate) {
-        exclude(module = "gson")
+    shadowImpl(libs.modrinthautoupdater) {
+        exclude(group = "gson")
     }
 
     shadowImpl("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
@@ -120,7 +126,6 @@ kotlin {
 }
 
 // Tasks
-
 tasks.compileJava {
     dependsOn(tasks.processResources)
 }
@@ -184,13 +189,14 @@ tasks.shadowJar {
     }
     exclude("META-INF/versions/**")
     relocate("io.github.notenoughupdates.moulconfig", "io.github.chindeaytb.collectiontracker.deps.moulconfig")
-    relocate("moe.nea.libautoupdate", "io.github.chindeaytb.collectiontracker.deps.libautoupdate")
+    relocate("io.github.chindeaytb.implementation", "io.github.chindeaytb.collectiontracker.deps.implementation")
 }
 
 blossom {
     replaceToken("sctVersion", project.version)
     replaceToken("@TOKEN_URL@", System.getenv("TOKEN_URL"))
     replaceToken("@COLLECTION_URL@", System.getenv("COLLECTION_URL"))
+    replaceToken("@BAZAAR_URL@", System.getenv("BAZAAR_URL"))
     replaceToken("@STATUS_URL@", System.getenv("STATUS_URL"))
     replaceToken("@AGENT@", System.getenv("AGENT"))
 }

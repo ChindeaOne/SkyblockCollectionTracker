@@ -9,5 +9,6 @@ build
 gradle.properties
 .gradle
 
-
+.devauth/*
+!.devauth/config.toml
 
