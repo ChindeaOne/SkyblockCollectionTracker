@@ -1,10 +1,10 @@
 package io.github.chindeaytb.collectiontracker.util
 
+import io.github.chindeaytb.collectiontracker.ModInitialization
 import io.github.chindeaytb.collectiontracker.commands.StartTracker.collection
 import io.github.chindeaytb.collectiontracker.config.core.Position
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
 import io.github.chindeaytb.collectiontracker.util.CollectionColors.colors
-import io.github.chindeaytb.collectiontracker.util.Hypixel.config
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.Gui
@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.GlStateManager
 
 object RenderUtils {
 
-    var position: Position = config!!.overlay.overlayPosition
+    var position: Position = ModInitialization.configManager.config!!.overlay.overlayPosition
 
     const val PADDING: Int = 5
     var maxWidth: Int = 0
@@ -43,7 +43,7 @@ object RenderUtils {
         GlStateManager.scale(position.scale, position.scale, 1.0f)
 
         if (TrackingHandlerClass.startTime != 0L) {
-            if (config!!.overlay.overlayTextColor) {
+            if (ModInitialization.configManager.config!!.overlay.overlayTextColor) {
                 renderColors(fontRenderer)
             } else {
                 renderStrings(fontRenderer)

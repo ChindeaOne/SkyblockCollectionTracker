@@ -1,5 +1,7 @@
 package io.github.chindeaytb.collectiontracker.util;
 
+import io.github.chindeaytb.collectiontracker.ModInitialization;
+import io.github.chindeaytb.collectiontracker.config.ModConfig;
 import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +18,8 @@ public class TextUtils {
     static List<String> overlayLines = new ArrayList<>();
 
     public static void updateStats() {
-        Overlay overlay = Objects.requireNonNull(Hypixel.INSTANCE.getConfig()).overlay;
+        ModConfig config = Objects.requireNonNull(ModInitialization.configManager.getConfig());
+        Overlay overlay = config.overlay;
 
         if (startTime == 0) {
             startTime = System.currentTimeMillis();
@@ -53,13 +56,13 @@ public class TextUtils {
                     break;
                 case 3:
                     if (moneyPerHour > 0) {
-                        if(Objects.requireNonNull(Hypixel.INSTANCE.getConfig()).bazaar.useBazaar){
+                        if(config.bazaar.useBazaar){
                             overlayLines.add("$/h (Bazaar): " + formatNumber(moneyPerHour));
                         } else {
                             overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHour));
                         }
                     } else {
-                        if(Objects.requireNonNull(Hypixel.INSTANCE.getConfig()).bazaar.useBazaar){
+                        if(config.bazaar.useBazaar){
                             overlayLines.add("$/h (Bazaar): Calculating...");
                         }
                         else{

@@ -1,5 +1,6 @@
 package io.github.chindeaytb.collectiontracker.gui.overlays;
 
+import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.util.Hypixel;
 import io.github.chindeaytb.collectiontracker.util.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -29,7 +30,7 @@ public class CollectionOverlay {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
-        if (!isTracking || !visible || Hypixel.INSTANCE.getConfig() == null) return;
+        if (!isTracking || !visible || ModInitialization.configManager.getConfig() == null) return;
 
         Minecraft mc = Minecraft.getMinecraft();
         FontRenderer fontRenderer = mc.fontRendererObj;
