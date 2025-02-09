@@ -38,7 +38,7 @@
   - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category. (WIP)
 
 - **Auto Updater**
-  - Implements [modrinthautoupdar](https://github.com/ChindeaYTB/modrinthautoupdater), a similar library to [libautoupdate](https://github.com/nea89o/libautoupdate).
+  - Implements [modrinthautoupdater](https://github.com/ChindeaYTB/modrinthautoupdater), a similar library to [libautoupdate](https://github.com/nea89o/libautoupdate).
   - The mod updates after Minecraft exits.
 ---
 
