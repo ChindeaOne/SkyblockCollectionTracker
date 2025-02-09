@@ -24,10 +24,10 @@
 
 ## Features
 - **MoulConfig GUI**
-  - Configure your tracking settings through the in-game GUI, accesible via `/sct`.
+  - Configure your tracking settings through the in-game GUI, accessible via `/sct`.
      
 - **Customizable overlay** 
-  - Enable color-coded text for each individual collection. (WIP)
+  - Enable color-coded text for each individual collection.
   - Configure what stats you want to see displayed in the Overlay category.
     
 - **Tracking mechanics**
@@ -36,6 +36,9 @@
 
 - **Choose your pricing**
   - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category. (WIP)
-    
+
+- **Auto Updater**
+  - Implements [modrinthautoupdar](https://github.com/ChindeaYTB/modrinthautoupdater), a similar library to [libautoupdate](https://github.com/nea89o/libautoupdate).
+  - The mod updates after Minecraft exits.
 ---
 
