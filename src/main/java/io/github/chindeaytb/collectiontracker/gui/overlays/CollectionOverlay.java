@@ -1,7 +1,6 @@
 package io.github.chindeaytb.collectiontracker.gui.overlays;
 
 import io.github.chindeaytb.collectiontracker.ModInitialization;
-import io.github.chindeaytb.collectiontracker.util.Hypixel;
 import io.github.chindeaytb.collectiontracker.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
