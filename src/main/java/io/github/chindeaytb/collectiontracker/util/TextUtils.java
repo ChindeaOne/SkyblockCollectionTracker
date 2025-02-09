@@ -56,23 +56,15 @@ public class TextUtils {
                     break;
                 case 3:
                     if (moneyPerHour > 0) {
-                        if(config.bazaar.useBazaar){
-                            overlayLines.add("$/h (Bazaar): " + formatNumber(moneyPerHour));
-                        } else {
-                            overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHour));
-                        }
+                        overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHour));
                     } else {
-                        if(config.bazaar.useBazaar){
-                            overlayLines.add("$/h (Bazaar): Calculating...");
-                        }
-                        else{
-                            overlayLines.add("$/h (NPC): Calculating...");
-                        }
+                        overlayLines.add("$/h (NPC): Calculating...");
                     }
                     break;
             }
         }
     }
+
     public static @NotNull List<String> getStrings() {
         updateStats();
         return overlayLines;
