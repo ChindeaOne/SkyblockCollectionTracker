@@ -4,6 +4,7 @@
 
 package io.github.chindeaytb.collectiontracker.util
 
+import io.github.chindeaytb.collectiontracker.autoupdate.UpdaterManager
 import io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay
 
 object ModulesLoader {
@@ -11,5 +12,6 @@ object ModulesLoader {
         add(CollectionOverlay())
         add(Hypixel)
         add(ServerUtils)
+        add(UpdaterManager)
     }
 }

@@ -94,9 +94,9 @@ dependencies {
     }
 
     shadowModImpl(libs.moulconfig)
-//    shadowModImpl(libs.modrinthautoupd) {
-//        exclude(group = "gson")
-//    }
+    shadowImpl(libs.modrinthautoupdater) {
+        exclude(group = "gson")
+    }
 
     shadowImpl("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
 
@@ -189,6 +189,7 @@ tasks.shadowJar {
     }
     exclude("META-INF/versions/**")
     relocate("io.github.notenoughupdates.moulconfig", "io.github.chindeaytb.collectiontracker.deps.moulconfig")
+    relocate("io.github.chindeaytb.implementation", "io.github.chindeaytb.collectiontracker.deps.implementation")
 }
 
 blossom {
