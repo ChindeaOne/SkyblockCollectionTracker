@@ -1,10 +1,9 @@
 package io.github.chindeaytb.collectiontracker.autoupdate
 
-import io.github.chindeaytb.UpdateSetup
 import io.github.chindeaytb.UpdateContext
+import io.github.chindeaytb.UpdateSetup
 import io.github.chindeaytb.UpdateTarget
 import io.github.chindeaytb.collectiontracker.ModInitialization
-import io.github.chindeaytb.collectiontracker.config.ModConfig
 import java.util.concurrent.CompletableFuture
 
 object UpdaterManager {
@@ -15,7 +14,7 @@ object UpdaterManager {
     private val context = UpdateContext(
         "sct",
         ModInitialization.version,
-        "none",
+        setUpdateStream(),
         ModInitialization.MODID,
         UpdateTarget.deleteAndSaveInTheSameFolder(UpdaterManager::class.java)
     )
@@ -24,15 +23,16 @@ object UpdaterManager {
         context.cleanup()
     }
 
-    fun checkUpdate(config: ModConfig?) {
-        val currentStream = config?.about?.update
-        if(currentStream != null){
-            if(currentStream == 2){
-                context.setStream("beta")
-            } else if(currentStream == 1){
-                context.setStream("release")
-            }
+    private fun setUpdateStream(): String{
+        val currentStream = ModInitialization.configManager.config?.about?.update
+        return when(currentStream){
+            1 -> "release"
+            2 -> "beta"
+            else -> "none"
         }
+    }
+
+    fun update() {
         activePromise = context.checkUpdate().thenAcceptAsync {
             potentialUpdate = it
             queueUpdate()
