@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.util.concurrent.CompletableFuture
 
 object Hypixel {
 
@@ -76,10 +77,12 @@ object Hypixel {
                         }
                     }
 
-                    logger.info("Update stream status: {}", ModInitialization.configManager.config?.about?.update)
+                    logger.info("Update stream status: {}", ModInitialization.configManager.config!!.about.update)
 
-                    if (ModInitialization.configManager.config?.about?.update != 0) {
-                        RepoUtils.checkForUpdates(ModInitialization.configManager.config?.about?.update ?: 0)
+                    if (ModInitialization.configManager.config!!.about.update != 0) {
+                        CompletableFuture.runAsync {
+                            RepoUtils.checkForUpdates(ModInitialization.configManager.config!!.about.update)
+                        }
 
                         if (isUpdateAvailable()) {
                             logger.info("New version found: ${RepoUtils.latestVersion}")
@@ -89,9 +92,15 @@ object Hypixel {
                             )
                             logger.info("The new version will be downloaded after closing the client.")
 
-                            UpdaterManager.checkUpdate(ModInitialization.configManager.config)
+                            UpdaterManager.update()
+                            ModInitialization.configManager.config!!.about.hasCheckedUpdate = false
 
                         } else {
+                            if(!ModInitialization.configManager.config!!.about.hasCheckedUpdate) {
+                                ChatUtils.sendMessage("§aThe mod has been updated successfully.")
+                                ModInitialization.configManager.config!!.about.hasCheckedUpdate = true
+                            }
+
                             logger.info("No new version found.")
                         }
                     } else{
