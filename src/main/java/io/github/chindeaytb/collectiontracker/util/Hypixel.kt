@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.util.concurrent.CompletableFuture
 
 object Hypixel {
 
@@ -76,24 +77,31 @@ object Hypixel {
                         }
                     }
 
-                    logger.info("Update stream status: {}", ModInitialization.configManager.config?.about?.update)
+                    logger.info("Update stream status: {}", ModInitialization.configManager.config!!.about.update)
 
-                    if (ModInitialization.configManager.config?.about?.update != 0) {
-                        RepoUtils.checkForUpdates(ModInitialization.configManager.config?.about?.update ?: 0)
+                    if (ModInitialization.configManager.config!!.about.update != 0) {
+                        CompletableFuture.runAsync {
+                            RepoUtils.checkForUpdates(ModInitialization.configManager.config!!.about.update)
+                        }.thenAcceptAsync {
+                            if (isUpdateAvailable()) {
+                                logger.info("New version found: ${RepoUtils.latestVersion}")
 
-                        if (isUpdateAvailable()) {
-                            logger.info("New version found: ${RepoUtils.latestVersion}")
+                                ChatUtils.sendMessage(
+                                    ChatComponentText("§eA new version for SkyblockCollectionTracker found: §a${RepoUtils.latestVersion}§e. It will be downloaded after closing the game.")
+                                )
+                                logger.info("The new version will be downloaded after closing the client.")
 
-                            ChatUtils.sendMessage(
-                                ChatComponentText("§eA new version for SkyblockCollectionTracker found: §a${RepoUtils.latestVersion}§e. It will be downloaded after closing the game.")
-                            )
-                            logger.info("The new version will be downloaded after closing the client.")
+                                UpdaterManager.update()
 
-                            UpdaterManager.checkUpdate(ModInitialization.configManager.config)
-
-                        } else {
-                            logger.info("No new version found.")
+                            } else {
+                                if(!ModInitialization.configManager.config!!.about.hasCheckedUpdate) {
+                                    ChatUtils.sendMessage("§aThe mod has been updated successfully.")
+                                    ModInitialization.configManager.config!!.about.hasCheckedUpdate = true
+                                }
+                                logger.info("No new version found.")
+                            }
                         }
+
                     } else{
                         logger.info("Update stream is disabled.")
                     }
