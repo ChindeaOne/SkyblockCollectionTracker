@@ -92,6 +92,7 @@ object Hypixel {
                                 logger.info("The new version will be downloaded after closing the client.")
 
                                 UpdaterManager.update()
+                                ModInitialization.configManager.config!!.about.hasCheckedUpdate = false
 
                             } else {
                                 if(!ModInitialization.configManager.config!!.about.hasCheckedUpdate) {
