@@ -1,7 +1,7 @@
 package io.github.chindeaytb.collectiontracker.autoupdate
 
-import io.github.chindeaytb.UpdateSetup
 import io.github.chindeaytb.UpdateContext
+import io.github.chindeaytb.UpdateSetup
 import io.github.chindeaytb.UpdateTarget
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import java.util.concurrent.CompletableFuture

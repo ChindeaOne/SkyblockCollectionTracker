@@ -79,8 +79,8 @@ public class HypixelApiFetcher {
         conn.setRequestProperty("X-COLLECTION", collection);
         conn.setRequestProperty("User-Agent", URLManager.AGENT);
 
-        conn.setConnectTimeout(15000); // 15 seconds
-        conn.setReadTimeout(15000); // 15 seconds
+        conn.setConnectTimeout(5000); // 5 seconds
+        conn.setReadTimeout(5000); // 5 seconds
 
         conn.setRequestProperty("Content-Type", "application/json");
         return conn;
