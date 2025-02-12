@@ -15,14 +15,17 @@ public class NPCPrice {
         collectionPrices.put("feather", 3);
         collectionPrices.put("leather", 3);
         collectionPrices.put("melon", 2);
-        collectionPrices.put("mushroom", 5);
-        collectionPrices.put("mutton", 5);
+        collectionPrices.put("red mushroom", 5);
+        collectionPrices.put("brown mushroom", 5);
+        collectionPrices.put("raw rabbit", 4);
+        collectionPrices.put("rabbit foot", 5);
+        collectionPrices.put("rabbit hide", 5);
         collectionPrices.put("nether wart", 4);
+        collectionPrices.put("mutton", 5);
         collectionPrices.put("potato", 3);
         collectionPrices.put("pumpkin", 10);
         collectionPrices.put("raw chicken", 4);
         collectionPrices.put("porkchop", 4);
-        collectionPrices.put("raw rabbit", 4);
         collectionPrices.put("seeds", 3);
         collectionPrices.put("sugar cane", 4);
         collectionPrices.put("wheat", 6);
@@ -48,7 +51,7 @@ public class NPCPrice {
         collectionPrices.put("glacite", 12);
         collectionPrices.put("glowstone", 2);
         collectionPrices.put("gold", 3);
-        collectionPrices.put("gravel", 3);
+        collectionPrices.put("flint", 4);
         collectionPrices.put("hard stone", 1);
         collectionPrices.put("ice", 1);
         collectionPrices.put("iron", 2);
@@ -102,20 +105,5 @@ public class NPCPrice {
 
     public static int getNpcPrice(String collection) {
         return collectionPrices.getOrDefault(collection, -1);
-    }
-
-    public static boolean notRiftCollection(String collection) {
-        switch (collection) {
-            case "wilted berberis":
-            case "living metal heart":
-            case "caducous stem":
-            case "agaricus cap":
-            case "hemovibe":
-            case "half-eaten carrot":
-            case "timite":
-                return false;
-            default:
-                return true;
-        }
     }
 }

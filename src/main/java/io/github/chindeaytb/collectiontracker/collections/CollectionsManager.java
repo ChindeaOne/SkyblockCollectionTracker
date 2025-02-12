@@ -3,7 +3,7 @@ package io.github.chindeaytb.collectiontracker.collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ValidCollectionsManager {
+public class CollectionsManager {
 
     private static final Map<String, Boolean> validCollections = new HashMap<>();
 
@@ -17,8 +17,11 @@ public class ValidCollectionsManager {
         validCollections.put("pumpkin", true);
         validCollections.put("wheat", true);
         validCollections.put("seeds", true);
-        validCollections.put("mushroom", true);
+        validCollections.put("red mushroom", true);
+        validCollections.put("brown mushroom", true);
         validCollections.put("raw rabbit", true);
+        validCollections.put("rabbit foot", true);
+        validCollections.put("rabbit hide", true);
         validCollections.put("nether wart", true);
         validCollections.put("mutton", true);
         validCollections.put("melon", true);
@@ -55,7 +58,7 @@ public class ValidCollectionsManager {
         validCollections.put("cobblestone", true);
         validCollections.put("glowstone", true);
         validCollections.put("gold", true);
-        validCollections.put("gravel", true);
+        validCollections.put("flint", true);
         validCollections.put("hard stone", true);
         validCollections.put("mithril", true);
         validCollections.put("emerald", true);
@@ -111,5 +114,20 @@ public class ValidCollectionsManager {
 
     public static boolean isValidCollection(String collectionName) {
         return validCollections.getOrDefault(collectionName, false);
+    }
+
+    public static boolean notRiftCollection(String collection) {
+        switch (collection) {
+            case "wilted berberis":
+            case "living metal heart":
+            case "caducous stem":
+            case "agaricus cap":
+            case "hemovibe":
+            case "half-eaten carrot":
+            case "timite":
+                return false;
+            default:
+                return true;
+        }
     }
 }
