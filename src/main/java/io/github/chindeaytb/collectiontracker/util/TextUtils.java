@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingRates.*;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingRates.*;
 
 public class TextUtils {
 
