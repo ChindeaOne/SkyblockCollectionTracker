@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.*;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingRates.*;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 
 public class TextUtils {
@@ -55,10 +55,18 @@ public class TextUtils {
                     }
                     break;
                 case 3:
-                    if (moneyPerHour > 0) {
-                        overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHour));
+                    if (moneyPerHourNPC > 0 && moneyPerHourBazaar > 0) {
+                        if (config.bazaar.useBazaar) {
+                            overlayLines.add("$/h (Bazaar): " + formatNumber(moneyPerHourBazaar));
+                        } else {
+                            overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHourNPC));
+                        }
                     } else {
-                        overlayLines.add("$/h (NPC): Calculating...");
+                        if (config.bazaar.useBazaar) {
+                            overlayLines.add("$/h (Bazaar): Calculating...");
+                        } else {
+                            overlayLines.add("$/h (NPC): Calculating...");
+                        }
                     }
                     break;
             }
