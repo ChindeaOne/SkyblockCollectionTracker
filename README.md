@@ -35,7 +35,7 @@
   - Need a break? Simply pause tracking with `/sct pause` and resume anytime with `/sct resume`.
 
 - **Choose your pricing**
-  - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category. (WIP)
+  - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category.
 
 - **Auto Updater**
   - Implements [modrinthautoupdater](https://github.com/ChindeaYTB/modrinthautoupdater), a similar library to [libautoupdate](https://github.com/nea89o/libautoupdate).
