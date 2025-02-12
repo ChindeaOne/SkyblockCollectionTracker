@@ -82,27 +82,27 @@ object Hypixel {
                     if (ModInitialization.configManager.config!!.about.update != 0) {
                         CompletableFuture.runAsync {
                             RepoUtils.checkForUpdates(ModInitialization.configManager.config!!.about.update)
-                        }
+                        }.thenAcceptAsync {
+                            if (isUpdateAvailable()) {
+                                logger.info("New version found: ${RepoUtils.latestVersion}")
 
-                        if (isUpdateAvailable()) {
-                            logger.info("New version found: ${RepoUtils.latestVersion}")
+                                ChatUtils.sendMessage(
+                                    ChatComponentText("§eA new version for SkyblockCollectionTracker found: §a${RepoUtils.latestVersion}§e. It will be downloaded after closing the game.")
+                                )
+                                logger.info("The new version will be downloaded after closing the client.")
 
-                            ChatUtils.sendMessage(
-                                ChatComponentText("§eA new version for SkyblockCollectionTracker found: §a${RepoUtils.latestVersion}§e. It will be downloaded after closing the game.")
-                            )
-                            logger.info("The new version will be downloaded after closing the client.")
+                                UpdaterManager.update()
+                                ModInitialization.configManager.config!!.about.hasCheckedUpdate = false
 
-                            UpdaterManager.update()
-                            ModInitialization.configManager.config!!.about.hasCheckedUpdate = false
-
-                        } else {
-                            if(!ModInitialization.configManager.config!!.about.hasCheckedUpdate) {
-                                ChatUtils.sendMessage("§aThe mod has been updated successfully.")
-                                ModInitialization.configManager.config!!.about.hasCheckedUpdate = true
+                            } else {
+                                if(!ModInitialization.configManager.config!!.about.hasCheckedUpdate) {
+                                    ChatUtils.sendMessage("§aThe mod has been updated successfully.")
+                                    ModInitialization.configManager.config!!.about.hasCheckedUpdate = true
+                                }
+                                logger.info("No new version found.")
                             }
-
-                            logger.info("No new version found.")
                         }
+
                     } else{
                         logger.info("Update stream is disabled.")
                     }

@@ -112,7 +112,6 @@ object RenderUtils {
     private fun renderStrings(
         fontRenderer: FontRenderer
     ) {
-
         val overlayLines = TextUtils.getStrings()
         if (overlayLines.isEmpty()) return
 
@@ -120,11 +119,37 @@ object RenderUtils {
         var scaledOverlayY: Int = (position.y / position.scale).toInt()
 
         for (line in overlayLines) {
-            fontRenderer.drawString(line, scaledOverlayX, scaledOverlayY, 0xFFFFFF)
+            val splitIndex = line.lastIndexOf(": ")
+            if (splitIndex != -1) {
+                val prefix = line.substring(0, splitIndex + 2)
+                val numberPart = line.substring(splitIndex + 2)
+
+                fontRenderer.drawString(prefix, scaledOverlayX, scaledOverlayY, 0x55FF55)
+
+                val prefixWidth = fontRenderer.getStringWidth(prefix)
+                fontRenderer.drawString(numberPart, scaledOverlayX + prefixWidth, scaledOverlayY, 0xFFFFFF)
+            } else {
+                fontRenderer.drawString(line, scaledOverlayX, scaledOverlayY, 0xFFFFFF)
+            }
+
             scaledOverlayY += fontRenderer.FONT_HEIGHT
         }
-        fontRenderer.drawString(TextUtils.uptimeString(), scaledOverlayX, scaledOverlayY, 0xFFFFFF)
+
+        val uptimeString = TextUtils.uptimeString()
+        val splitIndex = uptimeString.lastIndexOf(": ")
+        if (splitIndex != -1) {
+            val prefix = uptimeString.substring(0, splitIndex + 2)
+            val numberPart = uptimeString.substring(splitIndex + 2)
+
+            fontRenderer.drawString(prefix, scaledOverlayX, scaledOverlayY, 0x55FF55)
+
+            val prefixWidth = fontRenderer.getStringWidth(prefix)
+            fontRenderer.drawString(numberPart, scaledOverlayX + prefixWidth, scaledOverlayY, 0xFFFFFF)
+        } else {
+            fontRenderer.drawString(uptimeString, scaledOverlayX, scaledOverlayY, 0xFFFFFF)
+        }
     }
+
 
     private fun renderColors(
         fontRenderer: FontRenderer

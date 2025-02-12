@@ -23,8 +23,8 @@ public class TokenFetcher {
         connection.setRequestProperty("X-UUID", PlayerData.INSTANCE.getPlayerUUID());
         connection.setRequestProperty("User-Agent", URLManager.AGENT);
 
-        connection.setConnectTimeout(15000); // 15 seconds
-        connection.setReadTimeout(15000); // 15 seconds
+        connection.setConnectTimeout(5000); // 5 seconds
+        connection.setReadTimeout(5000); // 5 seconds
 
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {

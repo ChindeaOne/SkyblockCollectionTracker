@@ -14,7 +14,7 @@ object UpdaterManager {
     private val context = UpdateContext(
         "sct",
         ModInitialization.version,
-        setUpdateStream(),
+        "none",
         ModInitialization.MODID,
         UpdateTarget.deleteAndSaveInTheSameFolder(UpdaterManager::class.java)
     )
@@ -23,9 +23,9 @@ object UpdaterManager {
         context.cleanup()
     }
 
-    private fun setUpdateStream(): String{
-        val currentStream = ModInitialization.configManager.config?.about?.update
-        return when(currentStream){
+    private fun setUpdateStream(): String {
+        val currentStream = ModInitialization.configManager.config!!.about.update
+        return when (currentStream) {
             1 -> "release"
             2 -> "beta"
             else -> "none"
@@ -33,6 +33,8 @@ object UpdaterManager {
     }
 
     fun update() {
+        val stream = setUpdateStream()
+        context.setStream(stream)
         activePromise = context.checkUpdate().thenAcceptAsync {
             potentialUpdate = it
             queueUpdate()

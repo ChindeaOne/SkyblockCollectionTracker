@@ -21,7 +21,7 @@ public class DataFetcher {
     private static final Logger logger = LogManager.getLogger(DataFetcher.class);
     private static final Map<CacheKey, String> collectionCache = new HashMap<>();
     private static final Map<CacheKey, Long> cacheTimestamps = new HashMap<>();
-    private static final long CACHE_LIFESPAN = 120000; // 2 minutes
+    private static final long CACHE_LIFESPAN = 150000; // 2.5 minutes
     public static ScheduledExecutorService scheduler;
 
 
@@ -49,7 +49,7 @@ public class DataFetcher {
                 return;
             }
 
-            TrackCollection.displayCollection(jsonData);
+            TrackingRates.displayCollection(jsonData);
             logger.info("Data successfully fetched or retrieved and displayed for player with UUID: {} and collection: {}", playerUUID, collection);
 
         } catch (Exception e) {

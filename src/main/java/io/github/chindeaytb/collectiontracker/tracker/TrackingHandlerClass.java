@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.DataFetcher.scheduler;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackCollection.*;
+import static io.github.chindeaytb.collectiontracker.tracker.TrackingRates.*;
 
 public class TrackingHandlerClass {
 
