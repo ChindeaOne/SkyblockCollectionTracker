@@ -39,6 +39,6 @@
 
 - **Auto Updater**
   - Implements [modrinthautoupdater](https://github.com/ChindeaYTB/modrinthautoupdater), a similar library to [libautoupdate](https://github.com/nea89o/libautoupdate).
-  - The mod updates after Minecraft exits.
+  - The mod updates after closing the game.
 ---
 
