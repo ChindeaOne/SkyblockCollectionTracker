@@ -29,5 +29,4 @@ public class About {
 
     @Expose
     public boolean hasCheckedUpdate = false;
-
 }
