@@ -51,7 +51,7 @@ object CollectionColors {
         put("gold", 0xFFD700) // Gold
         put("gravel", 0xA9A9A9) // Dark Gray
         put("hard stone", 0x708090) // Slate Gray
-        put("mithril", 0x2BCFDF) // Light Blue
+        put("mithril", 0x41DAA4) // Light Blue
         put("emerald", 0x50C878) // Emerald Green
         put("red sand", 0xE97451) // Burnt Orange
         put("ice", 0xADD8E6) // Light Blue
