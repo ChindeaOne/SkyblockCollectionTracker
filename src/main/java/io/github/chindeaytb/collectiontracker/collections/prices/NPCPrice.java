@@ -18,8 +18,6 @@ public class NPCPrice {
         collectionPrices.put("red mushroom", 5);
         collectionPrices.put("brown mushroom", 5);
         collectionPrices.put("raw rabbit", 4);
-        collectionPrices.put("rabbit foot", 5);
-        collectionPrices.put("rabbit hide", 5);
         collectionPrices.put("nether wart", 4);
         collectionPrices.put("mutton", 5);
         collectionPrices.put("potato", 3);

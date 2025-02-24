@@ -20,8 +20,6 @@ public class CollectionsManager {
         validCollections.put("red mushroom", true);
         validCollections.put("brown mushroom", true);
         validCollections.put("raw rabbit", true);
-        validCollections.put("rabbit foot", true);
-        validCollections.put("rabbit hide", true);
         validCollections.put("nether wart", true);
         validCollections.put("mutton", true);
         validCollections.put("melon", true);

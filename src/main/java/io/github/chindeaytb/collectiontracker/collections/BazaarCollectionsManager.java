@@ -35,8 +35,6 @@ public class BazaarCollectionsManager {
         enchantedRecipe.put("red mushroom", 160);
         enchantedRecipe.put("brown mushroom", 160);
         enchantedRecipe.put("raw rabbit", 160);
-        enchantedRecipe.put("rabbit foot", 160);
-        enchantedRecipe.put("rabbit hide", 576);
         enchantedRecipe.put("nether wart", 160);
         enchantedRecipe.put("mutton", 160);
         enchantedRecipe.put("melon", 160);
