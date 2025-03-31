@@ -1,5 +1,6 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
+import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
 import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -18,14 +19,16 @@ public class SCT_Commands extends CommandBase {
     private final StopTracker stopTracker;
     private final PauseTracker pauseTracker;
     private final ResumeTracker resumeTracker;
+    private final CollectionList collectionList;
     private final GuiMenu guiMenu;
 
-    public SCT_Commands(CommandHelper commandHelper, StartTracker startTracker, StopTracker stopTracker, PauseTracker pauseTracker, ResumeTracker resumeTracker, GuiMenu guiMenu) {
+    public SCT_Commands(CommandHelper commandHelper, StartTracker startTracker, StopTracker stopTracker, PauseTracker pauseTracker, ResumeTracker resumeTracker, CollectionList collectionList, GuiMenu guiMenu) {
         this.commandHelper = commandHelper;
         this.startTracker = startTracker;
         this.stopTracker = stopTracker;
         this.pauseTracker = pauseTracker;
         this.resumeTracker = resumeTracker;
+        this.collectionList = collectionList;
         this.guiMenu = guiMenu;
     }
 
@@ -42,11 +45,11 @@ public class SCT_Commands extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop", "pause", "resume");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "track", "stop", "pause", "resume", "collections");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
-            return CommandBase.getListOfStringsMatchingLastWord(args, "cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane", "pumpkin", "wheat", "seeds", "red mushroom", "brown mushroom", "raw rabbit", "nether wart", "mutton", "melon", "potato", "leather", "porkchop", "feather", "lapis lazuli", "redstone", "umber", "coal", "mycelium", "end stone", "quartz", "sand", "iron", "amber", "topaz", "sapphire", "amethyst", "jasper", "ruby", "jade", "opal", "aquamarine", "citrine", "onyx", "peridot" , "tungsten", "obsidian", "diamond", "cobblestone", "glowstone", "gold", "flint", "hard stone", "mithril", "emerald", "red sand", "ice", "glacite", "sulphur", "netherrack", "ender pearl", "chili pepper", "slimeball", "magma cream", "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone", "blaze rod", "string", "acacia", "spruce", "jungle", "birch", "oak", "dark oak", "lily pad", "prismarine shard", "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals", "clay", "sponge", "wilted berberis", "living metal heart", "caducous stem", "agaricus cap", "hemovibe", "half-eaten carrot", "timite");
+            return CommandBase.getListOfStringsMatchingLastWord(args, CollectionsManager.COLLECTIONS);
         }
         return Collections.emptyList();
     }
@@ -74,6 +77,9 @@ public class SCT_Commands extends CommandBase {
                     break;
                 case "resume":
                     resumeTracker.processCommand(sender, args);
+                    break;
+                case "collections":
+                    collectionList.processCommand(sender, args);
                     break;
                 default:
                     ChatUtils.INSTANCE.sendMessage("Unknown command. Use /sct help.");

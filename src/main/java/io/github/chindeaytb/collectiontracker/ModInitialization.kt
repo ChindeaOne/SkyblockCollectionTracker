@@ -42,8 +42,9 @@ class ModInitialization {
         val stopTracker = StopTracker()
         val pauseTracker = PauseTracker()
         val resumeTracker = ResumeTracker()
+        val collectionList = CollectionList()
         val guiMenu = GuiMenu()
-        ClientCommandHandler.instance.registerCommand(SCT_Commands(commandHelper, startTracker, stopTracker, pauseTracker, resumeTracker, guiMenu))
+        ClientCommandHandler.instance.registerCommand(SCT_Commands(commandHelper, startTracker, stopTracker, pauseTracker, resumeTracker, collectionList, guiMenu))
 
         logger.info("SkyblockCollectionTracker initialized.")
 
