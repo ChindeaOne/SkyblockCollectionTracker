@@ -38,7 +38,7 @@ public class StartTracker extends CommandBase {
             }
             try {
                 if (!ServerStatus.checkServer()) {
-                    ChatUtils.INSTANCE.sendMessage("§cYou can't use any commands for this mod at the moment.");
+                    ChatUtils.INSTANCE.sendMessage("§cYou can't use any tracking commands at the moment.");
                     return;
                 }
 
@@ -59,11 +59,11 @@ public class StartTracker extends CommandBase {
                     if (!isTracking && !isPaused) {
                         collection = keyBuilder.toString().trim().toLowerCase();
                         if (!CollectionsManager.isValidCollection(collection)) {
-                            ChatUtils.INSTANCE.sendMessage("§4" + collection + " collection is not supported!");
+                            ChatUtils.INSTANCE.sendMessage("§4" + collection + " collection is not supported! Use /sct collections to see all supported collections.");
                         }
                         if (Objects.requireNonNull(ModInitialization.configManager.getConfig()).bazaar.useBazaar) {
                            if (!FetchBazaarPrice.checkBazaarType(collection)) {
-                               ChatUtils.INSTANCE.sendMessage("§c" + collection + " doesn't have an enchanted block variant in bazaar. Please change the type.");
+                               ChatUtils.INSTANCE.sendMessage("§c" + collection + " doesn't have an enchanted block variant in bazaar. Please change the type in the Bazaar category.");
                            } else {
                                TrackingHandlerClass.startTracking(sender);
                            }

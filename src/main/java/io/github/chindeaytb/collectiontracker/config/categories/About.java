@@ -13,14 +13,14 @@ public class About {
     public transient Void currentVersion = null;
 
     @Expose
-    @ConfigOption(name = "§aInfo", desc = "This mod is meant to track (almost) any collection that exists. Helps a lot if you are lazy to check your stats.")
+    @ConfigOption(name = "§aInfo", desc = "This mod is meant to track (almost) any collection that exists. You can also use it as a money tracker.")
     @ConfigEditorInfoText()
     public boolean info = true;
 
     @Expose
     @ConfigOption(
             name = "Update Stream",
-            desc = "Choose between getting notification about latest or latest beta versions."
+            desc = "Choose which type of notifications you want to receive about newer versions of the mod."
     )
     @ConfigEditorDropdown(
             values = {"None", "Full releases", "Beta releases"}

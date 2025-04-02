@@ -7,7 +7,7 @@ import io.github.moulberry.moulconfig.annotations.ConfigOption;
 @SuppressWarnings("unused")
 public class GUIConfig {
 
-    @ConfigOption(name = "Edit GUI Location", desc = "Allows the player to change the position of the tracker.")
+    @ConfigOption(name = "Edit GUI Location", desc = "Allows the player to change the position of the overlay.")
     @ConfigEditorButton(buttonText = "Edit")
     public Runnable positions = GuiManager::openGuiPositionEditor;
 

@@ -19,7 +19,7 @@ public class Bazaar {
     @Expose
     @ConfigOption(
             name = "Select Bazaar Type",
-            desc = "Select weather you want to use enchanted or enchanted block version"
+            desc = "Select which type of bazaar version for the collection to use"
     )
     @ConfigEditorDropdown(
         values = {"Enchanted version", "Enchanted block version"}

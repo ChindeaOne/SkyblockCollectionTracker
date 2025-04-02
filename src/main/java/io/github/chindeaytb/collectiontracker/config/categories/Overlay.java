@@ -21,7 +21,7 @@ public class Overlay {
     @Expose
     @ConfigOption(
             name = "Overlay Text",
-            desc = "Drag text to change the appearance of the Overlay."
+            desc = "Drag text to change the appearance of the overlay."
     )
     @ConfigEditorDraggableList(
             exampleText = {

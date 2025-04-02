@@ -29,7 +29,8 @@ public class CollectionList extends CommandBase {
     }
 
     private void sendCollectionList(ICommandSender sender) {
-        ChatUtils.INSTANCE.sendMessage("§aThese are all the collections:");
+        ChatUtils.INSTANCE.sendMessage("§aList of all collections available:");
+        sender.addChatMessage(new ChatComponentText(""));
 
         Map<String, String> categoryColors = new HashMap<>();
         categoryColors.put("Farming", "§a");
