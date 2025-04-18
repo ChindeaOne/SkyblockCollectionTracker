@@ -6,10 +6,12 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Stream;
 
 public class SCT_Commands extends CommandBase {
 
@@ -49,7 +51,11 @@ public class SCT_Commands extends CommandBase {
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("track")) {
-            return CommandBase.getListOfStringsMatchingLastWord(args, CollectionsManager.COLLECTIONS);
+            return CommandBase.getListOfStringsMatchingLastWord(args, Stream.concat(
+                    Arrays.stream(CollectionsManager.COLLECTIONS),
+                    Arrays.stream(CollectionsManager.SACK_COLLECTIONS)
+            ).toArray(String[]::new));
+
         }
         return Collections.emptyList();
     }
