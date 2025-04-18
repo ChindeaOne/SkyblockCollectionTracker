@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
         maven("https://oss.sonatype.org/content/repositories/snapshots")
@@ -27,10 +28,10 @@ pluginManagement {
 // Plugins block for managing plugin versions and applying them
 plugins {
     id("dev.architectury.architectury-pack200") version "0.1.3"
-    id("gg.essential.loom") version "1.6.+" apply false
     id("net.kyori.blossom") version "1.3.2" apply false
+    id("gg.essential.loom") version "1.6.9999" apply false
     kotlin("jvm") version "2.0.0" apply false
-}
+}                                                                              
 
 // Set the root project name
 rootProject.name = "SkyblockCollectionTracker"
