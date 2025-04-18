@@ -17,6 +17,9 @@ import java.net.URL;
 import java.util.Objects;
 
 public class FetchBazaarPrice {
+
+    public static boolean hasBazaarPrice = true;
+
     private static final Logger logger = LogManager.getLogger(FetchBazaarPrice.class);
 
     public static String fetchPrice(String uuid, String token, String collection) {
@@ -43,9 +46,6 @@ public class FetchBazaarPrice {
                 }
                 in.close();
                 conn.disconnect();
-                if (content.toString().contains("Collection type not supported.")) {
-                    ChatUtils.INSTANCE.sendMessage("Collection type not supported.");
-                }
                 logger.error("Server responded with code 400: {}", content.toString());
             } else if (responseCode == 401) {
                 logger.warn("Invalid or expired token. Fetching a new one and retrying...");
@@ -96,6 +96,7 @@ public class FetchBazaarPrice {
             if (responseCode == 200) {
                 return true;
             } else if (responseCode == 400) {
+                hasBazaarPrice = false;
                 return false;
             }
         } catch (Exception e) {

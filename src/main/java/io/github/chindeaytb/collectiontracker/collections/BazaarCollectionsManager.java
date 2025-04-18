@@ -100,6 +100,10 @@ public class BazaarCollectionsManager {
         enchantedRecipe.put("clay", 160);
         enchantedRecipe.put("sponge", 40);
 
+        // Sacks
+        enchantedRecipe.put("titanium", 160);
+        enchantedRecipe.put("shark fin", 160);
+
         // Enchanted Block Recipes
         // Farming
         enchantedBlockRecipe.put("cocoa", 20480);
@@ -150,5 +154,8 @@ public class BazaarCollectionsManager {
         enchantedBlockRecipe.put("salmon", 25600);
         enchantedBlockRecipe.put("clay", 25600);
         enchantedBlockRecipe.put("sponge", 1024);
+
+        // Sacks
+        enchantedBlockRecipe.put("titanium", 12800);
     }
 }
