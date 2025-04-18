@@ -99,6 +99,21 @@ public class NPCPrice {
         collectionPrices.put("raw fish", 6);
         collectionPrices.put("raw salmon", 10);
         collectionPrices.put("sponge", 50);
+
+        // Sacks
+        collectionPrices.put("cropie", 25000);
+        collectionPrices.put("squash", 75000);
+        collectionPrices.put("rabbit foot", 5);
+        collectionPrices.put("rabbit hide", 5);
+        collectionPrices.put("titanium", 20);
+        collectionPrices.put("refined mineral", 2000);
+        collectionPrices.put("glossy gemstone", 4000);
+        collectionPrices.put("ancient claw", 200);
+        collectionPrices.put("kuudra teeth", 500);
+        collectionPrices.put("plasma", 25000);
+        collectionPrices.put("volta", 1111);
+        collectionPrices.put("yoggie", 100);
+        collectionPrices.put("agarimoo tongue", 2050);
     }
 
     public static int getNpcPrice(String collection) {
