@@ -39,6 +39,7 @@ public class CollectionList extends CommandBase {
         categoryColors.put("Foraging", "§6");
         categoryColors.put("Fishing", "§3");
         categoryColors.put("Rift", "§5");
+        categoryColors.put("Sacks", "§7");
 
         Map<String, List<String>> categorizedCollections = new LinkedHashMap<>();
         categorizedCollections.put("Farming", Arrays.asList("cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane", "pumpkin", "wheat", "seeds", "red mushroom", "brown mushroom", "raw rabbit", "nether wart", "mutton", "melon", "potato", "leather", "porkchop", "feather"));
@@ -47,6 +48,7 @@ public class CollectionList extends CommandBase {
         categorizedCollections.put("Foraging", Arrays.asList("acacia", "spruce", "jungle", "birch", "oak", "dark oak"));
         categorizedCollections.put("Fishing", Arrays.asList("lily pad", "prismarine shard", "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals", "clay", "sponge"));
         categorizedCollections.put("Rift", Arrays.asList("wilted berberis", "living metal heart", "caducous stem", "agaricus cap", "hemovibe", "half-eaten carrot", "timite"));
+        categorizedCollections.put("Sacks", Arrays.asList("cropie", "squash", "rabbit foot", "rabbit hide", "titanium", "refined mineral", "glossy gemstone", "sludge juice", "ancient claw", "kuudra teeth", "plasma", "volta", "yoggie", "agarimoo tongue", "nurse shark tooth", "blue shark tooth", "tiger shark tooth", "shark fin", "chum", "carnival ticket", "white gift", "green gift", "red gift"));
 
         for (Map.Entry<String, List<String>> entry : categorizedCollections.entrySet()) {
             String category = entry.getKey();
@@ -61,7 +63,6 @@ public class CollectionList extends CommandBase {
             sender.addChatMessage(new ChatComponentText(""));
         }
     }
-
 
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender sender) {

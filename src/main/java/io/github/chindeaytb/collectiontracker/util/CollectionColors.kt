@@ -101,5 +101,30 @@ object CollectionColors {
         put("hemovibe", 0xDC1414) // Crimson
         put("half-eaten carrot", 0xFFA500) // Orange
         put("timite", 0x4682B4) // Steel Blue
+
+        // Sacks
+        put("cropie", 0xD36827) // Wheat Brown
+        put("squash", 0x288114) // Green
+        put("rabbit foot", 0xD8BD25 ) // Light Yellow
+        put("rabbit hide", 0xE6D8B7) // Beige
+        put("titanium", 0xC8C7BF) // Light Gray
+        put("refined mineral", 0x25B0D8) // Light Blue
+        put("glossy gemstone", 0xAD25D8) // Purple
+        put("sludge juice", 0x44EB4E) // Light Green
+        put("ancient claw", 0x2D2F2D) // Dark Gray
+        put("kuudra teeth", 0xC5BBAB) // Tan
+        put("plasma", 0x42A8C9) // Cyan
+        put("volta", 0x49CCE6) // Light Blue
+        put("yoggie", 0xD46322) // Orange
+        put("agarimoo tongue", 0xEB1D1D) // Red
+        put("nurse shark tooth", 0xD5E4EC) // Light Blue
+        put("blue shark tooth", 0xD5E4EC) // Light Blue
+        put("tiger shark tooth", 0xD5E4EC) // Light Blue
+        put("shark fin", 0x4682B4) // Steel Blue
+        put("chum", 0xEA3A7A) // Pink
+        put("carnival ticket", 0xE8CB3A) // Tan
+        put("white gift", 0xFFFFFF) // White
+        put("green gift", 0x00FF00) // Green
+        put("red gift", 0xFF0000) // Red
     }
 }
