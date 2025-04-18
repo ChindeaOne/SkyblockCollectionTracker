@@ -1,6 +1,8 @@
 package io.github.chindeaytb.collectiontracker.util;
 
 import io.github.chindeaytb.collectiontracker.ModInitialization;
+import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
+import io.github.chindeaytb.collectiontracker.collections.prices.NPCPrice;
 import io.github.chindeaytb.collectiontracker.config.ModConfig;
 import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +14,7 @@ import java.util.Objects;
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingRates.*;
+import static io.github.chindeaytb.collectiontracker.api.bazaarapi.FetchBazaarPrice.hasBazaarPrice;
 
 public class TextUtils {
 
@@ -34,36 +37,39 @@ public class TextUtils {
         for (int id : overlay.statsText) {
             switch (id) {
                 case 0:
-                    if (collection != null && collectionAmount >= 0) {
-                        overlayLines.add(formatCollectionName(collection) + " collection: " + formatNumber(collectionAmount));
+                    if (CollectionsManager.collection_source.equals("collection") && collection != null) {
+                        String collectionText = collectionAmount >= 0
+                                ? formatCollectionName(collection) + " collection: " + formatNumber(collectionAmount)
+                                : formatCollectionName(collection) + " collection: Calculating...";
+                        overlayLines.add(collectionText);
                     }
                     break;
                 case 1:
                     if (collection != null) {
-                        if (collectionMade > 0) {
-                            overlayLines.add(formatCollectionName(collection) + " collection (session): " + formatNumber(collectionMade));
-                        } else {
-                            overlayLines.add(formatCollectionName(collection) + " collection (session): Calculating...");
-                        }
+                        String sessionText = collectionMade > 0
+                                ? formatCollectionName(collection) + " collection (session): " + formatNumber(collectionMade)
+                                : formatCollectionName(collection) + " collection (session): Calculating...";
+                        overlayLines.add(sessionText);
                     }
                     break;
                 case 2:
-                    if (collectionPerHour > 0) {
-                        overlayLines.add("Coll/h: " + formatNumber(collectionPerHour));
-                    } else {
-                        overlayLines.add("Coll/h: Calculating...");
-                    }
+                    String perHourText = collectionPerHour > 0
+                            ? "Coll/h: " + formatNumber(collectionPerHour)
+                            : "Coll/h: Calculating...";
+                    overlayLines.add(perHourText);
                     break;
                 case 3:
-                    if (moneyPerHourNPC > 0 && moneyPerHourBazaar > 0) {
-                        if (config.bazaar.useBazaar) {
+                    boolean hasNpcPrice = NPCPrice.getNpcPrice(collection) != -1;
+
+                    if (config.bazaar.useBazaar && hasBazaarPrice) {
+                        if (moneyPerHourBazaar > 0) {
                             overlayLines.add("$/h (Bazaar): " + formatNumber(moneyPerHourBazaar));
                         } else {
-                            overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHourNPC));
-                        }
-                    } else {
-                        if (config.bazaar.useBazaar) {
                             overlayLines.add("$/h (Bazaar): Calculating...");
+                        }
+                    } else if (hasNpcPrice) {
+                        if (moneyPerHourNPC > 0) {
+                            overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHourNPC));
                         } else {
                             overlayLines.add("$/h (NPC): Calculating...");
                         }
