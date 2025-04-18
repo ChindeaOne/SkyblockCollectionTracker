@@ -49,8 +49,8 @@ public class DataFetcher {
                 return;
             }
 
-            TrackingRates.displayCollection(jsonData);
             logger.info("Data successfully fetched or retrieved and displayed for player with UUID: {} and collection: {}", playerUUID, collection);
+            TrackingRates.displayCollection(jsonData);
 
         } catch (Exception e) {
             logger.error("Error fetching data from the Hypixel API: {}", e.getMessage(), e);

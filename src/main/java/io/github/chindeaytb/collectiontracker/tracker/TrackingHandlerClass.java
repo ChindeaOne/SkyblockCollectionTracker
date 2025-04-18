@@ -69,7 +69,6 @@ public class TrackingHandlerClass {
             ChatUtils.INSTANCE.sendMessage("§cStopped tracking!");
             logger.info("Tracking stopped.");
 
-
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
             lastTime = 0;
@@ -87,7 +86,6 @@ public class TrackingHandlerClass {
         if (scheduler != null && !scheduler.isShutdown()) {
             isTracking = false;
             isPaused = false;
-            afk = false;
             scheduler.shutdown();
             try {
                 if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
@@ -101,6 +99,7 @@ public class TrackingHandlerClass {
             if (!Hypixel.INSTANCE.getServer()) {
                 logger.info("Tracking stopped because player disconnected from the server.");
             } else if (afk) {
+                afk = false;
                 logger.info("Tracking stopped because the player went AFK.");
             } else {
                 logger.info("Tracking stopped because the api server is offline.");
