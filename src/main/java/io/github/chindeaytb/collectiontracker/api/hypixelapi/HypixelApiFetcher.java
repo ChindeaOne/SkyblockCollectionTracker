@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static io.github.chindeaytb.collectiontracker.collections.CollectionsManager.collection_source;
+
 public class HypixelApiFetcher {
 
     private static final Logger logger = LogManager.getLogger(HypixelApiFetcher.class);
@@ -77,6 +79,7 @@ public class HypixelApiFetcher {
         conn.setRequestProperty("X-UUID", uuid);
         conn.setRequestProperty("Authorization", "Bearer " + token);
         conn.setRequestProperty("X-COLLECTION", collection);
+        conn.setRequestProperty("X-SOURCE", collection_source);
         conn.setRequestProperty("User-Agent", URLManager.AGENT);
 
         conn.setConnectTimeout(5000); // 5 seconds

@@ -58,9 +58,17 @@ public class StartTracker extends CommandBase {
 
                     if (!isTracking && !isPaused) {
                         collection = keyBuilder.toString().trim().toLowerCase();
-                        if (!CollectionsManager.isValidCollection(collection)) {
+                        if (!CollectionsManager.isValidCollection(collection) && !CollectionsManager.isValidSackCollection(collection)) {
                             ChatUtils.INSTANCE.sendMessage("§4" + collection + " collection is not supported! Use /sct collections to see all supported collections.");
                         }
+
+                        // Set collection source
+                        if(CollectionsManager.isValidSackCollection(collection)) {
+                            CollectionsManager.collection_source = "sacks";
+                        } else if (CollectionsManager.isValidCollection(collection)) {
+                            CollectionsManager.collection_source = "collection";
+                        }
+
                         if (Objects.requireNonNull(ModInitialization.configManager.getConfig()).bazaar.useBazaar) {
                            if (!FetchBazaarPrice.checkBazaarType(collection)) {
                                ChatUtils.INSTANCE.sendMessage("§c" + collection + " doesn't have an enchanted block variant in bazaar. Please change the type in the Bazaar category.");
