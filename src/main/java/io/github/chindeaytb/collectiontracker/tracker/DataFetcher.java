@@ -7,7 +7,9 @@ import io.github.chindeaytb.collectiontracker.util.ServerUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -24,9 +26,14 @@ public class DataFetcher {
     private static final long CACHE_LIFESPAN = 150000; // 2.5 minutes
     public static ScheduledExecutorService scheduler;
 
-
     public static void scheduleDataFetch() {
-        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 5, 180, TimeUnit.SECONDS);
+        int period = 180; // Default
+        List<String> timeConsumingCollections = Arrays.asList("cropie", "squash", "refined mineral", "glossy gemstone", "kuudra teeth", "nurse shark tooth", "blue shark tooth", "tiger shark tooth");
+
+        if (timeConsumingCollections.contains(collection)) {
+            period = 600;
+        }
+        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 5, period, TimeUnit.SECONDS);
         logger.info("Data fetching scheduled to run every 180 seconds");
     }
 
