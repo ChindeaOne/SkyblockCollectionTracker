@@ -3,7 +3,6 @@ package io.github.chindeaytb.collectiontracker.api.bazaarapi;
 import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.api.URLManager;
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager;
-import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import io.github.chindeaytb.collectiontracker.util.PlayerData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
