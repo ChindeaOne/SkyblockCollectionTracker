@@ -39,7 +39,7 @@ public class CollectionList extends CommandBase {
         categoryColors.put("Foraging", "§6");
         categoryColors.put("Fishing", "§3");
         categoryColors.put("Rift", "§5");
-        categoryColors.put("Sacks", "§7");
+        categoryColors.put("Sacks", "§8");
 
         Map<String, List<String>> categorizedCollections = new LinkedHashMap<>();
         categorizedCollections.put("Farming", Arrays.asList("cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane", "pumpkin", "wheat", "seeds", "red mushroom", "brown mushroom", "raw rabbit", "nether wart", "mutton", "melon", "potato", "leather", "porkchop", "feather"));
@@ -53,15 +53,18 @@ public class CollectionList extends CommandBase {
         for (Map.Entry<String, List<String>> entry : categorizedCollections.entrySet()) {
             String category = entry.getKey();
             String color = categoryColors.getOrDefault(category, "§f");
-            sender.addChatMessage(new ChatComponentText("   " + color + category + " Collections:"));
-
-            for (String collection : entry.getValue()) {
-                ChatComponentText message = new ChatComponentText("   " + color + "- " + collection);
-                message.setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sct track " + collection)));
-                sender.addChatMessage(message);
-            }
-            sender.addChatMessage(new ChatComponentText(""));
+            sendCategoryMessage(sender, color, category, entry.getValue());
         }
+    }
+
+    private void sendCategoryMessage(ICommandSender sender, String color, String category, List<String> collections) {
+        sender.addChatMessage(new ChatComponentText("   " + color + category + " Collections:"));
+        for (String collection : collections) {
+            ChatComponentText message = new ChatComponentText("   " + color + "- " + collection);
+            message.setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sct track " + collection)));
+            sender.addChatMessage(message);
+        }
+        sender.addChatMessage(new ChatComponentText(""));
     }
 
     @Override

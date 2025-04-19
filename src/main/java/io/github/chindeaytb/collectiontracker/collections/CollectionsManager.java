@@ -1,8 +1,8 @@
 package io.github.chindeaytb.collectiontracker.collections;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CollectionsManager {
 
@@ -25,28 +25,26 @@ public class CollectionsManager {
         "tiger shark tooth", "shark fin", "chum", "carnival ticket", "white gift", "green gift", "red gift"
     };
 
+    private static final Set<String> COLLECTIONS_SET = new HashSet<>(Arrays.asList(COLLECTIONS));
+    private static final Set<String> SACK_COLLECTIONS_SET = new HashSet<>(Arrays.asList(SACK_COLLECTIONS));
+
     public static String collection_source = null;
 
     public static boolean isValidCollection(String collectionName) {
-        return Arrays.asList(COLLECTIONS).contains(collectionName);
+        return COLLECTIONS_SET.contains(collectionName);
     }
 
     public static boolean isValidSackCollection(String collectionName) {
-        return Arrays.asList(SACK_COLLECTIONS).contains(collectionName);
+        return SACK_COLLECTIONS_SET.contains(collectionName);
     }
 
     public static boolean notRiftCollection(String collection) {
-        switch (collection) {
-            case "wilted berberis":
-            case "living metal heart":
-            case "caducous stem":
-            case "agaricus cap":
-            case "hemovibe":
-            case "half-eaten carrot":
-            case "timite":
-                return false;
-            default:
-                return true;
-        }
+        return !collection.equals("wilted berberis") &&
+                !collection.equals("living metal heart") &&
+                !collection.equals("caducous stem") &&
+                !collection.equals("agaricus cap") &&
+                !collection.equals("hemovibe") &&
+                !collection.equals("half-eaten carrot") &&
+                !collection.equals("timite");
     }
 }
