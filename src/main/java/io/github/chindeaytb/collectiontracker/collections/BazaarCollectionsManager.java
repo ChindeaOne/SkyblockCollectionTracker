@@ -101,6 +101,8 @@ public class BazaarCollectionsManager {
         enchantedRecipe.put("sponge", 40);
 
         // Sacks
+        enchantedRecipe.put("rabbit foot", 160);
+        enchantedRecipe.put("rabbit hide", 576);
         enchantedRecipe.put("titanium", 160);
         enchantedRecipe.put("shark fin", 160);
 
