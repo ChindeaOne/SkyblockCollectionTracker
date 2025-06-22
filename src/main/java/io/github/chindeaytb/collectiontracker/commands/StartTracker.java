@@ -60,6 +60,7 @@ public class StartTracker extends CommandBase {
                         collection = keyBuilder.toString().trim().toLowerCase();
                         if (!CollectionsManager.isValidCollection(collection) && !CollectionsManager.isValidSackCollection(collection)) {
                             ChatUtils.INSTANCE.sendMessage("§4" + collection + " collection is not supported! Use /sct collections to see all supported collections.");
+                            return;
                         }
 
                         // Set collection source
