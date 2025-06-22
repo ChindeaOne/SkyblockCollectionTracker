@@ -25,7 +25,7 @@ public class ServerStatus {
 
             return connection.getResponseCode() == HttpURLConnection.HTTP_OK;
         } catch (IOException e) {
-            logger.error("Error checking server status", e);
+            logger.error("[SCT]: Error checking server status", e);
             return false;
         } finally {
             if (connection != null) {

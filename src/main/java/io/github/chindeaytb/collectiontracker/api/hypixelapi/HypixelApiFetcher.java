@@ -39,7 +39,7 @@ public class HypixelApiFetcher {
 
                 return content.toString();
             } else if (responseCode == 401) {
-                logger.warn("Invalid or expired token. Fetching a new one and retrying...");
+                logger.warn("[SCT]: Invalid or expired token. Fetching a new one and retrying...");
                 TokenManager.fetchAndStoreToken();
 
                 conn = getHttpURLConnection(uuid, token, url, collection);
@@ -59,14 +59,14 @@ public class HypixelApiFetcher {
 
                     return content.toString();
                 } else {
-                    logger.error("Retry failed. Server responded with code: {}", responseCode);
+                    logger.error("[SCT]: Retry failed. Server responded with code: {}", responseCode);
                 }
             } else {
-                logger.error("Failed to fetch data. Server responded with code: {}", responseCode);
+                logger.error("[SCT]: Failed to fetch data. Server responded with code: {}", responseCode);
             }
 
         } catch (Exception e) {
-            logger.error("An error occurred while fetching data from the server: {}", e.getMessage());
+            logger.error("[SCT]: An error occurred while fetching data from the server: {}", e.getMessage());
         }
 
         return null;

@@ -45,9 +45,9 @@ public class FetchBazaarPrice {
                 }
                 in.close();
                 conn.disconnect();
-                logger.error("Server responded with code 400: {}", content.toString());
+                logger.error("[SCT]: Server responded with code 400: {}", content.toString());
             } else if (responseCode == 401) {
-                logger.warn("Invalid or expired token. Fetching a new one and retrying...");
+                logger.warn("[SCT]: Invalid or expired token. Fetching a new one and retrying...");
                 TokenManager.fetchAndStoreToken();
                 conn = getHttpURLConnection(uuid, token, url, collection);
                 responseCode = conn.getResponseCode();
@@ -62,13 +62,13 @@ public class FetchBazaarPrice {
                     conn.disconnect();
                     return content.toString();
                 } else {
-                    logger.error("Retry failed. Server responded with code: {}", responseCode);
+                    logger.error("[SCT]: Retry failed. Server responded with code: {}", responseCode);
                 }
             } else {
-                logger.error("Failed to fetch data. Server responded with code: {}", responseCode);
+                logger.error("[SCT]: Failed to fetch data. Server responded with code: {}", responseCode);
             }
         } catch (Exception e) {
-            logger.error("An error occurred while fetching data from the server: {}", e.getMessage());
+            logger.error("[SCT]: An error occurred while fetching data from the server: {}", e.getMessage());
         }
         return null;
     }
@@ -99,7 +99,7 @@ public class FetchBazaarPrice {
                 return false;
             }
         } catch (Exception e) {
-            logger.error("An error occurred while checking the bazaar type: {}", e.getMessage());
+            logger.error("[SCT]: An error occurred while checking the bazaar type: {}", e.getMessage());
         }
         return false;
     }

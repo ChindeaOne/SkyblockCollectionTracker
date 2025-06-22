@@ -13,7 +13,7 @@ object ServerUtils {
 
     var serverStatus = false
 
-    private const val NORMAL_CHECK_INTERVAL = 6000  // 5 minute
+    private const val NORMAL_CHECK_INTERVAL = 6000  // 5 minutes
     private var tickCounter = 0
     private var currentCheckInterval = NORMAL_CHECK_INTERVAL
     private const val COOLDOWN_CHECK_INTERVAL = 12000  // 10 minutes
@@ -32,18 +32,18 @@ object ServerUtils {
     }
 
     private fun checkServerStatusPeriodically() {
-        logger.info("Checking server status...")
+        logger.info("[SCT]: Checking server status...")
         serverStatus = ServerStatus.checkServer()
 
         if (serverStatus) {
-            logger.info("Server is alive.")
+            logger.info("[SCT]: Server is alive.")
             consecutiveFailures = 0
             currentCheckInterval = NORMAL_CHECK_INTERVAL
             if (TokenManager.getToken() == null) {
                 TokenManager.fetchAndStoreToken()
             }
         } else {
-            logger.warn("Server is not alive.")
+            logger.warn("[SCT]: Server is not alive.")
             consecutiveFailures++
             if (consecutiveFailures >= 3) {
                 currentCheckInterval = COOLDOWN_CHECK_INTERVAL

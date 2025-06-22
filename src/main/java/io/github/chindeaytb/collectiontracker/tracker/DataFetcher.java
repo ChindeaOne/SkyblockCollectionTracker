@@ -28,19 +28,19 @@ public class DataFetcher {
 
     public static void scheduleDataFetch() {
         int period = 180; // Default
-        List<String> timeConsumingCollections = Arrays.asList("cropie", "squash", "refined mineral", "glossy gemstone", "kuudra teeth", "nurse shark tooth", "blue shark tooth", "tiger shark tooth");
+        List<String> timeConsumingCollections = Arrays.asList("cropie", "squash", "refined mineral", "glossy gemstone");
 
         if (timeConsumingCollections.contains(collection)) {
             period = 600;
         }
         scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 5, period, TimeUnit.SECONDS);
-        logger.info("Data fetching scheduled to run every 180 seconds");
+        logger.info("[SCT]: Data fetching scheduled to run every 180 seconds");
     }
 
     public static void fetchData() {
         try {
             if (!ServerUtils.INSTANCE.getServerStatus()) {
-                logger.warn("Server is not alive. Stopping the tracker.");
+                logger.warn("[SCT]: Server is not alive. Stopping the tracker.");
                 TrackingHandlerClass.stopTracking();
                 return;
             }
@@ -52,15 +52,15 @@ public class DataFetcher {
             String jsonData = getData(playerUUID, collection);
 
             if (jsonData == null) {
-                logger.error("Failed to fetch or retrieve data from the cache");
+                logger.error("[SCT]: Failed to fetch or retrieve data from the cache");
                 return;
             }
 
-            logger.info("Data successfully fetched or retrieved and displayed for player with UUID: {} and collection: {}", playerUUID, collection);
+            logger.info("[SCT]: Data successfully fetched or retrieved and displayed for player with UUID: {} and collection: {}", playerUUID, collection);
             TrackingRates.displayCollection(jsonData);
 
         } catch (Exception e) {
-            logger.error("Error fetching data from the Hypixel API: {}", e.getMessage(), e);
+            logger.error("[SCT]: Error fetching data from the Hypixel API: {}", e.getMessage(), e);
         }
     }
 
@@ -69,11 +69,11 @@ public class DataFetcher {
         Long lastFetched = cacheTimestamps.get(cacheKey);
 
         if (lastFetched != null && (System.currentTimeMillis() - lastFetched) < CACHE_LIFESPAN) {
-            logger.info("Returning cached data for player with UUID: {} and collection: {}", playerUUID, collection);
+            logger.info("[SCT]: Returning cached data for player with UUID: {} and collection: {}", playerUUID, collection);
             return collectionCache.get(cacheKey);
         }
 
-        logger.info("Cache expired or missing. Fetching new data for player with UUID: {} and collection: {}", playerUUID, collection);
+        logger.info("[SCT]: Cache expired or missing. Fetching new data for player with UUID: {} and collection: {}", playerUUID, collection);
         String jsonData = HypixelApiFetcher.fetchJsonData(playerUUID, TokenManager.getToken(), collection);
 
         if (jsonData != null) {

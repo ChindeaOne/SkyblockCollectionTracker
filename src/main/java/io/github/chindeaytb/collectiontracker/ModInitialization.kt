@@ -25,7 +25,7 @@ class ModInitialization {
         loadModule(this)
         ModulesLoader.modules.forEach { loadModule(it) }
 
-        logger.info("Skyblock Collection Tracker pre-initialization complete.")
+        logger.info("[SCT]: Skyblock Collection Tracker pre-initialization complete.")
     }
 
     @Mod.EventHandler
@@ -34,7 +34,7 @@ class ModInitialization {
         configManager = ConfigManager()
 
         MinecraftForge.EVENT_BUS.register(configManager)
-        logger.info("ConfigManager initialized.")
+        logger.info("[SCT]: ConfigManager initialized.")
 
         // Register commands
         val commandHelper = CommandHelper()
@@ -46,7 +46,7 @@ class ModInitialization {
         val guiMenu = GuiMenu()
         ClientCommandHandler.instance.registerCommand(SCT_Commands(commandHelper, startTracker, stopTracker, pauseTracker, resumeTracker, collectionList, guiMenu))
 
-        logger.info("SkyblockCollectionTracker initialized.")
+        logger.info("[SCT]: SkyblockCollectionTracker initialized.")
 
         loadedClasses.clear()
     }

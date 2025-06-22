@@ -79,13 +79,13 @@ public class TrackingRates {
 
                     previousCollection = currentCollection;
                 } else {
-                    logger.warn("Collection '{}' not found in the response.", collection);
+                    logger.warn("[SCT]: Collection '{}' not found in the response.", collection);
                 }
             } else {
-                logger.error("Invalid JSON response: {}", jsonResponse);
+                logger.error("[SCT]: Invalid JSON response: {}", jsonResponse);
             }
         } catch (Exception e) {
-            logger.error("An error occurred while processing the collection data", e);
+            logger.error("[SCT]: An error occurred while processing the collection data", e);
         }
     }
 }

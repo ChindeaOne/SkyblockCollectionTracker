@@ -34,7 +34,7 @@ object Hypixel {
 
     @SubscribeEvent
     fun onDisconnect(event: ClientDisconnectionFromServerEvent) {
-        logger.info("Player has disconnected from the server.")
+        logger.info("[SCT]: Player has disconnected from the server.")
         server = false
         skyblock = false
         playerLoaded = false
@@ -77,19 +77,19 @@ object Hypixel {
                         }
                     }
 
-                    logger.info("Update stream status: {}", ModInitialization.configManager.config!!.about.update)
+                    logger.info("[SCT]: Update stream status: {}", ModInitialization.configManager.config!!.about.update)
 
                     if (ModInitialization.configManager.config!!.about.update != 0) {
                         CompletableFuture.runAsync {
                             RepoUtils.checkForUpdates(ModInitialization.configManager.config!!.about.update)
                         }.thenAcceptAsync {
                             if (isUpdateAvailable()) {
-                                logger.info("New version found: ${RepoUtils.latestVersion}")
+                                logger.info("[SCT]: New version found: ${RepoUtils.latestVersion}")
 
                                 ChatUtils.sendMessage(
                                     ChatComponentText("§eA new version for SkyblockCollectionTracker found: §a${RepoUtils.latestVersion}§e. It will be downloaded after closing the game.")
                                 )
-                                logger.info("The new version will be downloaded after closing the client.")
+                                logger.info("[SCT]: The new version will be downloaded after closing the client.")
 
                                 UpdaterManager.update()
                                 ModInitialization.configManager.config!!.about.hasCheckedUpdate = false
@@ -99,12 +99,12 @@ object Hypixel {
                                     ChatUtils.sendMessage("§aThe mod has been updated successfully.")
                                     ModInitialization.configManager.config!!.about.hasCheckedUpdate = true
                                 }
-                                logger.info("No new version found.")
+                                logger.info("[SCT]: No new version found.")
                             }
                         }
 
                     } else{
-                        logger.info("Update stream is disabled.")
+                        logger.info("[SCT]: Update stream is disabled.")
                     }
                 }
             }

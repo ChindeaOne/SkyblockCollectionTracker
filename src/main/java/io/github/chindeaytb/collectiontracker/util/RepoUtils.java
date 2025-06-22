@@ -68,10 +68,10 @@ public class RepoUtils {
                     MODRINTH_URL += latestVersion;
                 }
             } else {
-                logger.error("Failed to check for updates. HTTP Response Code: {}", connection.getResponseCode());
+                logger.error("[SCT]: Failed to check for updates. HTTP Response Code: {}", connection.getResponseCode());
             }
         } catch (Exception e) {
-            logger.error("An error occurred while checking for updates", e);
+            logger.error("[SCT]: An error occurred while checking for updates", e);
         }
     }
 

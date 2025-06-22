@@ -38,11 +38,11 @@ public class TokenFetcher {
                 JsonObject jsonResponse = new JsonParser().parse(content.toString()).getAsJsonObject();
                 String token = jsonResponse.has("token") ? jsonResponse.get("token").getAsString() : null;
 
-                logger.info("Successfully fetched token");
+                logger.info("[SCT]: Successfully fetched token");
                 return token;
             }
         } else {
-            logger.error("Failed to fetch token, response code: {}", responseCode);
+            logger.error("[SCT]: Failed to fetch token, response code: {}", responseCode);
             throw new Exception("Failed to fetch token, response code: " + responseCode);
         }
     }

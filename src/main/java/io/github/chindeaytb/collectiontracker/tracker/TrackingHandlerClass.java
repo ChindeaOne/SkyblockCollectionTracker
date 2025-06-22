@@ -48,7 +48,7 @@ public class TrackingHandlerClass {
         startTime = 0;
         lastTime = 0;
 
-        logger.info("Tracking started for player: {}", PlayerData.INSTANCE.getPlayerName());
+        logger.info("[SCT]: Tracking started for player: {}", PlayerData.INSTANCE.getPlayerName());
 
         DataFetcher.scheduleDataFetch();
     }
@@ -67,7 +67,7 @@ public class TrackingHandlerClass {
                 Thread.currentThread().interrupt();
             }
             ChatUtils.INSTANCE.sendMessage("§cStopped tracking!");
-            logger.info("Tracking stopped.");
+            logger.info("[SCT]: Tracking stopped.");
 
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
@@ -78,7 +78,7 @@ public class TrackingHandlerClass {
             CollectionOverlay.stopTracking();
         } else {
             ChatUtils.INSTANCE.sendMessage("§cNo tracking active!");
-            logger.warn("Attempted to stop tracking, but no tracking is active.");
+            logger.warn("[SCT]: Attempted to stop tracking, but no tracking is active.");
         }
     }
 
@@ -97,12 +97,12 @@ public class TrackingHandlerClass {
             }
 
             if (!Hypixel.INSTANCE.getServer()) {
-                logger.info("Tracking stopped because player disconnected from the server.");
+                logger.info("[SCT]: Tracking stopped because player disconnected from the server.");
             } else if (afk) {
                 afk = false;
-                logger.info("Tracking stopped because the player went AFK.");
+                logger.info("[SCT]: Tracking stopped because the player went AFK.");
             } else {
-                logger.info("Tracking stopped because the api server is offline.");
+                logger.info("[SCT]: Tracking stopped because the api server is offline.");
             }
 
             lastTrackTime = System.currentTimeMillis();
@@ -113,7 +113,7 @@ public class TrackingHandlerClass {
 
             CollectionOverlay.stopTracking();
         } else {
-            logger.warn("Attempted to stop tracking, but no tracking is active.");
+            logger.warn("[SCT]: Attempted to stop tracking, but no tracking is active.");
         }
     }
 
@@ -121,37 +121,37 @@ public class TrackingHandlerClass {
         if (scheduler != null && !scheduler.isShutdown()) {
             if (isPaused) {
                 ChatUtils.INSTANCE.sendMessage("§cTracking is already paused!");
-                logger.warn("Attempted to pause tracking, but tracking is already paused.");
+                logger.warn("[SCT]: Attempted to pause tracking, but tracking is already paused.");
                 return;
             }
             isPaused = true;
             lastTime += (System.currentTimeMillis() - startTime) / 1000;
             ChatUtils.INSTANCE.sendMessage("§7Tracking paused.");
-            logger.info("Tracking paused.");
+            logger.info("[SCT]: Tracking paused.");
         } else {
             ChatUtils.INSTANCE.sendMessage("§cNo tracking active!");
-            logger.warn("Attempted to pause tracking, but no tracking is active.");
+            logger.warn("[SCT]: Attempted to pause tracking, but no tracking is active.");
         }
     }
 
     public static void resumeTracking(ICommandSender sender) {
         if (scheduler == null || scheduler.isShutdown() && !isTracking) {
             ChatUtils.INSTANCE.sendMessage("§cNo tracking active!");
-            logger.warn("Attempted to resume tracking, but no tracking is active.");
+            logger.warn("[SCT]: Attempted to resume tracking, but no tracking is active.");
             return;
         }
 
         if (isTracking && isPaused) {
             ChatUtils.INSTANCE.sendMessage("§7Resuming tracking.");
-            logger.info("Resuming tracking.");
+            logger.info("[SCT]: Resuming tracking.");
             startTime = System.currentTimeMillis();
             isPaused = false;
         } else if (isTracking) {
             ChatUtils.INSTANCE.sendMessage("§cTracking is already active!");
-            logger.warn("Attempted to resume tracking, but tracking is already active.");
+            logger.warn("[SCT]: Attempted to resume tracking, but tracking is already active.");
         } else {
             ChatUtils.INSTANCE.sendMessage("§cTracking has not been started yet!");
-            logger.warn("Attempted to resume tracking, but tracking has not been started.");
+            logger.warn("[SCT]: Attempted to resume tracking, but tracking has not been started.");
         }
     }
 
