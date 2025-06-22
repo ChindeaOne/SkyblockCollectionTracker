@@ -20,9 +20,7 @@ public class CollectionsManager {
     };
 
     public static final String[] SACK_COLLECTIONS = {
-        "cropie", "squash", "rabbit foot", "rabbit hide", "titanium", "refined mineral", "glossy `gemstone`", "sludge juice",
-        "ancient claw", "kuudra teeth", "plasma", "volta", "yoggie", "agarimoo tongue", "nurse shark tooth", "blue shark tooth",
-        "tiger shark tooth", "shark fin", "chum", "carnival ticket", "white gift", "green gift", "red gift"
+        "cropie", "squash", "rabbit foot", "rabbit hide", "titanium", "refined mineral", "glossy gemstone", "sludge juice", "yoggie"
     };
 
     private static final Set<String> COLLECTIONS_SET = new HashSet<>(Arrays.asList(COLLECTIONS));
