@@ -124,12 +124,12 @@ object RenderUtils {
                 val prefix = line.substring(0, splitIndex + 2)
                 val numberPart = line.substring(splitIndex + 2)
 
-                fontRenderer.drawString(prefix, scaledOverlayX, scaledOverlayY, 0x55FF55)
+                fontRenderer.drawStringWithShadow(prefix, scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), 0x55FF55)
 
                 val prefixWidth = fontRenderer.getStringWidth(prefix)
-                fontRenderer.drawString(numberPart, scaledOverlayX + prefixWidth, scaledOverlayY, 0xFFFFFF)
+                fontRenderer.drawStringWithShadow(numberPart, (scaledOverlayX + prefixWidth).toFloat(), scaledOverlayY.toFloat(), 0xFFFFFF)
             } else {
-                fontRenderer.drawString(line, scaledOverlayX, scaledOverlayY, 0xFFFFFF)
+                fontRenderer.drawStringWithShadow(line, scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), 0xFFFFFF)
             }
 
             scaledOverlayY += fontRenderer.FONT_HEIGHT
@@ -141,15 +141,14 @@ object RenderUtils {
             val prefix = uptimeString.substring(0, splitIndex + 2)
             val numberPart = uptimeString.substring(splitIndex + 2)
 
-            fontRenderer.drawString(prefix, scaledOverlayX, scaledOverlayY, 0x55FF55)
+            fontRenderer.drawStringWithShadow(prefix, scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), 0x55FF55)
 
             val prefixWidth = fontRenderer.getStringWidth(prefix)
-            fontRenderer.drawString(numberPart, scaledOverlayX + prefixWidth, scaledOverlayY, 0xFFFFFF)
+            fontRenderer.drawStringWithShadow(numberPart, (scaledOverlayX + prefixWidth).toFloat(), scaledOverlayY.toFloat(), 0xFFFFFF)
         } else {
-            fontRenderer.drawString(uptimeString, scaledOverlayX, scaledOverlayY, 0xFFFFFF)
+            fontRenderer.drawStringWithShadow(uptimeString, scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), 0xFFFFFF)
         }
     }
-
 
     private fun renderColors(
         fontRenderer: FontRenderer
@@ -170,14 +169,14 @@ object RenderUtils {
                 val numberPart = line.substring(splitIndex + 2)
 
                 if (color != null) {
-                    fontRenderer.drawString(prefix, scaledOverlayX, scaledOverlayY, color)
+                    fontRenderer.drawStringWithShadow(prefix, scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), color)
                 }
 
                 val prefixWidth = fontRenderer.getStringWidth(prefix)
-                fontRenderer.drawString(numberPart, scaledOverlayX + prefixWidth, scaledOverlayY, 0xFFFFFF)
+                fontRenderer.drawStringWithShadow(numberPart, (scaledOverlayX + prefixWidth).toFloat(), scaledOverlayY.toFloat(), 0xFFFFFF)
             } else {
                 if (color != null) {
-                    fontRenderer.drawString(line, scaledOverlayX, scaledOverlayY, color)
+                    fontRenderer.drawStringWithShadow(line, scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), color)
                 }
             }
 
@@ -189,12 +188,12 @@ object RenderUtils {
                 val prefix = TextUtils.uptimeString().substring(0, splitIndex + 2)
                 val numberPart = TextUtils.uptimeString().substring(splitIndex + 2)
 
-                fontRenderer.drawString(prefix, scaledOverlayX, scaledOverlayY, color)
+                fontRenderer.drawStringWithShadow(prefix, scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), color)
 
                 val prefixWidth = fontRenderer.getStringWidth(prefix)
-                fontRenderer.drawString(numberPart, scaledOverlayX + prefixWidth, scaledOverlayY, 0xFFFFFF)
+                fontRenderer.drawStringWithShadow(numberPart, (scaledOverlayX + prefixWidth).toFloat(), scaledOverlayY.toFloat(), 0xFFFFFF)
             } else {
-                fontRenderer.drawString(TextUtils.uptimeString(), scaledOverlayX, scaledOverlayY, color)
+                fontRenderer.drawStringWithShadow(TextUtils.uptimeString(), scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), color)
             }
         }
     }
