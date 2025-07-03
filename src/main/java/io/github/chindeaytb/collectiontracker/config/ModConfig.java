@@ -2,11 +2,9 @@ package io.github.chindeaytb.collectiontracker.config;
 
 import com.google.gson.annotations.Expose;
 import io.github.chindeaytb.collectiontracker.ModInitialization;
-import io.github.chindeaytb.collectiontracker.config.categories.About;
-import io.github.chindeaytb.collectiontracker.config.categories.Bazaar;
-import io.github.chindeaytb.collectiontracker.config.categories.GUIConfig;
-import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
+import io.github.chindeaytb.collectiontracker.config.categories.*;
 import io.github.moulberry.moulconfig.Config;
+import io.github.moulberry.moulconfig.annotations.Accordion;
 import io.github.moulberry.moulconfig.annotations.Category;
 
 @SuppressWarnings("unused")
@@ -24,6 +22,10 @@ public class ModConfig extends Config {
     @Expose
     @Category(name = "Bazaar", desc = "Toggle bazaar prices")
     public Bazaar bazaar = new Bazaar();
+    @Expose
+    @Category(name = "Mining", desc = "Mining related settings")
+    @Accordion
+    public Mining mining = new Mining();
 
     @Override
     public String getTitle() {

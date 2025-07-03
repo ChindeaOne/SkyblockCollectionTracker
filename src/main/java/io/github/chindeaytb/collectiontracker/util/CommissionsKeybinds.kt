@@ -1,5 +1,25 @@
+/*
+ * Copyright (C) 2022-2023 NotEnoughUpdates contributors
+ *
+ * This file is part of NotEnoughUpdates.
+ *
+ * NotEnoughUpdates is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * NotEnoughUpdates is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with NotEnoughUpdates. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package io.github.chindeaytb.collectiontracker.util
 
+import io.github.chindeaytb.collectiontracker.ModInitialization
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.inventory.ContainerChest
@@ -12,12 +32,17 @@ import org.apache.logging.log4j.Logger
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 
-class SpecialItemContainerListener {
+class CommissionsKeybinds {
 
     var currentlyOpenChestName = ""
     private var lastClick = -1L
-    val keybinds = listOf(Keyboard.KEY_1, Keyboard.KEY_2, Keyboard.KEY_3, Keyboard.KEY_4)
-    private val logger: Logger = LogManager.getLogger(SpecialItemContainerListener::class.java)
+    private val keybinds: List<Int> get() = listOf(
+        ModInitialization.configManager.config!!.mining.commissions.commission1,
+        ModInitialization.configManager.config!!.mining.commissions.commission2,
+        ModInitialization.configManager.config!!.mining.commissions.commission3,
+        ModInitialization.configManager.config!!.mining.commissions.commission4,
+    )
+    private val logger: Logger = LogManager.getLogger(CommissionsKeybinds::class.java)
 
     @SubscribeEvent
     fun onGuiKeyboardInput(event: GuiScreenEvent.KeyboardInputEvent.Pre) {
@@ -29,6 +54,7 @@ class SpecialItemContainerListener {
         checkContainerName(event)
     }
 
+    // Inspired by NEU's WardrobeMouseButtons
     @SubscribeEvent(priority = EventPriority.HIGH)
     fun onGuiOpen(event: GuiOpenEvent) {
         if (!HypixelUtils.isOnSkyblock) return
@@ -43,9 +69,10 @@ class SpecialItemContainerListener {
         }
     }
 
+    // Inspired by NEU's WardrobeMouseButtons
     @Suppress("InvalidSubscribeEvent")
     fun checkContainerName(event: GuiScreenEvent) {
-        if (!HypixelUtils.isOnSkyblock) return
+        if (!HypixelUtils.isOnSkyblock || !ModInitialization.configManager.config!!.mining.commissions.enableCommissionsKeybinds) return
         val gui = event.gui as? GuiChest ?: return
         if (!currentlyOpenChestName.contains("Commissions")) return
 
