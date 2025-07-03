@@ -4,6 +4,7 @@ import io.github.chindeaytb.UpdateContext
 import io.github.chindeaytb.UpdateSetup
 import io.github.chindeaytb.UpdateTarget
 import io.github.chindeaytb.collectiontracker.ModInitialization
+import net.minecraft.client.Minecraft
 import java.util.concurrent.CompletableFuture
 
 object UpdaterManager {
@@ -13,6 +14,7 @@ object UpdaterManager {
 
     private val context = UpdateContext(
         "sct",
+        Minecraft.getMinecraft().version,
         ModInitialization.version,
         "none",
         ModInitialization.MODID,
