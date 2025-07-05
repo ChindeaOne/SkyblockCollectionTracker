@@ -14,9 +14,9 @@ plugins {
 
 version = setVersionFromGit()
 
-// Toolchains
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
+    toolchain.vendor.set(JvmVendorSpec.ADOPTIUM)
 }
 
 loom {
@@ -125,6 +125,42 @@ kotlin {
     }
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+val generateVersionConstants by tasks.registering {
+    val outputDir = file("src/main/java/io/github/chindeaytb/collectiontracker/util")
+    val outputFile = file("$outputDir/VersionConstants.kt")
+    inputs.property("modVersion", project.version)
+    outputs.file(outputFile)
+
+    doLast {
+        outputDir.mkdirs()
+        outputFile.writeText(
+            """
+            package io.github.chindeaytb.collectiontracker.util
+
+            object VersionConstants {
+                const val MOD_VERSION: String = "${project.version}"
+            }
+            """.trimIndent()
+        )
+    }
+}
+
+tasks.named("compileKotlin") {
+    dependsOn(generateVersionConstants)
+}
+tasks.named("compileJava") {
+    dependsOn(generateVersionConstants)
+}
+
+val cleanVersionConstants by tasks.registering(Delete::class) {
+    delete("src/main/java/io/github/chindeaytb/collectiontracker/util/VersionConstants.kt")
+}
+
 // Tasks
 tasks.compileJava {
     dependsOn(tasks.processResources)
@@ -149,6 +185,16 @@ tasks.processResources {
     filesMatching(listOf("mcmod.info", "mixins.sct.json")) {
         expand("version" to version)
     }
+    filesMatching("urls.properties") {
+        expand(
+            "TOKEN_URL" to (System.getenv("TOKEN_URL") ?: ""),
+            "COLLECTION_URL" to (System.getenv("COLLECTION_URL") ?: ""),
+            "BAZAAR_URL" to (System.getenv("BAZAAR_URL") ?: ""),
+            "CHECK_BAZAAR_TYPE_URL" to (System.getenv("CHECK_BAZAAR_TYPE_URL") ?: ""),
+            "STATUS_URL" to (System.getenv("STATUS_URL") ?: ""),
+            "AGENT" to (System.getenv("AGENT") ?: "")
+        )
+    }
 }
 
 tasks.withType<KotlinCompile> {
@@ -166,7 +212,7 @@ val remapJar by tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
     destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
 }
 
-val kotlinDependencyCollectionJar by tasks.creating(Zip::class) {
+val kotlinDependencyCollectionJar by tasks.registering(Zip::class) {
     archiveFileName.set("kotlin-libraries-wrapped.jar")
     destinationDirectory.set(project.layout.buildDirectory.dir("wrapperjars"))
     from(kotlinDependencies)
@@ -192,13 +238,14 @@ tasks.shadowJar {
     relocate("io.github.chindeaytb.implementation", "io.github.chindeaytb.collectiontracker.deps.implementation")
 }
 
-blossom {
-    replaceToken("sctVersion", project.version)
-    replaceToken("@TOKEN_URL@", System.getenv("TOKEN_URL"))
-    replaceToken("@COLLECTION_URL@", System.getenv("COLLECTION_URL"))
-    replaceToken("@STATUS_URL@", System.getenv("STATUS_URL"))
-    replaceToken("@BAZAAR_URL@", System.getenv("BAZAAR_URL"))
-    replaceToken("@CHECK_BAZAAR_TYPE_URL@", System.getenv("CHECK_BAZAAR_TYPE_URL"))
-    replaceToken("@AGENT@", System.getenv("AGENT"))
+tasks.jar {
+    finalizedBy(cleanVersionConstants)
 }
 
+tasks.build {
+    finalizedBy(cleanVersionConstants)
+}
+
+tasks.assemble {
+    finalizedBy(cleanVersionConstants)
+}
