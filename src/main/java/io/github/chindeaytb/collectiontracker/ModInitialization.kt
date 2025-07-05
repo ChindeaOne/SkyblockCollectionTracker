@@ -15,8 +15,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import io.github.chindeaytb.collectiontracker.util.VersionConstants
 
-@Mod(modid = ModInitialization.MODID, clientSideOnly = true, useMetadata = true, version = "sctVersion")
+@Mod(modid = ModInitialization.MODID, clientSideOnly = true, useMetadata = true, version = VersionConstants.MOD_VERSION)
 class ModInitialization {
 
     @Mod.EventHandler

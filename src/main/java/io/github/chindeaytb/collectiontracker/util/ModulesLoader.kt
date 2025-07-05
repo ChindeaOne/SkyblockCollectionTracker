@@ -13,6 +13,6 @@ object ModulesLoader {
         add(Hypixel)
         add(ServerUtils)
         add(UpdaterManager)
-        add(SpecialItemContainerListener())
+        add(CommissionsKeybinds())
     }
 }
