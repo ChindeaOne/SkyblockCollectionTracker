@@ -79,14 +79,6 @@ public class NPCPrice {
         collectionPrices.put("spider eye", 3);
         collectionPrices.put("string", 3);
 
-        // Foraging
-        collectionPrices.put("acacia", 2);
-        collectionPrices.put("birch", 2);
-        collectionPrices.put("dark oak", 2);
-        collectionPrices.put("jungle", 2);
-        collectionPrices.put("oak", 2);
-        collectionPrices.put("spruce", 2);
-
         // Fishing
         collectionPrices.put("clay", 3);
         collectionPrices.put("clownfish", 20);
@@ -108,12 +100,7 @@ public class NPCPrice {
         collectionPrices.put("titanium", 20);
         collectionPrices.put("refined mineral", 2000);
         collectionPrices.put("glossy gemstone", 4000);
-        collectionPrices.put("ancient claw", 200);
-        collectionPrices.put("kuudra teeth", 500);
-        collectionPrices.put("plasma", 25000);
-        collectionPrices.put("volta", 1111);
         collectionPrices.put("yoggie", 100);
-        collectionPrices.put("agarimoo tongue", 2050);
     }
 
     public static int getNpcPrice(String collection) {

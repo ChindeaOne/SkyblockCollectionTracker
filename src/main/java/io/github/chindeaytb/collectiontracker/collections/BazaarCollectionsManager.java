@@ -80,14 +80,6 @@ public class BazaarCollectionsManager {
         enchantedRecipe.put("blaze rod", 160);
         enchantedRecipe.put("string", 160);
 
-        // Foraging
-        enchantedRecipe.put("acacia", 160);
-        enchantedRecipe.put("spruce", 160);
-        enchantedRecipe.put("jungle", 160);
-        enchantedRecipe.put("birch", 160);
-        enchantedRecipe.put("oak", 160);
-        enchantedRecipe.put("dark oak", 160);
-
         // Fishing
         enchantedRecipe.put("lily pad", 160);
         enchantedRecipe.put("prismarine shard", 80);

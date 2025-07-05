@@ -45,10 +45,9 @@ public class CollectionList extends CommandBase {
         categorizedCollections.put("Farming", Arrays.asList("cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane", "pumpkin", "wheat", "seeds", "red mushroom", "brown mushroom", "raw rabbit", "nether wart", "mutton", "melon", "potato", "leather", "porkchop", "feather"));
         categorizedCollections.put("Mining", Arrays.asList("lapis lazuli", "redstone", "umber", "coal", "mycelium", "end stone", "quartz", "sand", "iron", "amber", "topaz", "sapphire", "amethyst", "jasper", "ruby", "jade", "opal", "aquamarine", "citrine", "onyx", "peridot", "tungsten", "obsidian", "diamond", "cobblestone", "glowstone", "gold", "flint", "hard stone", "mithril", "emerald", "red sand", "ice", "glacite", "sulphur", "netherrack"));
         categorizedCollections.put("Combat", Arrays.asList("ender pearl", "chili pepper", "slimeball", "magma cream", "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone", "blaze rod", "string"));
-        categorizedCollections.put("Foraging", Arrays.asList("acacia", "spruce", "jungle", "birch", "oak", "dark oak"));
         categorizedCollections.put("Fishing", Arrays.asList("lily pad", "prismarine shard", "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals", "clay", "sponge"));
         categorizedCollections.put("Rift", Arrays.asList("wilted berberis", "living metal heart", "caducous stem", "agaricus cap", "hemovibe", "half-eaten carrot", "timite"));
-        categorizedCollections.put("Sacks", Arrays.asList("cropie", "squash", "rabbit foot", "rabbit hide", "titanium", "refined mineral", "glossy gemstone", "sludge juice", "ancient claw", "kuudra teeth", "plasma", "volta", "yoggie", "agarimoo tongue", "nurse shark tooth", "blue shark tooth", "tiger shark tooth", "shark fin", "chum", "carnival ticket", "white gift", "green gift", "red gift"));
+        categorizedCollections.put("Sacks", Arrays.asList("cropie", "squash", "rabbit foot", "rabbit hide", "titanium", "refined mineral", "glossy gemstone", "sludge juice", "yoggie"));
 
         for (Map.Entry<String, List<String>> entry : categorizedCollections.entrySet()) {
             String category = entry.getKey();

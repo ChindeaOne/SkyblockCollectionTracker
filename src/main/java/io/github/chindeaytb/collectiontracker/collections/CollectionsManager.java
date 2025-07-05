@@ -14,9 +14,9 @@ public class CollectionsManager {
             "tungsten", "obsidian", "diamond", "cobblestone", "glowstone", "gold", "flint", "hard stone", "mithril",
             "emerald", "red sand", "ice", "glacite", "sulphur", "netherrack", "ender pearl", "chili pepper", "slimeball",
             "magma cream", "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone", "blaze rod", "string",
-            "acacia", "spruce", "jungle", "birch", "oak", "dark oak", "lily pad", "prismarine shard", "ink sac", "raw fish",
-            "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals", "clay", "sponge", "wilted berberis",
-            "living metal heart", "caducous stem", "agaricus cap", "hemovibe", "half-eaten carrot", "timite"
+            "lily pad", "prismarine shard", "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon", "magmafish",
+            "prismarine crystals", "clay", "sponge", "wilted berberis", "living metal heart", "caducous stem", "agaricus cap",
+            "hemovibe", "half-eaten carrot", "timite"
     };
 
     public static final String[] SACK_COLLECTIONS = {

@@ -72,14 +72,6 @@ object CollectionColors {
         put("blaze rod", 0xE1B319) // Gold
         put("string", 0xD3D3D3) // Light Gray
 
-        // Foraging
-        put("acacia", 0xFF4500) // Orange Red
-        put("spruce", 0x7E4F21) // Dark Brown
-        put("jungle", 0xCF7E2F) // Brown
-        put("birch", 0xEEE8AA) // Pale Goldenrod
-        put("oak", 0xD69243) // Wood Brown
-        put("dark oak", 0x5C4033) // Dark Brown
-
         // Fishing
         put("lily pad", 0x008000) // Green
         put("prismarine shard", 0x4682B4) // Steel Blue
@@ -111,20 +103,6 @@ object CollectionColors {
         put("refined mineral", 0x25B0D8) // Light Blue
         put("glossy gemstone", 0xAD25D8) // Purple
         put("sludge juice", 0x44EB4E) // Light Green
-        put("ancient claw", 0x2D2F2D) // Dark Gray
-        put("kuudra teeth", 0xC5BBAB) // Tan
-        put("plasma", 0x42A8C9) // Cyan
-        put("volta", 0x49CCE6) // Light Blue
         put("yoggie", 0xD46322) // Orange
-        put("agarimoo tongue", 0xEB1D1D) // Red
-        put("nurse shark tooth", 0xD5E4EC) // Light Blue
-        put("blue shark tooth", 0xD5E4EC) // Light Blue
-        put("tiger shark tooth", 0xD5E4EC) // Light Blue
-        put("shark fin", 0x4682B4) // Steel Blue
-        put("chum", 0xEA3A7A) // Pink
-        put("carnival ticket", 0xE8CB3A) // Tan
-        put("white gift", 0xFFFFFF) // White
-        put("green gift", 0x00FF00) // Green
-        put("red gift", 0xFF0000) // Red
     }
 }
