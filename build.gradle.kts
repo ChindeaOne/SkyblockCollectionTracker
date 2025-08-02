@@ -188,9 +188,11 @@ tasks.processResources {
     filesMatching("urls.properties") {
         expand(
             "TOKEN_URL" to (System.getenv("TOKEN_URL") ?: ""),
-            "COLLECTION_URL" to (System.getenv("COLLECTION_URL") ?: ""),
+            "TRACKED_COLLECTION_URL" to (System.getenv("TRACKED_COLLECTION_URL") ?: ""),
+            "AVAILABLE_COLLECTIONS_URL" to (System.getenv("AVAILABLE_COLLECTIONS_URL") ?: ""),
+            "AVAILABLE_GEMSTONES_URL" to (System.getenv("AVAILABLE_GEMSTONES_URL") ?: ""),
+            "NPC_PRICES_URL" to (System.getenv("NPC_PRICES_URL") ?: ""),
             "BAZAAR_URL" to (System.getenv("BAZAAR_URL") ?: ""),
-            "CHECK_BAZAAR_TYPE_URL" to (System.getenv("CHECK_BAZAAR_TYPE_URL") ?: ""),
             "STATUS_URL" to (System.getenv("STATUS_URL") ?: ""),
             "AGENT" to (System.getenv("AGENT") ?: "")
         )
@@ -212,12 +214,6 @@ val remapJar by tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
     destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
 }
 
-val kotlinDependencyCollectionJar by tasks.registering(Zip::class) {
-    archiveFileName.set("kotlin-libraries-wrapped.jar")
-    destinationDirectory.set(project.layout.buildDirectory.dir("wrapperjars"))
-    from(kotlinDependencies)
-    into("sct-kotlin-libraries-wrapped")
-}
 tasks.jar {
     archiveClassifier.set("without-deps")
     destinationDirectory.set(layout.buildDirectory.dir("intermediates"))
@@ -237,6 +233,8 @@ tasks.shadowJar {
     relocate("io.github.notenoughupdates.moulconfig", "io.github.chindeaytb.collectiontracker.deps.moulconfig")
     relocate("io.github.chindeaytb.implementation", "io.github.chindeaytb.collectiontracker.deps.implementation")
 }
+
+tasks.assemble.get().dependsOn(tasks.remapJar)
 
 tasks.jar {
     finalizedBy(cleanVersionConstants)

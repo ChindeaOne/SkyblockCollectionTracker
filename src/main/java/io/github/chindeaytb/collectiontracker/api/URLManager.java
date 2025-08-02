@@ -6,9 +6,11 @@ import java.io.InputStream;
 
 public class URLManager {
     public static final String TOKEN_URL;
-    public static final String COLLECTION_URL;
+    public static final String TRACKED_COLLECTION_URL;
+    public static final String AVAILABLE_COLLECTIONS_URL;
+    public static final String AVAILABLE_GEMSTONES_URL;
+    public static final String NPC_PRICES_URL;
     public static final String BAZAAR_URL;
-    public static final String CHECK_BAZAAR_TYPE_URL;
     public static final String STATUS_URL;
     public static final String AGENT;
 
@@ -22,9 +24,11 @@ public class URLManager {
             throw new RuntimeException("Failed to load urls.properties", e);
         }
         TOKEN_URL = props.getProperty("TOKEN_URL");
-        COLLECTION_URL = props.getProperty("COLLECTION_URL");
+        TRACKED_COLLECTION_URL = props.getProperty("TRACKED_COLLECTION_URL");
+        AVAILABLE_COLLECTIONS_URL = props.getProperty("AVAILABLE_COLLECTIONS_URL");
+        AVAILABLE_GEMSTONES_URL = props.getProperty("AVAILABLE_GEMSTONES_URL");
+        NPC_PRICES_URL = props.getProperty("NPC_PRICES_URL");
         BAZAAR_URL = props.getProperty("BAZAAR_URL");
-        CHECK_BAZAAR_TYPE_URL = props.getProperty("CHECK_BAZAAR_TYPE_URL");
         STATUS_URL = props.getProperty("STATUS_URL");
         AGENT = props.getProperty("AGENT");
     }
