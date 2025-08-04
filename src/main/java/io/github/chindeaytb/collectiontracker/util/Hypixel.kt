@@ -5,6 +5,9 @@
 package io.github.chindeaytb.collectiontracker.util
 
 import io.github.chindeaytb.collectiontracker.ModInitialization
+import io.github.chindeaytb.collectiontracker.api.collectionapi.FetchCollectionList
+import io.github.chindeaytb.collectiontracker.api.collectionapi.FetchGemstoneList
+import io.github.chindeaytb.collectiontracker.api.npcpriceapi.FetchNpcPrices
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager
 import io.github.chindeaytb.collectiontracker.autoupdate.UpdaterManager
@@ -69,12 +72,14 @@ object Hypixel {
                     setConfigForNewVersion()
 
                     if (!serverStatus) {
-                        ChatUtils.sendMessage("§cThe API server is down at the moment. Sorry for the inconvenience.")
-
+                        ChatUtils.sendMessage("§cThe API server is currently under maintenance. Tracking will be unavailable until the server is back online. We apologize for the inconvenience.")
+                        logger.warn("[SCT]: The API server is currently under maintenance.")
                     } else {
                         if (TokenManager.getToken() == null) {
                             TokenManager.fetchAndStoreToken()
                         }
+                        CompletableFuture.runAsync { fetchData() }
+                        logger.info("[SCT]: API data loaded successfully.")
                     }
 
                     logger.info("[SCT]: Update stream status: {}", ModInitialization.configManager.config!!.about.update)
@@ -82,14 +87,13 @@ object Hypixel {
                     if (ModInitialization.configManager.config!!.about.update != 0) {
                         CompletableFuture.runAsync {
                             RepoUtils.checkForUpdates(ModInitialization.configManager.config!!.about.update)
-                        }.thenAcceptAsync {
-                            if (isUpdateAvailable()) {
-                                logger.info("[SCT]: New version found: ${RepoUtils.latestVersion}")
+                        }.thenAcceptAsync  {
+                            if (RepoUtils.latestVersion != null) {
 
                                 ChatUtils.sendMessage(
                                     ChatComponentText("§eA new version for SkyblockCollectionTracker found: §a${RepoUtils.latestVersion}§e. It will be downloaded after closing the game.")
                                 )
-                                logger.info("[SCT]: The new version will be downloaded after closing the client.")
+                                logger.info("[SCT]: New version found: ${RepoUtils.latestVersion}")
 
                                 UpdaterManager.update()
                                 ModInitialization.configManager.config!!.about.hasCheckedUpdate = false
@@ -98,11 +102,11 @@ object Hypixel {
                                 if(!ModInitialization.configManager.config!!.about.hasCheckedUpdate) {
                                     ChatUtils.sendMessage("§aThe mod has been updated successfully.")
                                     ModInitialization.configManager.config!!.about.hasCheckedUpdate = true
+                                    logger.info("[SCT]: The mod has been updated successfully.")
                                 }
                                 logger.info("[SCT]: No new version found.")
                             }
                         }
-
                     } else{
                         logger.info("[SCT]: Update stream is disabled.")
                     }
@@ -115,40 +119,34 @@ object Hypixel {
         skyblock = inSkyblock
     }
 
+    private fun fetchData() {
+        // Request collection data
+        if (!FetchCollectionList.hasCollectionList) {
+            CompletableFuture.runAsync {
+                FetchCollectionList.fetchCollectionList()
+                FetchCollectionList.hasCollectionList = true
+            }
+        }
+        // Request NPC prices
+        if (!FetchNpcPrices.hasNpcPrice) {
+            CompletableFuture.runAsync {
+                FetchNpcPrices.fetchPrices()
+                FetchNpcPrices.hasNpcPrice = true
+            }
+        }
+        // Request gemstone list
+        if(!FetchGemstoneList.hasGemstoneList) {
+            CompletableFuture.runAsync {
+                FetchGemstoneList.fetchGemstoneList()
+                FetchGemstoneList.hasGemstoneList = true
+            }
+        }
+    }
+
     private fun setConfigForNewVersion() {
         val scale = ModInitialization.configManager.config!!.overlay.overlayPosition.scale
         if(scale == 0.0f){
             ModInitialization.configManager.config!!.overlay.overlayPosition.setScaling(1.0f)
-        }
-    }
-
-    private fun isUpdateAvailable(): Boolean {
-        val currentVersion = ModInitialization.version
-        val latestVersion = RepoUtils.latestVersion
-
-        if (currentVersion == latestVersion) return false
-
-        val currentParts = currentVersion.removePrefix("v").split("-", limit = 2)
-        val latestParts = latestVersion.removePrefix("v").split("-", limit = 2)
-
-        val currentNumericParts = currentParts[0].split(".").map { it.toIntOrNull() ?: 0 }
-        val latestNumericParts = latestParts[0].split(".").map { it.toIntOrNull() ?: 0 }
-
-        for (i in 0 until maxOf(currentNumericParts.size, latestNumericParts.size)) {
-            val currentPart = currentNumericParts.getOrElse(i) { 0 }
-            val latestPart = latestNumericParts.getOrElse(i) { 0 }
-            if (currentPart < latestPart) return true
-            if (currentPart > latestPart) return false
-        }
-
-        val currentPreRelease = currentParts.getOrNull(1)
-        val latestPreRelease = latestParts.getOrNull(1)
-
-        return when {
-            currentPreRelease == null && latestPreRelease != null -> false
-            currentPreRelease != null && latestPreRelease == null -> true
-            currentPreRelease != null && latestPreRelease != null -> currentPreRelease < latestPreRelease
-            else -> false
         }
     }
 
