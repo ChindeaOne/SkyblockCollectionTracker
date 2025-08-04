@@ -1,7 +1,7 @@
 package io.github.chindeaytb.collectiontracker.gui.overlays;
 
 import io.github.chindeaytb.collectiontracker.mixins.AccessorGuiContainer;
-import io.github.chindeaytb.collectiontracker.util.RenderUtils;
+import io.github.chindeaytb.collectiontracker.util.rendering.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;

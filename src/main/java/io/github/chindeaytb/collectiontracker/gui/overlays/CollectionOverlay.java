@@ -1,14 +1,14 @@
 package io.github.chindeaytb.collectiontracker.gui.overlays;
 
 import io.github.chindeaytb.collectiontracker.ModInitialization;
-import io.github.chindeaytb.collectiontracker.util.RenderUtils;
+import io.github.chindeaytb.collectiontracker.util.rendering.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
-import static io.github.chindeaytb.collectiontracker.util.TextUtils.updateStats;
+import static io.github.chindeaytb.collectiontracker.util.rendering.TextUtils.updateStats;
 
 public class CollectionOverlay {
 

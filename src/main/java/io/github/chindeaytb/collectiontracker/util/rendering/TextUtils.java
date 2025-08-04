@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.util;
+package io.github.chindeaytb.collectiontracker.util.rendering;
 
 import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.collections.BazaarCollectionsManager;
@@ -7,6 +7,7 @@ import io.github.chindeaytb.collectiontracker.collections.GemstonesManager;
 import io.github.chindeaytb.collectiontracker.collections.prices.NpcPrices;
 import io.github.chindeaytb.collectiontracker.config.ModConfig;
 import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
+import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

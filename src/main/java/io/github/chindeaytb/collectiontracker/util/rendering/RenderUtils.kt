@@ -1,10 +1,10 @@
-package io.github.chindeaytb.collectiontracker.util
+package io.github.chindeaytb.collectiontracker.util.rendering
 
 import io.github.chindeaytb.collectiontracker.ModInitialization
-import io.github.chindeaytb.collectiontracker.commands.StartTracker.collection
+import io.github.chindeaytb.collectiontracker.commands.StartTracker
 import io.github.chindeaytb.collectiontracker.config.core.Position
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
-import io.github.chindeaytb.collectiontracker.util.CollectionColors.colors
+import io.github.chindeaytb.collectiontracker.util.CollectionColors
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.Gui
@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.GlStateManager
 
 object RenderUtils {
 
-    var position: Position = ModInitialization.configManager.config!!.overlay.overlayPosition
+    var position: Position = ModInitialization.Companion.configManager.config!!.overlay.overlayPosition
 
     const val PADDING: Int = 5
     var maxWidth: Int = 0
@@ -43,7 +43,7 @@ object RenderUtils {
         GlStateManager.scale(position.scale, position.scale, 1.0f)
 
         if (TrackingHandlerClass.startTime != 0L) {
-            if (ModInitialization.configManager.config!!.overlay.overlayTextColor) {
+            if (ModInitialization.Companion.configManager.config!!.overlay.overlayTextColor) {
                 renderColors(fontRenderer)
             } else {
                 renderStrings(fontRenderer)
@@ -160,7 +160,7 @@ object RenderUtils {
         val scaledOverlayX: Int = (position.x / position.scale).toInt()
         var scaledOverlayY: Int = (position.y / position.scale).toInt()
 
-        val color = collection.let { colors[it] }
+        val color = StartTracker.collection.let { CollectionColors.colors[it] }
 
         for (line in overlayLines) {
             val splitIndex = line.lastIndexOf(": ")

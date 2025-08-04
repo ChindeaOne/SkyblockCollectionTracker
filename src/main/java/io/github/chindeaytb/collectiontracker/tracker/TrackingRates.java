@@ -18,7 +18,7 @@ import java.util.Map;
 import static io.github.chindeaytb.collectiontracker.collections.CollectionsManager.collectionType;
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.getUptimeInSeconds;
-import static io.github.chindeaytb.collectiontracker.util.TextUtils.updateStats;
+import static io.github.chindeaytb.collectiontracker.util.rendering.TextUtils.updateStats;
 
 public class TrackingRates {
 
