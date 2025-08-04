@@ -4,7 +4,6 @@ import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.api.bazaarapi.FetchBazaarPrice;
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus;
 import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager;
-import io.github.chindeaytb.collectiontracker.collections.BazaarCollectionsManager;
 import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import io.github.chindeaytb.collectiontracker.util.ChatUtils;
