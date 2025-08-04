@@ -43,7 +43,7 @@ public class TokenFetcher {
             }
         } else {
             logger.error("[SCT]: Failed to fetch token, response code: {}", responseCode);
-            throw new Exception("Failed to fetch token, response code: " + responseCode);
+            return null;
         }
     }
 }

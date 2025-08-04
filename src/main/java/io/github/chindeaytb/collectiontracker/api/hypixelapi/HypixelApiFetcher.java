@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static io.github.chindeaytb.collectiontracker.collections.CollectionsManager.collection_source;
+import static io.github.chindeaytb.collectiontracker.collections.CollectionsManager.collectionSource;
 
 public class HypixelApiFetcher {
 
@@ -20,7 +20,7 @@ public class HypixelApiFetcher {
 
     public static String fetchJsonData(String uuid, String token, String collection) {
         try {
-            URL url = new URL(URLManager.COLLECTION_URL);
+            URL url = new URL(URLManager.TRACKED_COLLECTION_URL);
             HttpURLConnection conn = getHttpURLConnection(uuid, token, url, collection);
 
             int responseCode = conn.getResponseCode();
@@ -79,7 +79,7 @@ public class HypixelApiFetcher {
         conn.setRequestProperty("X-UUID", uuid);
         conn.setRequestProperty("Authorization", "Bearer " + token);
         conn.setRequestProperty("X-COLLECTION", collection);
-        conn.setRequestProperty("X-SOURCE", collection_source);
+        conn.setRequestProperty("X-SOURCE", collectionSource);
         conn.setRequestProperty("User-Agent", URLManager.AGENT);
 
         conn.setConnectTimeout(5000); // 5 seconds

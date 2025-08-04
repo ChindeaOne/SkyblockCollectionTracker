@@ -26,21 +26,21 @@ public class DataFetcher {
     private static final long CACHE_LIFESPAN = 150000; // 2.5 minutes
     public static ScheduledExecutorService scheduler;
 
-    public static void scheduleDataFetch() {
+    public static void scheduleCollectionDataFetch() {
         int period = 180; // Default
         List<String> timeConsumingCollections = Arrays.asList("cropie", "squash", "refined mineral", "glossy gemstone");
 
         if (timeConsumingCollections.contains(collection)) {
             period = 600;
         }
-        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 5, period, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(DataFetcher::fetchData, 1, period, TimeUnit.SECONDS);
         logger.info("[SCT]: Data fetching scheduled to run every 180 seconds");
     }
 
     public static void fetchData() {
         try {
             if (!ServerUtils.INSTANCE.getServerStatus()) {
-                logger.warn("[SCT]: Server is not alive. Stopping the tracker.");
+                logger.warn("[SCT]: API server not online. Stopping the tracker.");
                 TrackingHandlerClass.stopTracking();
                 return;
             }
@@ -57,7 +57,7 @@ public class DataFetcher {
             }
 
             logger.info("[SCT]: Data successfully fetched or retrieved and displayed for player with UUID: {} and collection: {}", playerUUID, collection);
-            TrackingRates.displayCollection(jsonData);
+            TrackingRates.calculateRates(jsonData);
 
         } catch (Exception e) {
             logger.error("[SCT]: Error fetching data from the Hypixel API: {}", e.getMessage(), e);
@@ -80,7 +80,6 @@ public class DataFetcher {
             collectionCache.put(cacheKey, jsonData);
             cacheTimestamps.put(cacheKey, System.currentTimeMillis());
         }
-
         return jsonData;
     }
 

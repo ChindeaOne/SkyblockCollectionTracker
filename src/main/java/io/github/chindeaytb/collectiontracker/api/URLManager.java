@@ -1,8 +1,8 @@
 package io.github.chindeaytb.collectiontracker.api;
 
-import java.util.Properties;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 
 public class URLManager {
     public static final String TOKEN_URL;

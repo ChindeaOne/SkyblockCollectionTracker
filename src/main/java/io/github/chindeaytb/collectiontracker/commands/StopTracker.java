@@ -19,7 +19,7 @@ public class StopTracker extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length > 0 && args[0].equalsIgnoreCase("stop")) {
-            TrackingHandlerClass.stopTracking(sender);
+            TrackingHandlerClass.stopTrackingManual();
         }
     }
 
