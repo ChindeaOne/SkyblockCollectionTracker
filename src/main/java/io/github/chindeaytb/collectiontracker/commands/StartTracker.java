@@ -81,13 +81,7 @@ public class StartTracker extends CommandBase {
                             TrackingHandlerClass.startTracking();
                         } else {
                             // Fetch bazaar data asynchronously
-                            CompletableFuture.runAsync(() -> FetchBazaarPrice.fetchData(PlayerData.INSTANCE.getPlayerUUID(), TokenManager.getToken(), collection)).thenRun(() ->
-                                    {
-                                        if (!BazaarCollectionsManager.hasBazaarData) {
-                                            ModInitialization.configManager.getConfig().bazaar.bazaarConfig.useBazaar = false;
-                                        }
-                                        TrackingHandlerClass.startTracking();
-                                    }
+                            CompletableFuture.runAsync(() -> FetchBazaarPrice.fetchData(PlayerData.INSTANCE.getPlayerUUID(), TokenManager.getToken(), collection)).thenRun(TrackingHandlerClass::startTracking
                             );
                         }
                     } else {

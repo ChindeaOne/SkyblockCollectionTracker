@@ -52,6 +52,7 @@ public class TrackingHandlerClass {
         lastTime = 0;
 
         if (!BazaarCollectionsManager.hasBazaarData && Objects.requireNonNull(ModInitialization.configManager.getConfig()).bazaar.bazaarConfig.useBazaar) {
+            ModInitialization.configManager.getConfig().bazaar.bazaarConfig.useBazaar = false;
             ChatUtils.INSTANCE.sendMessage("§eWarning! Bazaar data not available for " + collection + ". Using NPC prices instead.");
         }
 
