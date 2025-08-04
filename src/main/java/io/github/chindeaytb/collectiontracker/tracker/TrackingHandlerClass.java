@@ -1,5 +1,7 @@
 package io.github.chindeaytb.collectiontracker.tracker;
 
+import io.github.chindeaytb.collectiontracker.ModInitialization;
+import io.github.chindeaytb.collectiontracker.collections.BazaarCollectionsManager;
 import io.github.chindeaytb.collectiontracker.gui.overlays.CollectionOverlay;
 import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import io.github.chindeaytb.collectiontracker.util.Hypixel;
@@ -8,6 +10,7 @@ import net.minecraft.command.ICommandSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -25,15 +28,15 @@ public class TrackingHandlerClass {
     public static long lastTime;
     private static long lastTrackTime = 0;
 
-    public static void startTracking(ICommandSender sender) {
+    public static void startTracking() {
         long currentTime = System.currentTimeMillis();
 
         if ((currentTime - lastTrackTime) / 1000 < COOLDOWN_PERIOD) {
             ChatUtils.INSTANCE.sendMessage("§cPlease wait before tracking another collection!");
             return;
+        } else {
+            ChatUtils.INSTANCE.sendMessage("§aTracking " + collection + " collection.");
         }
-
-        ChatUtils.INSTANCE.sendMessage("§aTracking " + collection + " collection");
 
         if (scheduler == null || scheduler.isShutdown()) {
             scheduler = Executors.newScheduledThreadPool(1);
@@ -48,12 +51,16 @@ public class TrackingHandlerClass {
         startTime = 0;
         lastTime = 0;
 
+        if (!BazaarCollectionsManager.hasBazaarData && Objects.requireNonNull(ModInitialization.configManager.getConfig()).bazaar.bazaarConfig.useBazaar) {
+            ChatUtils.INSTANCE.sendMessage("§eWarning! Bazaar data not available for " + collection + ". Using NPC prices instead.");
+        }
+
         logger.info("[SCT]: Tracking started for player: {}", PlayerData.INSTANCE.getPlayerName());
 
-        DataFetcher.scheduleDataFetch();
+        DataFetcher.scheduleCollectionDataFetch();
     }
 
-    public static void stopTracking(ICommandSender sender) {
+    public static void stopTrackingManual() {
         if (scheduler != null && !scheduler.isShutdown()) {
             isTracking = false;
             isPaused = false;
@@ -69,11 +76,15 @@ public class TrackingHandlerClass {
             ChatUtils.INSTANCE.sendMessage("§cStopped tracking!");
             logger.info("[SCT]: Tracking stopped.");
 
+            // Reset uptime
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
             lastTime = 0;
+            // Reset collection tracking
             previousCollection = -1;
-            sessionStartCollection = 0;
+            sessionStartCollection = -1;
+            // Clear profit map
+            moneyPerHourBazaar.clear();
 
             CollectionOverlay.stopTracking();
         } else {
@@ -101,16 +112,17 @@ public class TrackingHandlerClass {
             } else if (afk) {
                 afk = false;
                 logger.info("[SCT]: Tracking stopped because the player went AFK.");
-            } else {
-                logger.info("[SCT]: Tracking stopped because the api server is offline.");
             }
 
+            // Reset uptime
             lastTrackTime = System.currentTimeMillis();
             startTime = 0;
             lastTime = 0;
+            // Reset collection tracking
             previousCollection = -1;
-            sessionStartCollection = 0;
-
+            sessionStartCollection = -1;
+            // Clear profit map
+            moneyPerHourBazaar.clear();
             CollectionOverlay.stopTracking();
         } else {
             logger.warn("[SCT]: Attempted to stop tracking, but no tracking is active.");
