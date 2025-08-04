@@ -1,5 +1,6 @@
 package io.github.chindeaytb.collectiontracker.autoupdate
 
+import io.github.chindeaytb.ModrinthUpdateSource
 import io.github.chindeaytb.UpdateContext
 import io.github.chindeaytb.UpdateSetup
 import io.github.chindeaytb.UpdateTarget
@@ -11,10 +12,11 @@ object UpdaterManager {
 
     private var activePromise: CompletableFuture<*>? = null
     private var potentialUpdate: UpdateSetup? = null
+    private val version = Minecraft.getMinecraft().version.split("-")[0]
 
     private val context = UpdateContext(
         "sct",
-        Minecraft.getMinecraft().version,
+        version,
         ModInitialization.version,
         "none",
         ModInitialization.MODID,
