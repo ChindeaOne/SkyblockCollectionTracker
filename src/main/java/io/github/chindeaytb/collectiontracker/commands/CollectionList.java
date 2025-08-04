@@ -1,5 +1,6 @@
 package io.github.chindeaytb.collectiontracker.commands;
 
+import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
 import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -42,12 +43,14 @@ public class CollectionList extends CommandBase {
         categoryColors.put("Sacks", "§8");
 
         Map<String, List<String>> categorizedCollections = new LinkedHashMap<>();
-        categorizedCollections.put("Farming", Arrays.asList("cocoa beans", "carrot", "cactus", "raw chicken", "sugar cane", "pumpkin", "wheat", "seeds", "red mushroom", "brown mushroom", "raw rabbit", "nether wart", "mutton", "melon", "potato", "leather", "porkchop", "feather"));
-        categorizedCollections.put("Mining", Arrays.asList("lapis lazuli", "redstone", "umber", "coal", "mycelium", "end stone", "quartz", "sand", "iron", "amber", "topaz", "sapphire", "amethyst", "jasper", "ruby", "jade", "opal", "aquamarine", "citrine", "onyx", "peridot", "tungsten", "obsidian", "diamond", "cobblestone", "glowstone", "gold", "flint", "hard stone", "mithril", "emerald", "red sand", "ice", "glacite", "sulphur", "netherrack"));
-        categorizedCollections.put("Combat", Arrays.asList("ender pearl", "chili pepper", "slimeball", "magma cream", "ghast tear", "gunpowder", "rotten flesh", "spider eye", "bone", "blaze rod", "string"));
-        categorizedCollections.put("Fishing", Arrays.asList("lily pad", "prismarine shard", "ink sac", "raw fish", "pufferfish", "clownfish", "raw salmon", "magmafish", "prismarine crystals", "clay", "sponge"));
-        categorizedCollections.put("Rift", Arrays.asList("wilted berberis", "living metal heart", "caducous stem", "agaricus cap", "hemovibe", "half-eaten carrot", "timite"));
-        categorizedCollections.put("Sacks", Arrays.asList("cropie", "squash", "rabbit foot", "rabbit hide", "titanium", "refined mineral", "glossy gemstone", "sludge juice", "yoggie"));
+
+        for (Map.Entry<String, Set<String>> entry : CollectionsManager.collections.entrySet()) {
+            String category = entry.getKey();
+            Set<String> items = entry.getValue();
+
+            List<String> sortedItems = new ArrayList<>(items);
+            categorizedCollections.put(category, sortedItems);
+        }
 
         for (Map.Entry<String, List<String>> entry : categorizedCollections.entrySet()) {
             String category = entry.getKey();
