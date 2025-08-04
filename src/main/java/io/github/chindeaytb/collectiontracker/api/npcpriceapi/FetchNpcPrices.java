@@ -51,7 +51,11 @@ public class FetchNpcPrices {
     private static @NotNull HttpURLConnection getHttpURLConnection(URL url) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
-        conn.setRequestProperty("X-GAME-VERSION", Minecraft.getMinecraft().getVersion());
+
+        String fullVersion = Minecraft.getMinecraft().getVersion();
+        String gameVersion = fullVersion.split("-")[0];
+
+        conn.setRequestProperty("X-GAME-VERSION", gameVersion);
         conn.setRequestProperty("User-Agent", URLManager.AGENT);
 
         conn.setConnectTimeout(5000); // 5 seconds
