@@ -1,6 +1,5 @@
 package io.github.chindeaytb.collectiontracker.autoupdate
 
-import io.github.chindeaytb.ModrinthUpdateSource
 import io.github.chindeaytb.UpdateContext
 import io.github.chindeaytb.UpdateSetup
 import io.github.chindeaytb.UpdateTarget
