@@ -72,6 +72,9 @@ object CollectionColors {
         put("blaze rod", 0xE1B319) // Gold
         put("string", 0xD3D3D3) // Light Gray
 
+        // Foraging
+        put("oak", 0xD69243) // Wood Brown
+
         // Fishing
         put("lily pad", 0x008000) // Green
         put("prismarine shard", 0x4682B4) // Steel Blue
