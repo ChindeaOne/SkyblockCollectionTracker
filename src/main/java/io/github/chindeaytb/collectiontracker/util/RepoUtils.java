@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.chindeaytb.collectiontracker.ModInitialization;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,74 +13,89 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class RepoUtils {
-    public static String MODRINTH_URL = "https://modrinth.com/mod/sct/version/";
     private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
     public static String latestVersion;
-    public static String latestStableVersion;
-    public static String latestBetaVersion;
 
-    public static void checkForUpdates(int update) {
+    public static void checkForUpdates(int updateSetting) {
         try {
+            String currentVersion = ModInitialization.getVersion();
             URL url = new URL(API_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
 
-            if (connection.getResponseCode() == 200) {
-                JsonArray releases = getJsonArray(connection);
-
-                latestStableVersion = null;
-                latestBetaVersion = null;
-
-                for (JsonElement element : releases) {
-                    JsonObject release = element.getAsJsonObject();
-                    boolean isPreRelease = release.get("prerelease").getAsBoolean();
-                    String versionTag = release.get("tag_name").getAsString();
-
-                    if (!isPreRelease && (latestStableVersion == null || isNewerVersion(versionTag, latestStableVersion))) {
-                        latestStableVersion = versionTag;
-                    }
-                    if (isPreRelease && (latestBetaVersion == null || isNewerVersion(versionTag, latestBetaVersion))) {
-                        latestBetaVersion = versionTag;
-                    }
-                }
-
-                if (update == 1 && latestStableVersion != null) {
-                    latestVersion = latestStableVersion;
-                } else if (update == 2) {
-                    if (latestStableVersion != null && latestBetaVersion != null) {
-
-                        latestVersion = isNewerVersion(latestStableVersion, latestBetaVersion) ? latestStableVersion : latestBetaVersion;
-                    } else if (latestStableVersion != null) {
-                        latestVersion = latestStableVersion;
-                    } else if (latestBetaVersion != null) {
-                        latestVersion = latestBetaVersion;
-                    } else {
-                        latestVersion = null;
-                    }
-                } else {
-                    latestVersion = null;
-                }
-
-                if (latestVersion != null) {
-                    MODRINTH_URL += latestVersion;
-                }
-            } else {
+            if (connection.getResponseCode() != 200) {
                 logger.error("[SCT]: Failed to check for updates. HTTP Response Code: {}", connection.getResponseCode());
+                return;
             }
+
+            JsonArray releases = getJsonArray(connection);
+
+            String latestStable = null;
+            String latestBeta = null;
+
+            for (JsonElement element : releases) {
+                JsonObject release = element.getAsJsonObject();
+                boolean isPreRelease = release.get("prerelease").getAsBoolean();
+                String versionTag = release.get("tag_name").getAsString();
+
+                if (!isPreRelease && (latestStable == null || isNewerVersion(versionTag, latestStable))) {
+                    latestStable = versionTag;
+                }
+
+                if (isPreRelease && (latestBeta == null || isNewerVersion(versionTag, latestBeta))) {
+                    latestBeta = versionTag;
+                }
+            }
+
+            String selectedVersion = null;
+
+            if (updateSetting == 1) {
+                selectedVersion = latestStable;
+            } else if (updateSetting == 2) {
+                if (latestStable != null && latestBeta != null) {
+                    selectedVersion = isNewerVersion(latestStable, latestBeta) ? latestStable : latestBeta;
+                } else {
+                    selectedVersion = latestStable != null ? latestStable : latestBeta;
+                }
+            }
+
+            // Stable-only logic
+            if (updateSetting == 1 && selectedVersion != null && selectedVersion.contains("-")) {
+                latestVersion = null;
+                return;
+            }
+
+            // Compare to current
+            if (selectedVersion != null && isNewerVersion(selectedVersion, currentVersion)) {
+                latestVersion = selectedVersion;
+            } else {
+                latestVersion = null;
+            }
+
         } catch (Exception e) {
             logger.error("[SCT]: An error occurred while checking for updates", e);
         }
+    }
+
+    public static boolean isNewerVersion(String candidateVersion, String currentVersion) {
+        Version c = Version.parse(candidateVersion);
+        Version cur = Version.parse(currentVersion);
+        return c.compareTo(cur) > 0;
     }
 
     private static JsonArray getJsonArray(HttpURLConnection connection) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder response = new StringBuilder();
         String line;
-
         while ((line = reader.readLine()) != null) {
             response.append(line);
         }
@@ -90,42 +106,67 @@ public class RepoUtils {
         return jsonElement.getAsJsonArray();
     }
 
-    public static boolean isNewerVersion(String candidateVersion, String currentVersion) {
-        String candidateClean = candidateVersion.replace("v", "");
-        String currentClean = currentVersion.replace("v", "");
+    private static class Version implements Comparable<Version> {
+        private final List<Integer> numericParts;
+        private final String preLabel;
+        private final int preNumber;
 
-        String[] candidateParts = candidateClean.split("-beta");
-        String[] currentParts = currentClean.split("-beta");
+        private Version(List<Integer> numericParts, String preLabel, int preNumber) {
+            this.numericParts = numericParts;
+            this.preLabel = preLabel;
+            this.preNumber = preNumber;
+        }
 
-        String candidateMain = candidateParts[0];
-        String currentMain = currentParts[0];
+        public static Version parse(String raw) {
+            String version = raw.startsWith("v") ? raw.substring(1) : raw;
+            String[] split = version.split("-", 2);
 
-        Integer candidateBeta = candidateParts.length > 1 ? Integer.parseInt(candidateParts[1]) : null;
-        Integer currentBeta = currentParts.length > 1 ? Integer.parseInt(currentParts[1]) : null;
+            List<Integer> numeric = Arrays.stream(split[0].split("\\."))
+                    .map(s -> {
+                        try {
+                            return Integer.parseInt(s);
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    })
+                    .collect(Collectors.toList());
 
-        String[] candidateNums = candidateMain.split("\\.");
-        String[] currentNums = currentMain.split("\\.");
+            String preLabel = null;
+            int preNum = 0;
 
-        int length = Math.max(candidateNums.length, currentNums.length);
-        for (int i = 0; i < length; i++) {
-            int candidateNum = i < candidateNums.length ? Integer.parseInt(candidateNums[i]) : 0;
-            int currentNum = i < currentNums.length ? Integer.parseInt(currentNums[i]) : 0;
-            if (candidateNum > currentNum) {
-                return true;
-            } else if (candidateNum < currentNum) {
-                return false;
+            if (split.length == 2) {
+                Matcher matcher = Pattern.compile("([a-zA-Z]+)(\\d*)").matcher(split[1]);
+                if (matcher.matches()) {
+                    preLabel = matcher.group(1).toLowerCase();
+                    preNum = matcher.group(2).isEmpty() ? 1 : Integer.parseInt(matcher.group(2));
+                } else {
+                    preLabel = split[1].toLowerCase();
+                    preNum = 0;
+                }
             }
+
+            return new Version(numeric, preLabel, preNum);
         }
 
-        if (candidateBeta == null && currentBeta != null) {
-            return true;
-        } else if (candidateBeta != null && currentBeta == null) {
-            return false;
-        } else if (candidateBeta != null && currentBeta != null) {
-            return candidateBeta > currentBeta;
-        }
+        @Override
+        public int compareTo(Version other) {
+            int length = Math.max(this.numericParts.size(), other.numericParts.size());
+            for (int i = 0; i < length; i++) {
+                int a = i < this.numericParts.size() ? this.numericParts.get(i) : 0;
+                int b = i < other.numericParts.size() ? other.numericParts.get(i) : 0;
+                if (a != b) return Integer.compare(a, b);
+            }
 
-        return false;
+            if (this.preLabel == null && other.preLabel != null) return 1;
+            if (this.preLabel != null && other.preLabel == null) return -1;
+            if (this.preLabel != null && other.preLabel != null) {
+                int cmp = this.preLabel.compareTo(other.preLabel);
+                if (cmp != 0) return cmp;
+                return Integer.compare(this.preNumber, other.preNumber);
+            }
+
+            return 0;
+        }
     }
-
 }
+
