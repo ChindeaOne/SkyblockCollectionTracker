@@ -1,8 +1,10 @@
 package io.github.chindeaytb.collectiontracker.util;
 
 import io.github.chindeaytb.collectiontracker.ModInitialization;
+import io.github.chindeaytb.collectiontracker.collections.BazaarCollectionsManager;
 import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
-import io.github.chindeaytb.collectiontracker.collections.prices.NPCPrice;
+import io.github.chindeaytb.collectiontracker.collections.GemstonesManager;
+import io.github.chindeaytb.collectiontracker.collections.prices.NpcPrices;
 import io.github.chindeaytb.collectiontracker.config.ModConfig;
 import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static io.github.chindeaytb.collectiontracker.api.bazaarapi.FetchBazaarPrice.hasBazaarPrice;
+import static io.github.chindeaytb.collectiontracker.collections.CollectionsManager.collectionType;
 import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingRates.*;
@@ -37,7 +39,7 @@ public class TextUtils {
         for (int id : overlay.statsText) {
             switch (id) {
                 case 0:
-                    if (CollectionsManager.collection_source.equals("collection") && collection != null) {
+                    if (CollectionsManager.collectionSource.equals("collection") && collection != null) {
                         String collectionText = collectionAmount >= 0
                                 ? formatCollectionName(collection) + " collection: " + formatNumber(collectionAmount)
                                 : formatCollectionName(collection) + " collection: Calculating...";
@@ -59,19 +61,69 @@ public class TextUtils {
                     overlayLines.add(perHourText);
                     break;
                 case 3:
-                    boolean hasNpcPrice = NPCPrice.getNpcPrice(collection) != -1;
-
-                    if (config.bazaar.useBazaar && hasBazaarPrice) {
-                        if (moneyPerHourBazaar > 0) {
-                            overlayLines.add("$/h (Bazaar): " + formatNumber(moneyPerHourBazaar));
-                        } else {
-                            overlayLines.add("$/h (Bazaar): Calculating...");
+                    boolean hasNpcPrice = NpcPrices.getNpcPrice(collection) != -1;
+                    if (!CollectionsManager.isRiftCollection(collection)) {
+                        if (config.bazaar.bazaarConfig.useBazaar) {
+                            switch (collectionType) {
+                                case "normal":
+                                    float localMoneyPerHour = moneyPerHourBazaar.get(collectionType);
+                                    if (localMoneyPerHour > 0) {
+                                        overlayLines.add("$/h (Bazaar): " + formatNumber(localMoneyPerHour));
+                                    } else {
+                                        overlayLines.add("$/h (Bazaar): Calculating...");
+                                    }
+                                    break;
+                                case "enchanted":
+                                    if (config.bazaar.bazaarConfig.bazaarType.equals("Enchanted version")) {
+                                        float enchantedPrice = moneyPerHourBazaar.get("Enchanted version");
+                                        if (enchantedPrice > 0) {
+                                            overlayLines.add("$/h (Bazaar): " + formatNumber(enchantedPrice));
+                                        } else {
+                                            overlayLines.add("$/h (Bazaar): Calculating...");
+                                        }
+                                    } else {
+                                        float superEnchantedPrice = moneyPerHourBazaar.get("Super Enchanted version");
+                                        if (superEnchantedPrice == -1.0f) {
+                                            config.bazaar.bazaarConfig.bazaarType = "Enchanted version";
+                                        } else if (superEnchantedPrice > 0) {
+                                            overlayLines.add("$/h (Bazaar): " + formatNumber(superEnchantedPrice));
+                                        } else {
+                                            overlayLines.add("$/h (Bazaar): Calculating...");
+                                        }
+                                    }
+                                    break;
+                                case "gemstone":
+                                    float gemstonePrice = moneyPerHourBazaar.get(config.mining.gemstones.gemstoneVariants.toUpperCase());
+                                    if (gemstonePrice > 0) {
+                                        overlayLines.add("$/h (Bazaar): " + formatNumber(gemstonePrice));
+                                    } else {
+                                        overlayLines.add("$/h (Bazaar): Calculating...");
+                                    }
+                                    break;
+                            }
+                        } else if (hasNpcPrice) {
+                            if (moneyPerHourNPC > 0) {
+                                overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHourNPC));
+                            } else {
+                                overlayLines.add("$/h (NPC): Calculating...");
+                            }
                         }
-                    } else if (hasNpcPrice) {
-                        if (moneyPerHourNPC > 0) {
-                            overlayLines.add("$/h (NPC): " + formatNumber(moneyPerHourNPC));
-                        } else {
-                            overlayLines.add("$/h (NPC): Calculating...");
+                    } else if (config.bazaar.bazaarConfig.useBazaar) {
+                        config.bazaar.bazaarConfig.useBazaar = false;
+                        ChatUtils.INSTANCE.sendMessage("You cannot use Bazaar prices for Rift collections!");
+                    }
+                    break;
+                case 4:
+                    if (config.bazaar.bazaarConfig.useBazaar) {
+                        if (GemstonesManager.checkIfGemstone(collection)) {
+                            String extrasText = "Variant: " + config.mining.gemstones.gemstoneVariants;
+                            overlayLines.add(extrasText);
+                        } else if (collectionType.equals("enchanted")) {
+                            if (config.bazaar.bazaarConfig.bazaarType.equals("Enchanted version")) {
+                                overlayLines.add("Item: " + BazaarCollectionsManager.enchantedRecipe.keySet().iterator().next());
+                            } else {
+                                overlayLines.add("Item: " + BazaarCollectionsManager.superEnchantedRecipe.keySet().iterator().next());
+                            }
                         }
                     }
                     break;
