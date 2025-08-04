@@ -69,7 +69,7 @@ public class TrackingRates {
 
         float priceNPC = NpcPrices.getNpcPrice(collection);
 
-        if(!CollectionsManager.isRiftCollection(collection)) {
+        if(!CollectionsManager.isRiftCollection(collection) && BazaarCollectionsManager.hasBazaarData) {
             switch (collectionType) {
                 case "normal":
                     bazaarPrice = BazaarPrices.normalPrice;

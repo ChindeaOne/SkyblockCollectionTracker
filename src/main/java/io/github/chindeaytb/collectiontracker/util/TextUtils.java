@@ -62,7 +62,7 @@ public class TextUtils {
                     break;
                 case 3:
                     boolean hasNpcPrice = NpcPrices.getNpcPrice(collection) != -1;
-                    if (!CollectionsManager.isRiftCollection(collection)) {
+                    if (!CollectionsManager.isRiftCollection(collection) && BazaarCollectionsManager.hasBazaarData) {
                         if (config.bazaar.bazaarConfig.useBazaar) {
                             switch (collectionType) {
                                 case "normal":
@@ -110,7 +110,7 @@ public class TextUtils {
                         }
                     } else if (config.bazaar.bazaarConfig.useBazaar) {
                         config.bazaar.bazaarConfig.useBazaar = false;
-                        ChatUtils.INSTANCE.sendMessage("You cannot use Bazaar prices for Rift collections!");
+                        ChatUtils.INSTANCE.sendMessage("§cYou cannot use Bazaar prices for this collection!");
                     }
                     break;
                 case 4:
@@ -119,16 +119,34 @@ public class TextUtils {
                             String extrasText = "Variant: " + config.mining.gemstones.gemstoneVariants;
                             overlayLines.add(extrasText);
                         } else if (collectionType.equals("enchanted")) {
+                            String itemName;
                             if (config.bazaar.bazaarConfig.bazaarType.equals("Enchanted version")) {
-                                overlayLines.add("Item: " + BazaarCollectionsManager.enchantedRecipe.keySet().iterator().next());
+                                itemName = formatBazaarItemName(BazaarCollectionsManager.enchantedRecipe.keySet().iterator().next());
+                                overlayLines.add("Item: " + itemName);
                             } else {
-                                overlayLines.add("Item: " + BazaarCollectionsManager.superEnchantedRecipe.keySet().iterator().next());
+                                itemName = formatBazaarItemName(BazaarCollectionsManager.superEnchantedRecipe.keySet().iterator().next());
+                                overlayLines.add("Item: " + itemName);
                             }
                         }
                     }
                     break;
             }
         }
+    }
+
+    private static String formatBazaarItemName(String name) {
+        String[] words = name.split("_");
+        StringBuilder formatted = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i].toLowerCase();
+            if (i == 0) {
+                formatted.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1));
+            } else {
+                formatted.append(" ").append(word);
+            }
+        }
+        return formatted.toString();
     }
 
     public static @NotNull List<String> getStrings() {
