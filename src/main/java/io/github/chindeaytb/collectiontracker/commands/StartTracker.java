@@ -3,14 +3,19 @@ package io.github.chindeaytb.collectiontracker.commands;
 import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.api.bazaarapi.FetchBazaarPrice;
 import io.github.chindeaytb.collectiontracker.api.serverapi.ServerStatus;
+import io.github.chindeaytb.collectiontracker.api.tokenapi.TokenManager;
+import io.github.chindeaytb.collectiontracker.collections.BazaarCollectionsManager;
 import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass;
 import io.github.chindeaytb.collectiontracker.util.ChatUtils;
 import io.github.chindeaytb.collectiontracker.util.HypixelUtils;
+import io.github.chindeaytb.collectiontracker.util.PlayerData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isPaused;
 import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.isTracking;
@@ -18,6 +23,8 @@ import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClas
 public class StartTracker extends CommandBase {
 
     public static String collection = "";
+
+    public static Logger logger = LogManager.getLogger(StartTracker.class);
 
     @Override
     public String getCommandName() {
@@ -58,26 +65,30 @@ public class StartTracker extends CommandBase {
 
                     if (!isTracking && !isPaused) {
                         collection = keyBuilder.toString().trim().toLowerCase();
-                        if (!CollectionsManager.isValidCollection(collection) && !CollectionsManager.isValidSackCollection(collection)) {
+                        if (!CollectionsManager.isValidCollection(collection)) {
                             ChatUtils.INSTANCE.sendMessage("§4" + collection + " collection is not supported! Use /sct collections to see all supported collections.");
                             return;
                         }
-
                         // Set collection source
-                        if(CollectionsManager.isValidSackCollection(collection)) {
-                            CollectionsManager.collection_source = "sacks";
-                        } else if (CollectionsManager.isValidCollection(collection)) {
-                            CollectionsManager.collection_source = "collection";
-                        }
+                        if (CollectionsManager.isCollection(collection)) {
+                            CollectionsManager.collectionSource = "collection";
+                        } else CollectionsManager.collectionSource = "sacks";
 
-                        if (Objects.requireNonNull(ModInitialization.configManager.getConfig()).bazaar.useBazaar) {
-                           if (!FetchBazaarPrice.checkBazaarType(collection)) {
-                               ChatUtils.INSTANCE.sendMessage("§c" + collection + " doesn't have an enchanted block variant in bazaar. Please change the type in the Bazaar category.");
-                           } else {
-                               TrackingHandlerClass.startTracking(sender);
-                           }
+                        assert ModInitialization.configManager.getConfig() != null;
+                        // Check if the collection is a Rift collection
+                        if (CollectionsManager.isRiftCollection(collection)) {
+                            ModInitialization.configManager.getConfig().bazaar.bazaarConfig.useBazaar = false;
+                            TrackingHandlerClass.startTracking();
                         } else {
-                            TrackingHandlerClass.startTracking(sender);
+                            // Fetch bazaar data asynchronously
+                            CompletableFuture.runAsync(() -> FetchBazaarPrice.fetchData(PlayerData.INSTANCE.getPlayerUUID(), TokenManager.getToken(), collection)).thenRun(() ->
+                                    {
+                                        if (!BazaarCollectionsManager.hasBazaarData) {
+                                            ModInitialization.configManager.getConfig().bazaar.bazaarConfig.useBazaar = false;
+                                        }
+                                        TrackingHandlerClass.startTracking();
+                                    }
+                            );
                         }
                     } else {
                         ChatUtils.INSTANCE.sendMessage("§cAlready tracking a collection.");
@@ -85,6 +96,7 @@ public class StartTracker extends CommandBase {
                 }
             } catch (Exception e) {
                 ChatUtils.INSTANCE.sendMessage("§cAn error occurred while processing the command.");
+                logger.error("Error processing command: ", e);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
