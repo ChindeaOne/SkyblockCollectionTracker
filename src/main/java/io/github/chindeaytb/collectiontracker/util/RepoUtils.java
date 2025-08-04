@@ -37,6 +37,13 @@ public class RepoUtils {
                 return;
             }
 
+            if (connection.getResponseCode() == 403) {
+                // GitHub API rate limit exceeded
+                ChatUtils.INSTANCE.sendMessage("Unfortunately, the GitHub API rate limit has been exceeded. The mod will not be able to update right now.");
+                logger.warn("[SCT]: GitHub API rate limit exceeded. Please try again later.");
+                return;
+            }
+
             JsonArray releases = getJsonArray(connection);
 
             String latestStable = null;
