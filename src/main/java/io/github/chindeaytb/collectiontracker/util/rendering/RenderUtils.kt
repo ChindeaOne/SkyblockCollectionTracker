@@ -5,17 +5,14 @@ import io.github.chindeaytb.collectiontracker.commands.StartTracker
 import io.github.chindeaytb.collectiontracker.config.core.Position
 import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
 import io.github.chindeaytb.collectiontracker.util.CollectionColors
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.Gui
-import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 
 object RenderUtils {
 
-    var position: Position = ModInitialization.Companion.configManager.config!!.overlay.overlayPosition
+    var position: Position = ModInitialization.configManager.config!!.overlay.overlayPosition
 
-    const val PADDING: Int = 5
     var maxWidth: Int = 0
     var textHeight: Int = 0
 
@@ -30,20 +27,17 @@ object RenderUtils {
                 maxWidth = lineWidth
             }
         }
-        textHeight = fontRenderer.FONT_HEIGHT * overlayLines.size
+        textHeight = fontRenderer.FONT_HEIGHT * (overlayLines.size + 1)
+        position.setDimensions(maxWidth, textHeight)
     }
 
     fun drawRect(fontRenderer: FontRenderer) {
-        // For newer versions
-        if(position.scale == 0.0f){
-            position.setScaling(1.0f)
-        }
 
         GlStateManager.pushMatrix()
         GlStateManager.scale(position.scale, position.scale, 1.0f)
 
         if (TrackingHandlerClass.startTime != 0L) {
-            if (ModInitialization.Companion.configManager.config!!.overlay.overlayTextColor) {
+            if (ModInitialization.configManager.config!!.overlay.overlayTextColor) {
                 renderColors(fontRenderer)
             } else {
                 renderStrings(fontRenderer)
@@ -58,23 +52,24 @@ object RenderUtils {
         getDimensions(fontRenderer)
 
         GlStateManager.pushMatrix()
+
         GlStateManager.translate(position.x.toDouble(), position.y.toDouble(), 0.0)
         GlStateManager.scale(position.scale, position.scale, 1.0f)
-        GlStateManager.translate(-position.x.toDouble(), -position.y.toDouble(), 0.0)
 
+        // Draw the overlay background in local (unscaled) coordinates
         Gui.drawRect(
-            position.x,
-            position.y,
-            position.x + maxWidth + 2 * PADDING,
-            position.y + textHeight + 2 * PADDING,
+            0,
+            0,
+            position.width,
+            position.height,
             -0x7fbfbfc0
         )
 
+        // Center the overlay text within the overlay bounds in local coordinates
         val overlayText = "§aMove the overlay"
         val textWidth = fontRenderer.getStringWidth(overlayText)
-
-        val textX: Int = position.x + (maxWidth + 2 * PADDING - textWidth) / 2
-        val textY: Int = position.y + textHeight / 2
+        val textX: Int = (position.width - textWidth) / 2
+        val textY: Int = (position.height - fontRenderer.FONT_HEIGHT) / 2
         fontRenderer.drawString(overlayText, textX, textY, 0xFFFFFF)
         GlStateManager.popMatrix()
 
@@ -84,13 +79,11 @@ object RenderUtils {
     }
 
     private fun drawStaticText(fontRenderer: FontRenderer) {
-        val screenWidth: Int = ScaledResolution(Minecraft.getMinecraft()).scaledWidth
-
         val textScale = 0.8
 
         val resizeText = "§aUse the mouse wheel to resize the overlay"
         val textWidth = fontRenderer.getStringWidth(resizeText)
-        val textX = (screenWidth / 2f) / textScale - (textWidth / 2f)
+        val textX = (ScaleUtils.width / 2f) / textScale - (textWidth / 2f)
         val textY = 10 / textScale
 
         GlStateManager.pushMatrix()
@@ -100,7 +93,7 @@ object RenderUtils {
 
         val positionText = "§7Position: X=${position.x}, Y=${position.y}"
         val positionWidth = fontRenderer.getStringWidth(positionText)
-        val positionX = (screenWidth / 2f) / textScale - (positionWidth / 2f)
+        val positionX = (ScaleUtils.width / 2f) / textScale - (positionWidth / 2f)
         val positionY = (textY + fontRenderer.FONT_HEIGHT + 5) / textScale
 
         GlStateManager.pushMatrix()
