@@ -11,6 +11,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
+
 public class DummyOverlay extends GuiScreen {
 
     private boolean dragging = false;
@@ -60,7 +61,7 @@ public class DummyOverlay extends GuiScreen {
 
         int scrollAmount = Mouse.getEventDWheel();
         if (scrollAmount != 0) {
-            float scaleChange = 0.1f;
+            float scaleChange = 0.05f;
             float currentScale = RenderUtils.INSTANCE.getPosition().getScale();
 
             if (scrollAmount > 0) {
@@ -88,13 +89,20 @@ public class DummyOverlay extends GuiScreen {
     }
 
     private boolean isMouseOverOverlay(int mouseX, int mouseY) {
-        return mouseX >= RenderUtils.INSTANCE.getPosition().getX() && mouseX <= RenderUtils.INSTANCE.getPosition().getX() + RenderUtils.INSTANCE.getMaxWidth() + 2 * RenderUtils.PADDING && mouseY >= RenderUtils.INSTANCE.getPosition().getY() && mouseY <= RenderUtils.INSTANCE.getPosition().getY() + RenderUtils.INSTANCE.getTextHeight() + 2 * RenderUtils.PADDING;
+        int x = RenderUtils.INSTANCE.getPosition().getX();
+        int y = RenderUtils.INSTANCE.getPosition().getY();
+        int width = RenderUtils.INSTANCE.getPosition().getWidth();
+        int height = RenderUtils.INSTANCE.getPosition().getHeight();
+        float scale = RenderUtils.INSTANCE.getPosition().getScale();
+
+        int right = x + Math.round(width * scale);
+        int bottom = y + Math.round(height * scale);
+
+        return mouseX >= x && mouseX <= right && mouseY >= y && mouseY <= bottom;
     }
 
     @Override
     public void onGuiClosed() {
-
         CollectionOverlay.setVisible(true);
     }
-
 }
