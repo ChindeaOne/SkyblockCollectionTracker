@@ -15,7 +15,7 @@
 
 ## Installation
 
-1. Download the latest version from [here](https://github.com/ChindeaYTB/SkyblockCollectionTracker/releases). 
+1. Download the latest version from [here](https://github.com/ChindeaOne/SkyblockCollectionTracker/releases). 
 2. Add the mod to your mods folder (`.minecraft/mods`).
 3. Run Minecraft with the [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html) installation.
 4. Use `/sct help` to get started.
@@ -38,7 +38,7 @@
   - You can either use the NPC prices (primarily designed for ironman players) or Bazaar prices from the Bazaar category.
 
 - **Auto Updater**
-  - Implements [modrinthautoupdater](https://github.com/ChindeaYTB/modrinthautoupdater), a similar library to [libautoupdate](https://github.com/nea89o/libautoupdate).
+  - Implements [modrinthautoupdater](https://github.com/ChindeaOne/modrinthautoupdater), a similar library to [libautoupdate](https://github.com/nea89o/libautoupdate).
   - The mod updates after closing the game.
 ---
 
