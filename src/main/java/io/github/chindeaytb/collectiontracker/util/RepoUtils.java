@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class RepoUtils {
-    private static final String API_URL = "https://api.github.com/repos/ChindeaYTB/SkyblockCollectionTracker/releases";
+    private static final String API_URL = "https://api.github.com/repos/ChindeaOne/SkyblockCollectionTracker/releases";
     private static final Logger logger = LogManager.getLogger(RepoUtils.class);
     public static String latestVersion;
 

@@ -1,7 +1,7 @@
 [versions]
 moulconfig = "1.3.0"
-modrinthautoupdater = "1.1.2"
+modrinthautoupdater = "1.1.3"
 
 [libraries]
 moulconfig = { module = "org.notenoughupdates.moulconfig:MoulConfig", version.ref = "moulconfig" }
-modrinthautoupdater = { module = "com.github.ChindeaYTB:modrinthautoupdater", version.ref = "modrinthautoupdater" }
+modrinthautoupdater = { module = "com.github.ChindeaOne:modrinthautoupdater", version.ref = "modrinthautoupdater" }

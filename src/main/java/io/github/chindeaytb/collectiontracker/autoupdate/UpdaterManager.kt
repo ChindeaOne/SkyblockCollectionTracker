@@ -1,8 +1,8 @@
 package io.github.chindeaytb.collectiontracker.autoupdate
 
-import io.github.chindeaytb.UpdateContext
-import io.github.chindeaytb.UpdateSetup
-import io.github.chindeaytb.UpdateTarget
+import io.github.chindeaone.UpdateContext
+import io.github.chindeaone.UpdateSetup
+import io.github.chindeaone.UpdateTarget
 import io.github.chindeaytb.collectiontracker.ModInitialization
 import net.minecraft.client.Minecraft
 import java.util.concurrent.CompletableFuture
