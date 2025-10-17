@@ -1,6 +1,6 @@
-package io.github.chindeaytb.collectiontracker.commands;
+package io.github.chindeaone.collectiontracker.commands;
 
-import io.github.chindeaytb.collectiontracker.util.ChatUtils;
+import io.github.chindeaone.collectiontracker.util.ChatUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -34,6 +34,7 @@ public class CommandHelper extends CommandBase {
         sender.addChatMessage(new ChatComponentText("§a◆/sct pause => Pauses tracking."));
         sender.addChatMessage(new ChatComponentText("§a◆/sct resume => Resumes tracking."));
         sender.addChatMessage(new ChatComponentText("§a◆/sct collections => Shows all collections available."));
+        sender.addChatMessage(new ChatComponentText("§a◆/sct multitrack => Tracks multiple collections at once."));
     }
 
     @Override
