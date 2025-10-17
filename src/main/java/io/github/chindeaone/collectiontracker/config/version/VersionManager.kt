@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.config.version
+package io.github.chindeaone.collectiontracker.config.version
 
 import io.github.moulberry.moulconfig.processor.MoulConfigProcessor
 

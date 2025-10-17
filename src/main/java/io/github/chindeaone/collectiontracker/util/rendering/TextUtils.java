@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.util.rendering;
+package io.github.chindeaone.collectiontracker.util.rendering;
 
 import io.github.chindeaytb.collectiontracker.ModInitialization;
 import io.github.chindeaytb.collectiontracker.collections.BazaarCollectionsManager;
