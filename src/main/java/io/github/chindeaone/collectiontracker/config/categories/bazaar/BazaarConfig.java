@@ -1,4 +1,4 @@
-package io.github.chindeaytb.collectiontracker.config.categories.bazaar;
+package io.github.chindeaone.collectiontracker.config.categories.bazaar;
 
 import com.google.gson.annotations.Expose;
 import io.github.moulberry.moulconfig.annotations.ConfigEditorBoolean;
@@ -23,4 +23,11 @@ public class BazaarConfig {
             values = {"Enchanted version", "Super enchanted version"}
     )
     public String bazaarType = "Enchanted version";
+
+    @Expose
+    @ConfigOption(name = "Gemstone variants", desc = "Choose which gemstone variants to track.")
+    @ConfigEditorDropdown(
+            values = {"Rough", "Flawed", "Fine", "Flawless", "Perfect"}
+    )
+    public String gemstoneVariants = "Fine"; // Default to Fine variant
 }
