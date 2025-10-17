@@ -107,5 +107,6 @@ object CollectionColors {
         put("glossy gemstone", 0xAD25D8) // Purple
         put("sludge juice", 0x44EB4E) // Light Green
         put("yoggie", 0xD46322) // Orange
+        put("agarimoo tongue", 0xD43232) // Red
     }
 }
