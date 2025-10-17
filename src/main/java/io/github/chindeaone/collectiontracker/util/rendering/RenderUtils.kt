@@ -1,17 +1,20 @@
-package io.github.chindeaytb.collectiontracker.util.rendering
+package io.github.chindeaone.collectiontracker.util.rendering
 
-import io.github.chindeaytb.collectiontracker.ModInitialization
-import io.github.chindeaytb.collectiontracker.commands.StartTracker
-import io.github.chindeaytb.collectiontracker.config.core.Position
-import io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass
-import io.github.chindeaytb.collectiontracker.util.CollectionColors
+import io.github.chindeaone.collectiontracker.ModInitialization
+import io.github.chindeaone.collectiontracker.commands.StartTracker
+import io.github.chindeaone.collectiontracker.config.categories.Overlay
+import io.github.chindeaone.collectiontracker.config.core.Position
+import io.github.chindeaone.collectiontracker.tracker.TrackingHandlerClass
+import io.github.chindeaone.collectiontracker.util.CollectionColors
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager
 
 object RenderUtils {
 
-    var position: Position = ModInitialization.configManager.config!!.overlay.overlayPosition
+    var overlay: Overlay = ModInitialization.configManager.config!!.overlay
+    var position: Position = overlay.overlaySingle.overlayPosition
+    val positionList: Position = overlay.overlayList.overlayPosition
 
     var maxWidth: Int = 0
     var textHeight: Int = 0
@@ -56,7 +59,6 @@ object RenderUtils {
         GlStateManager.translate(position.x.toDouble(), position.y.toDouble(), 0.0)
         GlStateManager.scale(position.scale, position.scale, 1.0f)
 
-        // Draw the overlay background in local (unscaled) coordinates
         Gui.drawRect(
             0,
             0,
@@ -65,12 +67,22 @@ object RenderUtils {
             -0x7fbfbfc0
         )
 
-        // Center the overlay text within the overlay bounds in local coordinates
         val overlayText = "§aMove the overlay"
         val textWidth = fontRenderer.getStringWidth(overlayText)
-        val textX: Int = (position.width - textWidth) / 2
-        val textY: Int = (position.height - fontRenderer.FONT_HEIGHT) / 2
-        fontRenderer.drawString(overlayText, textX, textY, 0xFFFFFF)
+
+        val textScale = 0.9f
+
+        val scaledTextWidth = textWidth * textScale
+        val scaledTextHeight = fontRenderer.FONT_HEIGHT * textScale
+
+        val textX: Float = (positionList.width - scaledTextWidth) / 2f
+        val textY: Float = (positionList.height - scaledTextHeight) / 2f
+
+        GlStateManager.pushMatrix()
+        GlStateManager.scale(textScale, textScale, 1.0f)
+        fontRenderer.drawStringWithShadow(overlayText, (textX / textScale), (textY / textScale), 0xFFFFFF)
+        GlStateManager.popMatrix()
+
         GlStateManager.popMatrix()
 
         GlStateManager.pushMatrix()
@@ -88,7 +100,7 @@ object RenderUtils {
 
         GlStateManager.pushMatrix()
         GlStateManager.scale(textScale, textScale, 1.0)
-        fontRenderer.drawString(resizeText, textX.toInt(), textY.toInt(), 0xFFFFFF)
+        fontRenderer.drawStringWithShadow(resizeText, textX.toFloat(), textY.toFloat(), 0xFFFFFF)
         GlStateManager.popMatrix()
 
         val positionText = "§7Position: X=${position.x}, Y=${position.y}"
@@ -98,7 +110,7 @@ object RenderUtils {
 
         GlStateManager.pushMatrix()
         GlStateManager.scale(textScale, textScale, 1.0)
-        fontRenderer.drawString(positionText, positionX.toInt(), positionY.toInt(), 0xFFFFFF)
+        fontRenderer.drawStringWithShadow(positionText, positionX.toFloat(), positionY.toFloat(), 0xFFFFFF)
         GlStateManager.popMatrix()
     }
 
@@ -189,5 +201,45 @@ object RenderUtils {
                 fontRenderer.drawStringWithShadow(TextUtils.uptimeString(), scaledOverlayX.toFloat(), scaledOverlayY.toFloat(), color)
             }
         }
+    }
+
+    fun drawRectDummyList (
+        fontRenderer: FontRenderer
+    ){
+        getDimensions(fontRenderer)
+
+        GlStateManager.pushMatrix()
+
+        GlStateManager.translate(positionList.x.toDouble(), positionList.y.toDouble(), 0.0)
+        GlStateManager.scale(positionList.scale, positionList.scale, 1.0f)
+
+        Gui.drawRect(
+            0,
+            0,
+            positionList.width,
+            positionList.height,
+            -0x7fbfbfc0
+        )
+
+        val overlayText = "§aMove the overlay list"
+        val textWidth = fontRenderer.getStringWidth(overlayText)
+
+        val textScale = 0.9f
+        val scaledTextWidth = textWidth * textScale
+        val scaledTextHeight = fontRenderer.FONT_HEIGHT * textScale
+
+        val textX: Float = (positionList.width - scaledTextWidth) / 2f
+        val textY: Float = (positionList.height - scaledTextHeight) / 2f
+
+        GlStateManager.pushMatrix()
+        GlStateManager.scale(textScale, textScale, 1.0f)
+        fontRenderer.drawStringWithShadow(overlayText, (textX / textScale), (textY / textScale), 0xFFFFFF)
+        GlStateManager.popMatrix()
+
+        GlStateManager.popMatrix()
+
+        GlStateManager.pushMatrix()
+        drawStaticText(fontRenderer)
+        GlStateManager.popMatrix()
     }
 }
