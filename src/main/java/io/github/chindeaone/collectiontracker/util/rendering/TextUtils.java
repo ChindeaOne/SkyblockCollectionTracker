@@ -1,23 +1,23 @@
 package io.github.chindeaone.collectiontracker.util.rendering;
 
-import io.github.chindeaytb.collectiontracker.ModInitialization;
-import io.github.chindeaytb.collectiontracker.collections.BazaarCollectionsManager;
-import io.github.chindeaytb.collectiontracker.collections.CollectionsManager;
-import io.github.chindeaytb.collectiontracker.collections.GemstonesManager;
-import io.github.chindeaytb.collectiontracker.collections.prices.NpcPrices;
-import io.github.chindeaytb.collectiontracker.config.ModConfig;
-import io.github.chindeaytb.collectiontracker.config.categories.Overlay;
-import io.github.chindeaytb.collectiontracker.util.ChatUtils;
+import io.github.chindeaone.collectiontracker.ModInitialization;
+import io.github.chindeaone.collectiontracker.collections.BazaarCollectionsManager;
+import io.github.chindeaone.collectiontracker.collections.CollectionsManager;
+import io.github.chindeaone.collectiontracker.collections.GemstonesManager;
+import io.github.chindeaone.collectiontracker.collections.prices.NpcPrices;
+import io.github.chindeaone.collectiontracker.config.ModConfig;
+import io.github.chindeaone.collectiontracker.config.categories.overlay.OverlaySingle;
+import io.github.chindeaone.collectiontracker.util.ChatUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static io.github.chindeaytb.collectiontracker.collections.CollectionsManager.collectionType;
-import static io.github.chindeaytb.collectiontracker.commands.StartTracker.collection;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingHandlerClass.*;
-import static io.github.chindeaytb.collectiontracker.tracker.TrackingRates.*;
+import static io.github.chindeaone.collectiontracker.collections.CollectionsManager.collectionType;
+import static io.github.chindeaone.collectiontracker.commands.StartTracker.collection;
+import static io.github.chindeaone.collectiontracker.tracker.TrackingHandlerClass.*;
+import static io.github.chindeaone.collectiontracker.tracker.TrackingRates.*;
 
 public class TextUtils {
 
@@ -25,7 +25,7 @@ public class TextUtils {
 
     public static void updateStats() {
         ModConfig config = Objects.requireNonNull(ModInitialization.configManager.getConfig());
-        Overlay overlay = config.overlay;
+        OverlaySingle overlay = config.overlay.overlaySingle;
 
         if (startTime == 0) {
             startTime = System.currentTimeMillis();
@@ -94,7 +94,7 @@ public class TextUtils {
                                     }
                                     break;
                                 case "gemstone":
-                                    float gemstonePrice = moneyPerHourBazaar.get(config.mining.gemstones.gemstoneVariants.toUpperCase());
+                                    float gemstonePrice = moneyPerHourBazaar.get(config.bazaar.bazaarConfig.gemstoneVariants.toUpperCase());
                                     if (gemstonePrice > 0) {
                                         overlayLines.add("$/h (Bazaar): " + formatNumber(gemstonePrice));
                                     } else {
@@ -117,7 +117,7 @@ public class TextUtils {
                 case 4:
                     if (config.bazaar.bazaarConfig.useBazaar) {
                         if (GemstonesManager.checkIfGemstone(collection)) {
-                            String extrasText = "Variant: " + config.mining.gemstones.gemstoneVariants;
+                            String extrasText = "Variant: " + config.bazaar.bazaarConfig.gemstoneVariants;
                             overlayLines.add(extrasText);
                         } else if (collectionType.equals("enchanted")) {
                             String itemName;
