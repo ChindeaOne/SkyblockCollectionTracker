@@ -131,7 +131,7 @@ java {
 }
 
 val generateVersionConstants by tasks.registering {
-    val outputDir = file("src/main/java/io/github/chindeaytb/collectiontracker/util")
+    val outputDir = file("src/main/java/io/github/chindeaone/collectiontracker/util")
     val outputFile = file("$outputDir/VersionConstants.kt")
     inputs.property("modVersion", project.version)
     outputs.file(outputFile)
@@ -140,7 +140,7 @@ val generateVersionConstants by tasks.registering {
         outputDir.mkdirs()
         outputFile.writeText(
             """
-            package io.github.chindeaytb.collectiontracker.util
+            package io.github.chindeaone.collectiontracker.util
 
             object VersionConstants {
                 const val MOD_VERSION: String = "${project.version}"
@@ -158,7 +158,7 @@ tasks.named("compileJava") {
 }
 
 val cleanVersionConstants by tasks.registering(Delete::class) {
-    delete("src/main/java/io/github/chindeaytb/collectiontracker/util/VersionConstants.kt")
+    delete("src/main/java/io/github/chindeaone/collectiontracker/util/VersionConstants.kt")
 }
 
 // Tasks
@@ -230,8 +230,8 @@ tasks.shadowJar {
         }
     }
     exclude("META-INF/versions/**")
-    relocate("io.github.notenoughupdates.moulconfig", "io.github.chindeaytb.collectiontracker.deps.moulconfig")
-    relocate("io.github.chindeaytb.implementation", "io.github.chindeaytb.collectiontracker.deps.implementation")
+    relocate("io.github.notenoughupdates.moulconfig", "io.github.chindeaone.collectiontracker.deps.moulconfig")
+    relocate("io.github.chindeaone.implementation", "io.github.chindeaone.collectiontracker.deps.implementation")
 }
 
 tasks.assemble.get().dependsOn(tasks.remapJar)
