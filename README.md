@@ -7,11 +7,19 @@
 
 ---
 
+## EOL \(End of Life\)
+
+Since Hypixel Skyblock will soon transition to the modern version, this version is **EOL** and no longer maintained.
+
+Use the new *[Fabric](https://github.com/ChindeaOne/SkyblockCollectionTracker-fabric)* version instead.
+---
+
 ## Acknowledgments
 
 **Huge thanks to:** nea89, Ninjune, Moulberry, hannibal2 and the SkyHanni team. Full credits and acknowledgments can be found [here](CREDITS.md).
 
 ---
+
 
 ## Installation
 
